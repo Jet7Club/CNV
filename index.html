@@ -32,15 +32,15 @@ h1{font-size:clamp(58px,8vw,126px);line-height:.95;margin:0 0 18px}.hero p{font-
 .story{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px}.story article{background:#fff;border-radius:28px;padding:30px;box-shadow:0 14px 38px rgba(0,0,0,.05)}.story h3{font-size:30px;color:#173a2f;margin:8px 0 12px}.story p{line-height:1.72;color:#57635e}
 
 .aol{background:linear-gradient(180deg,var(--paper),var(--paper2))}.filters{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 22px}.filter-btn{border:1px solid rgba(195,154,87,.28);background:#fff;color:#385149;border-radius:999px;padding:10px 14px;cursor:pointer}.filter-btn.on{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.paths-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}.path-card{background:#fff;border-radius:26px;padding:22px;box-shadow:0 12px 34px rgba(0,0,0,.05);border:1px solid rgba(195,154,87,.12)}.path-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.path-num{font:20px Georgia,serif;color:#a77a3d}.path-cat{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#7b8a84}.path-card h3{font-size:27px;color:#15392f;margin:8px 0 12px}.path-card p{line-height:1.62;color:#57645f;margin:0 0 10px}.path-desc{min-height:56px}
+.paths-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}.path-card{background:#fff;border-radius:26px;padding:22px;box-shadow:0 12px 34px rgba(0,0,0,.05);border:1px solid rgba(195,154,87,.12);cursor:pointer;transition:.22s}.path-card:hover{transform:translateY(-4px);border-color:rgba(167,122,61,.42);box-shadow:0 18px 42px rgba(0,0,0,.08)}.path-card.selected{border-color:#b88742;box-shadow:0 0 0 2px rgba(184,135,66,.16),0 18px 42px rgba(0,0,0,.08)}.path-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.path-num{font:20px Georgia,serif;color:#a77a3d}.path-cat{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#7b8a84}.path-card h3{font-size:27px;color:#15392f;margin:8px 0 12px}.path-card p{line-height:1.62;color:#57645f;margin:0 0 10px}.path-desc{min-height:56px}
 
 .world{background:var(--forest);color:#fff}.world h2{color:#fff}.world .lead{color:#d7e2dd}.locations{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:36px}.loc{padding:24px;border:1px solid rgba(255,255,255,.15);border-radius:22px;background:rgba(255,255,255,.04);transition:.2s}.loc:hover{border-color:#d8b76f;background:rgba(216,183,111,.13);transform:translateY(-3px)}.loc small{color:#d9bd83}.loc h3{font-size:24px;margin:10px 0 6px}.loc p{color:#dce6e1;line-height:1.68}
-.join{text-align:center;padding:120px 5vw;background:linear-gradient(#f5f0e7,#e9dfcf)}.join h2{font-size:clamp(48px,7vw,90px)}.choices{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:30px}.choice{border:1px solid #d6c6aa;background:#fff;border-radius:999px;padding:14px 18px;cursor:pointer}.choice:hover{border-color:#aa7a3b;color:#8d622d}
+.join{text-align:center;padding:120px 5vw;background:linear-gradient(#f5f0e7,#e9dfcf)}.join h2{font-size:clamp(48px,7vw,90px)}.join .lead{max-width:860px}.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1120px;margin:38px auto 0}.choice{border:1px solid rgba(166,122,61,.22);background:rgba(255,255,255,.86);border-radius:26px;padding:26px;text-align:left;cursor:pointer;box-shadow:0 14px 36px rgba(34,48,42,.06);transition:.25s}.choice:hover{border-color:#aa7a3b;transform:translateY(-5px);box-shadow:0 20px 48px rgba(34,48,42,.1)}.choice b{display:block;font:28px Georgia,serif;color:#173a2f;margin:8px 0}.choice small{display:block;color:#6e7a74;line-height:1.55;font-size:13px}.choice .choice-no{font-size:11px;letter-spacing:.18em;color:#a77a3d;text-transform:uppercase}
 footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .modal{position:fixed;inset:0;z-index:100;background:rgba(2,16,12,.74);display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.box{background:#fbf7ef;width:min(650px,96vw);border-radius:30px;padding:30px;box-shadow:0 35px 100px rgba(0,0,0,.35)}.box input,.box select,.box textarea{width:100%;margin:7px 0;border:1px solid #d7cdbd;background:#fff;border-radius:12px;padding:13px;font:inherit}.box textarea{min-height:110px}
 @media(max-width:1100px){.paths-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:980px){nav{display:none}.copy-grid,.master{grid-template-columns:1fr}.pull{position:static}.stats,.cards,.paths-grid{grid-template-columns:repeat(2,1fr)}.story{grid-template-columns:1fr}.locations{grid-template-columns:repeat(2,1fr)}.slide{flex-basis:88vw}.image-mosaic{grid-template-columns:1fr 1fr}.image-mosaic figure.large{grid-row:auto;grid-column:span 2}}
-@media(max-width:600px){.top{padding:0 16px}.brand span{display:none}.langs{display:none}.hero{padding:0 22px 7vh}.section{padding:78px 22px}.stats,.cards,.locations,.paths-grid,.image-mosaic{grid-template-columns:1fr}.slide{height:62vh;flex-basis:90vw}.slide-copy{left:22px;right:22px}.slide-copy .word{font-size:42px}.image-mosaic figure.large{grid-column:auto}}
+@media(max-width:980px){nav{display:none}.copy-grid,.master{grid-template-columns:1fr}.pull{position:static}.stats,.cards,.paths-grid,.choices{grid-template-columns:repeat(2,1fr)}.story{grid-template-columns:1fr}.locations{grid-template-columns:repeat(2,1fr)}.slide{flex-basis:88vw}.image-mosaic{grid-template-columns:1fr 1fr}.image-mosaic figure.large{grid-row:auto;grid-column:span 2}}
+@media(max-width:600px){.top{padding:0 16px}.brand span{display:none}.langs{display:none}.hero{padding:0 22px 7vh}.section{padding:78px 22px}.stats,.cards,.locations,.paths-grid,.image-mosaic,.choices{grid-template-columns:1fr}.slide{height:62vh;flex-basis:90vw}.slide-copy{left:22px;right:22px}.slide-copy .word{font-size:42px}.image-mosaic figure.large{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -131,12 +131,14 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
 </div>
 </section>
 
-<section class="section alt">
-<div class="kicker">Life at CNV</div><h2>Une journée avec davantage d'espace.</h2>
+<section class="section alt" id="life">
+<div class="kicker">Life at CNV</div><h2>Une journée en pleine nature, riche en belles expériences</h2>
+<p class="lead" id="lifeProfileIntro">Cliquez sur l’un des 50 profils « Art of Life » : cette journée se réécrit automatiquement pour illustrer son rythme, ses envies et les espaces CNV qui lui correspondent le mieux.</p>
+<div style="margin-top:24px;padding:18px 22px;border-radius:18px;background:rgba(195,154,87,.1);border:1px solid rgba(195,154,87,.18);max-width:900px"><span class="kicker" style="display:block;margin-bottom:7px">Profil sélectionné</span><strong id="selectedProfile" class="serif" style="font-size:28px;color:#173a2f">Expérience CNV découverte</strong><div id="selectedFit" style="color:#6a756f;margin-top:5px">Nature · Wellness · Community</div></div>
 <div class="story">
-<article><h3>Matin</h3><p>La journée peut commencer avec une marche, du yoga, un café face au paysage ou un petit-déjeuner issu de la production locale. Ceux qui travaillent rejoignent ensuite le Collaborative Hub ou choisissent un endroit calme, intérieur ou extérieur. L'objectif n'est pas d'imposer un rythme collectif, mais de créer un environnement qui rend les bons choix plus simples.</p></article>
-<article><h3>Après-midi</h3><p>Le temps se partage entre projets, rencontres, activités physiques, baignade, spa, ateliers, rendez-vous ou découverte du territoire. Les familles disposent de leurs espaces, les entrepreneurs des leurs, tandis que la majorité des zones reste naturellement ouverte aux rencontres et aux usages spontanés.</p></article>
-<article><h3>Soir</h3><p>Un dîner peut se prolonger autour d'une grande table, d'un feu ou d'un événement. Certaines soirées sont calmes, d'autres plus musicales. La vie sociale est présente sans envahir le reste du village : la fête et le silence peuvent coexister parce qu'ils ont chacun leur place.</p></article>
+<article><h3>Matin</h3><p id="dayMorning">Réveil sans précipitation, marche ou mouvement en pleine nature, petit-déjeuner frais puis un premier temps choisi entre création, travail concentré, exploration ou bien-être.</p></article>
+<article><h3>Après-midi</h3><p id="dayAfternoon">Déjeuner convivial, découverte des espaces CNV, activité physique, atelier, rencontre ou spa selon l’énergie du jour. La journée reste fluide et laisse une vraie place à l’imprévu.</p></article>
+<article><h3>Soir</h3><p id="dayEvening">Coucher du soleil, dîner partagé ou plus intime, puis conversation, musique, événement ou retour au calme. Chaque profil peut composer sa propre intensité sociale.</p></article>
 </div>
 </section>
 
@@ -158,7 +160,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
 <button class="filter-btn" onclick="filterPaths('Lifestyle',this)">Lifestyle</button></div>
 <div class="paths-grid" id="pathsGrid">
 
-    <article class="path-card" data-cat="Visionnaire">
+    <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">01</span><span class="path-cat">Visionnaire</span></div>
       <h3>Fondateur visionnaire</h3>
       <p class="path-desc">Pense à dix ou vingt ans, recherche du sens, de l’impact et de l’échelle.</p>
@@ -166,7 +168,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Marche au lever du soleil → travail profond → salon stratégique → dîner au coucher du soleil</p>
     </article>
     
-    <article class="path-card" data-cat="Visionnaire">
+    <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">02</span><span class="path-cat">Visionnaire</span></div>
       <h3>Architecte de sens</h3>
       <p class="path-desc">Construit des projets alignés avec ses valeurs et un impact de long terme.</p>
@@ -174,7 +176,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Matin de réflexion → co-création → mentorat → soirée calme</p>
     </article>
     
-    <article class="path-card" data-cat="Visionnaire">
+    <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">03</span><span class="path-cat">Visionnaire</span></div>
       <h3>Créateur du futur</h3>
       <p class="path-desc">Recherche innovation, talents et grandes idées autour de lui.</p>
@@ -182,7 +184,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Briefing matinal → ateliers → rencontres investisseurs → musique live</p>
     </article>
     
-    <article class="path-card" data-cat="Visionnaire">
+    <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">04</span><span class="path-cat">Visionnaire</span></div>
       <h3>Connecteur global</h3>
       <p class="path-desc">Circule entre plusieurs univers et crée des ponts entre les personnes.</p>
@@ -190,7 +192,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner de connexions → rendez-vous ciblés → rencontre sociale → dîner</p>
     </article>
     
-    <article class="path-card" data-cat="Visionnaire">
+    <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">05</span><span class="path-cat">Visionnaire</span></div>
       <h3>Bâtisseur d’héritage</h3>
       <p class="path-desc">Recherche beauté, profondeur et création de valeur intergénérationnelle.</p>
@@ -198,7 +200,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Temps dans la nature → échanges de haut niveau → table familiale → soirée contemplative</p>
     </article>
     
-    <article class="path-card" data-cat="Créatif">
+    <article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">06</span><span class="path-cat">Créatif</span></div>
       <h3>Artiste en résidence</h3>
       <p class="path-desc">A besoin d’inspiration, de beauté et de temps pour créer.</p>
@@ -206,7 +208,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Création le matin → marche nature → dîner partagé → soirée douce</p>
     </article>
     
-    <article class="path-card" data-cat="Créatif">
+    <article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">07</span><span class="path-cat">Créatif</span></div>
       <h3>Curateur de design</h3>
       <p class="path-desc">Vit à travers l’esthétique, les matières et les expériences.</p>
@@ -214,7 +216,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner lent → exploration design → pause wellness → soirée intime</p>
     </article>
     
-    <article class="path-card" data-cat="Créatif">
+    <article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">08</span><span class="path-cat">Créatif</span></div>
       <h3>Conteur</h3>
       <p class="path-desc">Transforme les expériences en récits, contenus et souvenirs.</p>
@@ -222,7 +224,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Captation → interviews → montage → événement communautaire</p>
     </article>
     
-    <article class="path-card" data-cat="Créatif">
+    <article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">09</span><span class="path-cat">Créatif</span></div>
       <h3>Passionné de musique</h3>
       <p class="path-desc">Recherche rythme, émotion et vie nocturne de qualité.</p>
@@ -230,7 +232,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Mouvement → session de travail → sunset gathering → soirée musicale</p>
     </article>
     
-    <article class="path-card" data-cat="Créatif">
+    <article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">10</span><span class="path-cat">Créatif</span></div>
       <h3>Explorateur du goût</h3>
       <p class="path-desc">Découvre les lieux par la gastronomie, les ambiances et les rencontres.</p>
@@ -238,7 +240,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Visite des jardins → déjeuner dégustation → atelier → table du chef</p>
     </article>
     
-    <article class="path-card" data-cat="Bâtisseur">
+    <article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">11</span><span class="path-cat">Bâtisseur</span></div>
       <h3>Entrepreneur opérateur</h3>
       <p class="path-desc">Aime l’action, la vitesse et transformer les idées en réalisations.</p>
@@ -246,7 +248,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Stand-up matinal → production → networking → sport</p>
     </article>
     
-    <article class="path-card" data-cat="Bâtisseur">
+    <article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">12</span><span class="path-cat">Bâtisseur</span></div>
       <h3>Leader de start-up</h3>
       <p class="path-desc">A besoin d’un écosystème de bâtisseurs et d’un rythme concret.</p>
@@ -254,7 +256,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Focus → atelier d’équipe → café investisseurs → conversation au coin du feu</p>
     </article>
     
-    <article class="path-card" data-cat="Bâtisseur">
+    <article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">13</span><span class="path-cat">Bâtisseur</span></div>
       <h3>Entrepreneur à impact</h3>
       <p class="path-desc">Associe croissance économique et valeur sociale ou environnementale.</p>
@@ -262,7 +264,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Marche terrain → business lab → rendez-vous partenaires → long dîner</p>
     </article>
     
-    <article class="path-card" data-cat="Bâtisseur">
+    <article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">14</span><span class="path-cat">Bâtisseur</span></div>
       <h3>Investisseur résident</h3>
       <p class="path-desc">Recherche deal flow, calme et conversations de qualité.</p>
@@ -270,7 +272,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Wellness → rendez-vous sélectionnés → visite du village → dîner privé</p>
     </article>
     
-    <article class="path-card" data-cat="Bâtisseur">
+    <article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">15</span><span class="path-cat">Bâtisseur</span></div>
       <h3>Héritier d’entreprise familiale</h3>
       <p class="path-desc">Fait le lien entre héritage, modernité et renouvellement.</p>
@@ -278,7 +280,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner familial → gouvernance → loisirs → soirée partagée</p>
     </article>
     
-    <article class="path-card" data-cat="Connecteur">
+    <article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">16</span><span class="path-cat">Connecteur</span></div>
       <h3>Catalyseur de communauté</h3>
       <p class="path-desc">S’épanouit lorsque les personnes se rencontrent et que la confiance grandit.</p>
@@ -286,7 +288,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Cercles café → introductions → déjeuner partagé → musique</p>
     </article>
     
-    <article class="path-card" data-cat="Connecteur">
+    <article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">17</span><span class="path-cat">Connecteur</span></div>
       <h3>Hôte de mastermind</h3>
       <p class="path-desc">Aime réunir les bonnes personnes autour de conversations à forte valeur.</p>
@@ -294,7 +296,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Briefing → tables rondes → pause spa → dîner salon</p>
     </article>
     
-    <article class="path-card" data-cat="Connecteur">
+    <article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">18</span><span class="path-cat">Connecteur</span></div>
       <h3>Pont culturel</h3>
       <p class="path-desc">Relie les cultures, les générations et les univers différents.</p>
@@ -302,7 +304,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Marche & discussion → atelier culturel → repas commun → récits</p>
     </article>
     
-    <article class="path-card" data-cat="Connecteur">
+    <article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">19</span><span class="path-cat">Connecteur</span></div>
       <h3>Networker discret</h3>
       <p class="path-desc">Préfère la qualité des échanges à la quantité.</p>
@@ -310,7 +312,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petits-déjeuners 1:1 → rendez-vous discrets → apéritif au coucher du soleil</p>
     </article>
     
-    <article class="path-card" data-cat="Connecteur">
+    <article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">20</span><span class="path-cat">Connecteur</span></div>
       <h3>Curateur d’événements</h3>
       <p class="path-desc">Imagine et organise des expériences significatives pour les autres.</p>
@@ -318,7 +320,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Préparation → design d’expérience → accueil → célébration</p>
     </article>
     
-    <article class="path-card" data-cat="Régénération">
+    <article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">21</span><span class="path-cat">Régénération</span></div>
       <h3>Passionné de wellness</h3>
       <p class="path-desc">Place récupération, mouvement et équilibre intérieur au premier plan.</p>
@@ -326,7 +328,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Yoga → hydrothérapie → déjeuner sain → sommeil précoce</p>
     </article>
     
-    <article class="path-card" data-cat="Régénération">
+    <article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">22</span><span class="path-cat">Régénération</span></div>
       <h3>Thérapeute / Coach</h3>
       <p class="path-desc">A besoin de calme, de confiance et d’espaces propices à la transformation.</p>
@@ -334,7 +336,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Méditation → séances → marche régénérante → dîner calme</p>
     </article>
     
-    <article class="path-card" data-cat="Régénération">
+    <article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">23</span><span class="path-cat">Régénération</span></div>
       <h3>Guide souffle & corps</h3>
       <p class="path-desc">Travaille avec le mouvement, le souffle et la présence.</p>
@@ -342,7 +344,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Cours au lever → accompagnements → récupération piscine → thé communautaire</p>
     </article>
     
-    <article class="path-card" data-cat="Régénération">
+    <article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">24</span><span class="path-cat">Régénération</span></div>
       <h3>Explorateur longévité</h3>
       <p class="path-desc">Optimise santé, sommeil, alimentation et récupération.</p>
@@ -350,7 +352,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Mesures & mouvement → déjeuner nutrition → circuit thermal → repos profond</p>
     </article>
     
-    <article class="path-card" data-cat="Régénération">
+    <article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">25</span><span class="path-cat">Régénération</span></div>
       <h3>Chercheur intérieur</h3>
       <p class="path-desc">Recherche silence, rituels et alignement personnel.</p>
@@ -358,7 +360,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Contemplation → journal → soin → soirée aux bougies</p>
     </article>
     
-    <article class="path-card" data-cat="Explorateur">
+    <article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">26</span><span class="path-cat">Explorateur</span></div>
       <h3>Explorateur nature</h3>
       <p class="path-desc">A besoin de sentiers, de biodiversité et de liberté en plein air.</p>
@@ -366,7 +368,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Randonnée tôt → déjeuner dehors → mobilité → observation des étoiles</p>
     </article>
     
-    <article class="path-card" data-cat="Explorateur">
+    <article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">27</span><span class="path-cat">Explorateur</span></div>
       <h3>Esprit d’aventure</h3>
       <p class="path-desc">Aime la nouveauté, le mouvement et les défis en extérieur.</p>
@@ -374,7 +376,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Entraînement → exploration → récupération eau froide → célébration</p>
     </article>
     
-    <article class="path-card" data-cat="Explorateur">
+    <article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">28</span><span class="path-cat">Explorateur</span></div>
       <h3>Voyageur lent</h3>
       <p class="path-desc">Préfère l’immersion, la douceur et la profondeur locale.</p>
@@ -382,7 +384,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Marche village → rencontre artisans → long repas → calme sous la lune</p>
     </article>
     
-    <article class="path-card" data-cat="Explorateur">
+    <article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">29</span><span class="path-cat">Explorateur</span></div>
       <h3>Âme nomade</h3>
       <p class="path-desc">Recherche flexibilité, ouverture et habitat léger.</p>
@@ -390,7 +392,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Travail mobile → rencontres spontanées → événement le soir</p>
     </article>
     
-    <article class="path-card" data-cat="Explorateur">
+    <article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">30</span><span class="path-cat">Explorateur</span></div>
       <h3>Pionnier écologique</h3>
       <p class="path-desc">Explore des manières régénératives d’habiter la terre.</p>
@@ -398,7 +400,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Tour des jardins → laboratoire durable → dîner au champ → repos tôt</p>
     </article>
     
-    <article class="path-card" data-cat="Famille">
+    <article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">31</span><span class="path-cat">Famille</span></div>
       <h3>Bâtisseur de cocon familial</h3>
       <p class="path-desc">Privilégie sécurité, chaleur et souvenirs partagés.</p>
@@ -406,7 +408,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner familial → activités enfants → temps parents → dîner en famille</p>
     </article>
     
-    <article class="path-card" data-cat="Famille">
+    <article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">32</span><span class="path-cat">Famille</span></div>
       <h3>Parent conscient</h3>
       <p class="path-desc">Recherche un environnement sain et une éducation porteuse de sens.</p>
@@ -414,7 +416,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Apprentissage nature → repas sain → cercle communautaire</p>
     </article>
     
-    <article class="path-card" data-cat="Famille">
+    <article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">33</span><span class="path-cat">Famille</span></div>
       <h3>Hôte multigénérationnel</h3>
       <p class="path-desc">Aime réunir plusieurs générations avec confort et élégance.</p>
@@ -422,7 +424,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Matin détente → activités intergénérationnelles → grande table</p>
     </article>
     
-    <article class="path-card" data-cat="Famille">
+    <article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">34</span><span class="path-cat">Famille</span></div>
       <h3>Explorateur enfants d’abord</h3>
       <p class="path-desc">Choisit les lieux où les enfants peuvent s’épanouir librement.</p>
@@ -430,7 +432,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Jeux dehors → atelier découverte → piscine → soirée calme</p>
     </article>
     
-    <article class="path-card" data-cat="Famille">
+    <article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">35</span><span class="path-cat">Famille</span></div>
       <h3>Famille sociale avec ados</h3>
       <p class="path-desc">Recherche énergie, confort et liberté pour toutes les générations.</p>
@@ -438,7 +440,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Brunch → sport & studio → dîner familial → temps social ados</p>
     </article>
     
-    <article class="path-card" data-cat="Nature">
+    <article class="path-card" data-cat="Nature" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">36</span><span class="path-cat">Nature</span></div>
       <h3>Passionné de permaculture</h3>
       <p class="path-desc">Se sent ancré par les jardins, les cycles naturels et la nourriture.</p>
@@ -446,7 +448,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Jardin → déjeuner de saison → atelier → récolte au coucher du soleil</p>
     </article>
     
-    <article class="path-card" data-cat="Nature">
+    <article class="path-card" data-cat="Nature" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">37</span><span class="path-cat">Nature</span></div>
       <h3>Épicurien responsable</h3>
       <p class="path-desc">Recherche plaisir, qualité et origine dans l’alimentation.</p>
@@ -454,7 +456,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Marché → dégustation → repos → dîner du chef</p>
     </article>
     
-    <article class="path-card" data-cat="Nature">
+    <article class="path-card" data-cat="Nature" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">38</span><span class="path-cat">Nature</span></div>
       <h3>Minimaliste</h3>
       <p class="path-desc">Veut moins de distractions et davantage de clarté.</p>
@@ -462,7 +464,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Silence → travail concentré → repas simple → soirée tôt</p>
     </article>
     
-    <article class="path-card" data-cat="Nature">
+    <article class="path-card" data-cat="Nature" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">39</span><span class="path-cat">Nature</span></div>
       <h3>Rééquilibreur de vie</h3>
       <p class="path-desc">A besoin de sortir du rythme urbain et de retrouver de l’espace.</p>
@@ -470,7 +472,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Récupération → travail profond → massage → dîner lent</p>
     </article>
     
-    <article class="path-card" data-cat="Nature">
+    <article class="path-card" data-cat="Nature" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">40</span><span class="path-cat">Nature</span></div>
       <h3>Réinventeur de seconde vie</h3>
       <p class="path-desc">Entre dans une nouvelle étape de vie avec intention.</p>
@@ -478,7 +480,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Mouvement doux → nouvel apprentissage → thé social → soirée paisible</p>
     </article>
     
-    <article class="path-card" data-cat="Leadership">
+    <article class="path-card" data-cat="Leadership" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">41</span><span class="path-cat">Leadership</span></div>
       <h3>Dirigeant en retraite stratégique</h3>
       <p class="path-desc">Recherche calme et hauteur de vue pour prendre des décisions importantes.</p>
@@ -486,7 +488,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner privé → réunions de haut niveau → spa → dîner stratégique</p>
     </article>
     
-    <article class="path-card" data-cat="Leadership">
+    <article class="path-card" data-cat="Leadership" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">42</span><span class="path-cat">Leadership</span></div>
       <h3>Minimaliste du boardroom</h3>
       <p class="path-desc">Valorise clarté, discrétion et service de très haut niveau.</p>
@@ -494,7 +496,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Travail concentré → marche silencieuse → rencontres choisies</p>
     </article>
     
-    <article class="path-card" data-cat="Leadership">
+    <article class="path-card" data-cat="Leadership" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">43</span><span class="path-cat">Leadership</span></div>
       <h3>Bâtisseur d’équipe</h3>
       <p class="path-desc">Rassemble les groupes autour d’une énergie et d’objectifs communs.</p>
@@ -502,7 +504,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Atelier → défi extérieur → débrief → soirée conviviale</p>
     </article>
     
-    <article class="path-card" data-cat="Leadership">
+    <article class="path-card" data-cat="Leadership" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">44</span><span class="path-cat">Leadership</span></div>
       <h3>Orateur</h3>
       <p class="path-desc">Se nourrit des idées, des échanges et de la présence publique.</p>
@@ -510,7 +512,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Préparation → intervention → rencontres → conversations lounge</p>
     </article>
     
-    <article class="path-card" data-cat="Leadership">
+    <article class="path-card" data-cat="Leadership" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">45</span><span class="path-cat">Leadership</span></div>
       <h3>Mentor</h3>
       <p class="path-desc">Souhaite transmettre son expérience dans un cadre chaleureux.</p>
@@ -518,7 +520,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Réflexion → mentorat → marche calme → dîner salon</p>
     </article>
     
-    <article class="path-card" data-cat="Lifestyle">
+    <article class="path-card" data-cat="Lifestyle" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">46</span><span class="path-cat">Lifestyle</span></div>
       <h3>Chercheur d’énergie jeune</h3>
       <p class="path-desc">Aime le mouvement, les rencontres et une vie flexible.</p>
@@ -526,7 +528,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Workout → coworking → événement → nightlife</p>
     </article>
     
-    <article class="path-card" data-cat="Lifestyle">
+    <article class="path-card" data-cat="Lifestyle" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">47</span><span class="path-cat">Lifestyle</span></div>
       <h3>Amateur de retraite premium</h3>
       <p class="path-desc">Recherche confort, beauté et fluidité.</p>
@@ -534,7 +536,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Petit-déjeuner tardif → soin → lecture → apéritif sunset</p>
     </article>
     
-    <article class="path-card" data-cat="Lifestyle">
+    <article class="path-card" data-cat="Lifestyle" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">48</span><span class="path-cat">Lifestyle</span></div>
       <h3>Romantique du glamping</h3>
       <p class="path-desc">Veut une nature mémorable avec douceur et charme.</p>
@@ -542,7 +544,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Matin lent → exploration → wellness en duo → dîner aux bougies</p>
     </article>
     
-    <article class="path-card" data-cat="Lifestyle">
+    <article class="path-card" data-cat="Lifestyle" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">49</span><span class="path-cat">Lifestyle</span></div>
       <h3>Sérénité senior</h3>
       <p class="path-desc">Valorise paix, santé, dignité et beaux environnements.</p>
@@ -550,7 +552,7 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
       <p><strong>Parcours CNV :</strong> Mouvement doux → thé social → soirée régénérante</p>
     </article>
     
-    <article class="path-card" data-cat="Lifestyle">
+    <article class="path-card" data-cat="Lifestyle" onclick="selectProfile(this)">
       <div class="path-top"><span class="path-num">50</span><span class="path-cat">Lifestyle</span></div>
       <h3>Campeur esprit libre</h3>
       <p class="path-desc">Recherche simplicité, ouverture et aventure.</p>
@@ -574,20 +576,22 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
 </section>
 
 <section class="join" id="join">
-<div class="kicker">Rejoindre CNV</div><h2>Comment souhaitez-vous vivre CNV ?</h2><p class="lead" style="margin:auto">Résident, visiteur, membre, partenaire ou investisseur : l'entrée dans CNV dépend de ce que vous souhaitez construire, vivre ou partager.</p>
+<div class="kicker">Rejoindre CNV</div>
+<h2>Trouvez votre place dans l’aventure CNV.</h2>
+<p class="lead" style="margin:auto">On peut rejoindre CNV de plusieurs façons : vivre l’expérience, donner de son temps, soutenir le projet, ouvrir son réseau, construire avec nous ou participer à son développement. Choisissez simplement la relation qui vous ressemble.</p>
 <div class="choices">
-<button class="choice" onclick="openModal('Live at CNV')">Je veux y vivre</button>
-<button class="choice" onclick="openModal('Visit CNV')">Je veux visiter</button>
-<button class="choice" onclick="openModal('Invest in CNV')">Je veux investir</button>
-<button class="choice" onclick="openModal('Partner with CNV')">Je veux devenir partenaire</button>
-<button class="choice" onclick="openModal('Volunteer at CNV')">Je veux être volontaire</button>
-<button class="choice" onclick="openModal('Join the Community')">Rejoindre la communauté</button>
+<button class="choice" onclick="openModal('Devenir membre')"><span class="choice-no">01 · Belong</span><b>Je veux devenir membre</b><small>Entrer dans la communauté CNV, participer aux expériences, rencontres et futurs avantages membres.</small></button>
+<button class="choice" onclick="openModal('Devenir volontaire')"><span class="choice-no">02 · Contribute</span><b>Je veux être volontaire</b><small>Donner du temps, des compétences ou de l’énergie à une mission concrète du village.</small></button>
+<button class="choice" onclick="openModal('Devenir ami de CNV')"><span class="choice-no">03 · Support</span><b>Je veux devenir ami</b><small>Suivre le projet, participer à certains rendez-vous et soutenir son développement à votre rythme.</small></button>
+<button class="choice" onclick="openModal('Devenir Patron de CNV')"><span class="choice-no">04 · Patron</span><b>Je veux devenir Patron</b><small>Soutenir CNV de manière privilégiée et contribuer à faire émerger des espaces, programmes ou initiatives.</small></button>
+<button class="choice" onclick="openModal('Devenir partenaire')"><span class="choice-no">05 · Build</span><b>Je veux devenir partenaire</b><small>Apporter une expertise, un service, une marque, une technologie ou construire une activité avec CNV.</small></button>
+<button class="choice" onclick="openModal('Devenir investisseur')"><span class="choice-no">06 · Invest</span><b>Je veux devenir investisseur</b><small>Découvrir le modèle, les premiers sites, la stratégie de développement et les opportunités d’investissement.</small></button>
 </div>
 </section>
 
 <footer><div><strong class="serif" style="font-size:24px">Chill Natural Villages</strong><br><span style="opacity:.65">Your Collaborative Hub</span></div><div style="opacity:.58">Nature · Community · Wellbeing · Collaboration</div></footer>
 
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="box"><button style="float:right;border:0;background:none;font-size:24px;cursor:pointer" onclick="closeModal()">×</button><div class="kicker">CNV</div><h3 id="mTitle" style="font-size:38px;color:#10372c;margin:10px 0">Join CNV</h3><p>Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.</p><form onsubmit="event.preventDefault();this.innerHTML='<h3 style=&quot;font-family:Georgia,serif&quot;>Merci.</h3><p>Votre demande a bien été enregistrée dans cette démo.</p>'"><input placeholder="Prénom" required><input placeholder="Nom" required><input type="email" placeholder="Email" required><select><option>Mon intérêt</option><option>Living</option><option>Visiting</option><option>Investing</option><option>Partnering</option><option>Volunteer</option><option>Community</option></select><textarea placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" style="margin-top:8px;color:#11231c" type="submit">Continuer</button></form></div></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="box"><button style="float:right;border:0;background:none;font-size:24px;cursor:pointer" onclick="closeModal()">×</button><div class="kicker">CNV</div><h3 id="mTitle" style="font-size:38px;color:#10372c;margin:10px 0">Join CNV</h3><p>Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.</p><form onsubmit="event.preventDefault();this.innerHTML='<h3 style=&quot;font-family:Georgia,serif&quot;>Merci.</h3><p>Votre demande a bien été enregistrée dans cette démo.</p>'"><input placeholder="Prénom" required><input placeholder="Nom" required><input type="email" placeholder="Email" required><select id="interestSelect"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" style="margin-top:8px;color:#11231c" type="submit">Continuer</button></form></div></div>
 
 <script>
 const zones={
@@ -610,7 +614,69 @@ function filterPaths(cat, btn){
   });
 }
 
-function openModal(t){document.getElementById('mTitle').textContent=t||'Join CNV';document.getElementById('modal').classList.add('show');document.body.classList.add('lock')}
+function selectProfile(card){
+  document.querySelectorAll('.path-card').forEach(x=>x.classList.remove('selected'));
+  card.classList.add('selected');
+  const title=(card.querySelector('h3')?.textContent||'Profil CNV').trim();
+  const desc=(card.querySelector('.path-desc')?.textContent||'').trim();
+  const ps=[...card.querySelectorAll('p')];
+  const fit=(ps.find(p=>p.textContent.includes('Univers conseillé'))?.textContent||'').replace('Univers conseillé :','').trim();
+  const pathway=(ps.find(p=>p.textContent.includes('Parcours CNV'))?.textContent||'').replace('Parcours CNV :','').trim();
+  const steps=pathway.split('→').map(s=>s.trim()).filter(Boolean);
+
+  const cat=card.dataset.cat||'Lifestyle';
+  const morningByCat={
+    'Visionnaire':'La matinée commence dans le calme, avec une marche ou un moment seul face au paysage, avant un bloc de réflexion stratégique et de création à forte valeur.',
+    'Créatif':'La matinée privilégie l’inspiration : lumière naturelle, promenade, café lent puis plusieurs heures de création dans un espace calme ou un studio ouvert sur la nature.',
+    'Bâtisseur':'La matinée démarre avec énergie : mouvement, petit-déjeuner efficace puis un bloc de travail concret, réunions courtes et décisions orientées vers l’action.',
+    'Connecteur':'La matinée se construit autour de rencontres de qualité : petit-déjeuner partagé, introductions choisies et conversations où de nouvelles collaborations peuvent naître.',
+    'Régénération':'La journée commence par le corps : respiration, yoga, marche, eau ou soin, puis un petit-déjeuner sain avant un temps de calme et d’attention intérieure.',
+    'Explorateur':'Le matin se vit dehors : départ tôt, sentier, activité nature ou découverte du territoire, avec une grande place laissée à la curiosité et à l’imprévu.',
+    'Famille':'La matinée démarre ensemble, sans stress : petit-déjeuner familial, nature, activités pour les enfants puis un moment où chacun retrouve son propre rythme.',
+    'Nature':'La matinée suit les cycles naturels : marche, jardins, permaculture, produits frais et gestes simples qui reconnectent immédiatement au territoire.',
+    'Leadership':'La matinée est volontairement claire et protégée : mouvement, petit-déjeuner discret puis une plage de concentration ou de décisions importantes sans distractions.',
+    'Lifestyle':'La matinée reste libre et élégante : réveil naturel, activité douce, bon petit-déjeuner et choix spontané entre wellness, travail, découverte ou rencontre.'
+  };
+  const afternoonByCat={
+    'Visionnaire':'L’après-midi alterne co-création, échanges avec entrepreneurs ou investisseurs et temps de recul. Le village devient un laboratoire d’idées à ciel ouvert.',
+    'Créatif':'Après un déjeuner inspirant, place aux ateliers, collaborations, prises de vue, musique ou exploration. Les rencontres servent la création sans la saturer.',
+    'Bâtisseur':'Après le déjeuner, le rythme repart entre production, rendez-vous, essais terrain et connexions utiles. Une activité physique permet ensuite de relâcher la pression.',
+    'Connecteur':'Le déjeuner devient un point de rencontre, suivi de rendez-vous 1:1, ateliers ou cercles de discussion. L’essentiel est la qualité humaine plus que le nombre.',
+    'Régénération':'L’après-midi reste doux : cuisine saine, spa, baignade, séance individuelle ou atelier bien-être, avec du temps non programmé pour laisser le corps récupérer.',
+    'Explorateur':'L’après-midi poursuit l’aventure : sport, eau, mobilité douce, randonnée ou expérience locale. Le programme garde volontairement une marge pour la surprise.',
+    'Famille':'L’après-midi mélange activités enfants, sport, piscine, nature et temps libre des parents. Les expériences communes restent simples, joyeuses et faciles à organiser.',
+    'Nature':'Après un déjeuner issu du territoire, l’après-midi se poursuit entre jardins, ateliers, découverte des producteurs, marche ou temps calme au milieu du paysage.',
+    'Leadership':'Après le déjeuner, quelques rendez-vous à forte valeur, un atelier restreint ou une session de travail d’équipe. Le spa ou la marche sert de sas avant la soirée.',
+    'Lifestyle':'L’après-midi se compose à la carte : spa, sport, piscine, lecture, travail léger, atelier ou rencontre. Rien n’oblige à suivre un programme prédéfini.'
+  };
+  const eveningByCat={
+    'Visionnaire':'Au coucher du soleil, la journée ralentit autour d’un dîner choisi, d’un salon de conversation ou d’un échange plus intime pour transformer les idées du jour en perspectives.',
+    'Créatif':'La soirée devient sensorielle : dîner, musique, exposition, performance ou conversation tardive. Selon l’humeur, elle se termine par la fête ou par le silence.',
+    'Bâtisseur':'La soirée est plus légère : dîner convivial, retour sur les avancées du jour, rencontre informelle puis musique ou détente avant de repartir frais le lendemain.',
+    'Connecteur':'La soirée est le moment naturel du lien : grande table, apéritif au coucher du soleil, musique et conversations qui se prolongent sans protocole.',
+    'Régénération':'La soirée privilégie l’apaisement : dîner léger, promenade, infusion, musique douce et coucher plus tôt pour protéger la qualité du sommeil.',
+    'Explorateur':'Après le coucher du soleil, feu, repas partagé, récits de la journée et observation du ciel. La soirée garde un esprit simple et vivant.',
+    'Famille':'La soirée réunit la famille autour d’un bon repas, puis chacun peut choisir : temps calme, rencontre avec d’autres familles, musique ou retour au cocon.',
+    'Nature':'Le soir revient à l’essentiel : récolte ou cuisine partagée, table conviviale, feu ou promenade, avec une attention particulière au rythme naturel et au calme.',
+    'Leadership':'La journée se termine par un dîner stratégique ou une conversation confidentielle, puis un vrai temps de déconnexion pour laisser les décisions mûrir.',
+    'Lifestyle':'Au coucher du soleil, place au plaisir : apéritif, dîner, musique ou événement. Ceux qui préfèrent le calme peuvent simplement se retirer dans leur espace.'
+  };
+
+  document.getElementById('selectedProfile').textContent=title;
+  document.getElementById('selectedFit').textContent=fit ? 'Univers conseillé : '+fit : cat;
+  document.getElementById('lifeProfileIntro').textContent=desc+' La journée ci-dessous est adaptée à ce profil et peut encore évoluer selon la durée du séjour, les envies et les rencontres.';
+  document.getElementById('dayMorning').textContent=(morningByCat[cat]||morningByCat['Lifestyle'])+(steps[0]?' Point de départ suggéré : '+steps[0]+'.':'');
+  document.getElementById('dayAfternoon').textContent=(afternoonByCat[cat]||afternoonByCat['Lifestyle'])+(steps[1]?' Moment clé : '+steps[1]+'.':'')+(steps[2]?' Puis : '+steps[2]+'.':'');
+  document.getElementById('dayEvening').textContent=(eveningByCat[cat]||eveningByCat['Lifestyle'])+(steps[steps.length-1]?' Final naturel : '+steps[steps.length-1]+'.':'');
+  document.getElementById('life').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function openModal(t){
+  document.getElementById('mTitle').textContent=t||'Rejoindre CNV';
+  const s=document.getElementById('interestSelect');
+  if(s && t){ for(let i=0;i<s.options.length;i++){ if(s.options[i].text===t){s.selectedIndex=i;break;} } }
+  document.getElementById('modal').classList.add('show');document.body.classList.add('lock')
+}
 function closeModal(){document.getElementById('modal').classList.remove('show');document.body.classList.remove('lock')}
 
 function setLang(l,b){
