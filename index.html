@@ -64,6 +64,13 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 .profile-step.active{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
 .profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
 #pathsGrid .path-card{display:none}
+</style><style id="day-program-style">
+.day-program{margin-top:8px}
+.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
+.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
+.day-program strong{color:#173a2f;font-weight:800}
+.story article{overflow:hidden}
 </style></head>
 <body>
 <header class="top">
@@ -588,15 +595,15 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <div class="story">
 <article>
 <h3>Matin</h3>
-<p id="dayMorning">La journée peut commencer avec une marche, du yoga, un café face au paysage ou un petit-déjeuner issu de la production locale. Ceux qui travaillent rejoignent ensuite le Collaborative Hub ou choisissent un endroit calme, intérieur ou extérieur. L'objectif n'est pas d'imposer un rythme collectif, mais de créer un environnement qui rend les bons choix plus simples.</p>
+<div id="dayMorning" class="day-program"></div>
 </article>
 <article>
 <h3>Après-midi</h3>
-<p id="dayAfternoon">Le temps se partage entre projets, rencontres, activités physiques, baignade, spa, ateliers, rendez-vous ou découverte du territoire. Les familles disposent de leurs espaces, les entrepreneurs des leurs, tandis que la majorité des zones reste naturellement ouverte aux rencontres et aux usages spontanés.</p>
+<div id="dayAfternoon" class="day-program"></div>
 </article>
 <article>
 <h3>Soir</h3>
-<p id="dayEvening">Un dîner peut se prolonger autour d'une grande table, d'un feu ou d'un événement. Certaines soirées sont calmes, d'autres plus musicales. La vie sociale est présente sans envahir le reste du village : la fête et le silence peuvent coexister parce qu'ils ont chacun leur place.</p>
+<div id="dayEvening" class="day-program"></div>
 </article>
 </div>
 </section>
@@ -780,7 +787,7 @@ function setLang(l,b){
  const atm=section('#atmospheres'); if(atm){const p=atm.querySelector('.lead');text(p,bdy.atmosLead);}
  const vi=section('#village'); if(vi){text(vi.querySelector('.lead'),bdy.villageLead);const cards=vi.querySelectorAll('.card');bdy.cards.forEach((x,i)=>{if(cards[i]){text(cards[i].querySelector('h3'),x[0]);text(cards[i].querySelector('p'),x[1]);}});}
  const ar=section('#artoflife'); if(ar){const leads=ar.querySelectorAll(':scope > .lead');if(leads[0])text(leads[0],bdy.artLead1);}
- const lifeSec=section('#life'); if(lifeSec && !selectedCard){const ps=lifeSec.querySelectorAll('.story article p');bdy.lifeBody.forEach((x,i)=>text(ps[i],x));}
+ const lifeSec=section('#life'); if(lifeSec && !selectedCard){renderDayPrograms(l,[]);}
  const pl=section('#places'); if(pl){text(pl.querySelector('.lead'),bdy.placesLead);const locs=pl.querySelectorAll('.loc');bdy.locations.forEach((x,i)=>{if(locs[i]){text(locs[i].querySelector('h3'),x[0]);text(locs[i].querySelector('p'),x[1]);}});}
  const jo=section('#join'); if(jo){text(jo.querySelector('.lead'),bdy.joinLead);const sm=jo.querySelectorAll('.choice small');bdy.joinSmall.forEach((x,i)=>text(sm[i],x));}
  const modal=document.getElementById('modal'); if(modal){const mp=modal.querySelector('.box>p');text(mp,bdy.modalDesc);const opts=document.getElementById('interestSelect')?.options;if(opts)bdy.modalOptions.forEach((x,i)=>{if(opts[i])opts[i].text=x;});}
@@ -807,17 +814,37 @@ function setLang(l,b){
  setZone(currentZone); if(selectedCard)selectProfile(selectedCard,false);
 }
 
+function renderDayPrograms(lang,steps=[]){
+ const data={
+  fr:{
+   morning:[['Réveil','Marche, yoga ou réveil en douceur face au paysage.'],['Petit-déjeuner','Produits locaux, café au calme et temps pour choisir son rythme.'],['Premier temps fort',steps[0]||'Travail concentré, exploration ou activité bien-être selon le profil.']],
+   afternoon:[['Déjeuner','Repas convivial, léger ou gastronomique selon les envies.'],['Expérience',steps[1]||'Projet, sport, baignade, spa, atelier ou découverte du territoire.'],['Rencontre',steps[2]||'Un temps ouvert aux rencontres, à la famille ou à une activité spontanée.']],
+   evening:[['Coucher du soleil','Un moment dehors pour ralentir et profiter du paysage.'],['Dîner',steps.at(-1)||'Grande table, dîner intime ou expérience culinaire partagée.'],['Après-dîner','Musique, conversation, feu, événement ou retour au calme selon l’énergie du jour.']]
+  },
+  en:{
+   morning:[['Wake-up','A walk, yoga or a gentle start overlooking the landscape.'],['Breakfast','Local produce, coffee in a quiet setting and time to choose your own pace.'],['First highlight',steps[0]||'Focused work, exploration or a wellbeing activity depending on your profile.']],
+   afternoon:[['Lunch','A convivial, light or gastronomic meal depending on your mood.'],['Experience',steps[1]||'Project time, sport, swimming, spa, workshop or local discovery.'],['Connection',steps[2]||'Time left open for encounters, family or a spontaneous activity.']],
+   evening:[['Sunset','A moment outdoors to slow down and enjoy the landscape.'],['Dinner',steps.at(-1)||'A long table, intimate dinner or shared culinary experience.'],['After dinner','Music, conversation, a fire, an event or a quiet return depending on the mood.']]
+  },
+  es:{
+   morning:[['Despertar','Paseo, yoga o un comienzo suave frente al paisaje.'],['Desayuno','Productos locales, café tranquilo y tiempo para elegir el propio ritmo.'],['Primer momento clave',steps[0]||'Trabajo concentrado, exploración o bienestar según el perfil.']],
+   afternoon:[['Almuerzo','Una comida agradable, ligera o gastronómica según las ganas.'],['Experiencia',steps[1]||'Proyecto, deporte, baño, spa, taller o descubrimiento del entorno.'],['Encuentro',steps[2]||'Un tiempo abierto a encuentros, familia o una actividad espontánea.']],
+   evening:[['Atardecer','Un momento al aire libre para bajar el ritmo y disfrutar del paisaje.'],['Cena',steps.at(-1)||'Gran mesa, cena íntima o experiencia culinaria compartida.'],['Después de cenar','Música, conversación, fuego, evento o calma según la energía del día.']]
+  }
+ };
+ const d=data[lang]||data.fr;
+ const render=(id,items)=>{const el=document.getElementById(id);if(el)el.innerHTML='<ul>'+items.map(x=>'<li><strong>'+x[0]+' :</strong> '+x[1]+'</li>').join('')+'</ul>';};
+ render('dayMorning',d.morning);render('dayAfternoon',d.afternoon);render('dayEvening',d.evening);
+}
+
 function selectProfile(card,scroll=true){
  selectedCard=card;document.querySelectorAll('.path-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');const pp=document.getElementById('profilePrompt');if(pp)pp.textContent='Profil sélectionné : '+(card.querySelector('h3')?.textContent||'')+'. Votre journée CNV personnalisée est affichée ci-dessous.';
  const ps=[...card.querySelectorAll('p')], title=card.querySelector('h3')?.textContent.trim()||'',desc=card.querySelector('.path-desc')?.textContent.trim()||'',fit=(ps[1]?.textContent||'').replace(/^.*?:\s*/,'').trim(),path=(ps[2]?.textContent||'').replace(/^.*?:\s*/,'').trim(),steps=path.split('→').map(x=>x.trim()).filter(Boolean);
  text(document.getElementById('selectedProfile'),title);text(document.getElementById('selectedFit'),L[currentLang].art[5][0]+' '+fit);
  const intro=currentLang==='fr'?'Proposition exemple pour « '+title+' » : '+desc+' Cette journée reste libre et peut évoluer selon la durée du séjour, les envies, les rencontres et la saison.':currentLang==='en'?'Example proposal for “'+title+'”: '+desc+' This day remains flexible and can evolve with the length of stay, your wishes, encounters and the season.':'Propuesta de ejemplo para «'+title+'»: '+desc+' Este día sigue siendo flexible y puede evolucionar según la duración de la estancia, tus deseos, los encuentros y la temporada.';
  text(document.getElementById('lifeProfileIntro'),intro);
- const generic=BODY[currentLang].lifeBody;const arts=document.querySelectorAll('#life .story article');L[currentLang].life[6].forEach((x,i)=>text(arts[i].querySelector('h3'),x));
- const add=currentLang==='fr'?[' Point de départ suggéré : ',' Moment clé : ',' Final naturel : ']:currentLang==='en'?[' Suggested starting point: ',' Key moment: ',' Natural finale: ']:[' Punto de partida sugerido: ',' Momento clave: ',' Final natural: '];
- text(document.getElementById('dayMorning'),generic[0]+(steps[0]?add[0]+steps[0]+'.':''));
- text(document.getElementById('dayAfternoon'),generic[1]+(steps[1]?add[1]+steps[1]+'.':'')+(steps[2]?' '+steps[2]+'.':''));
- text(document.getElementById('dayEvening'),generic[2]+(steps.at(-1)?add[2]+steps.at(-1)+'.':''));
+ const arts=document.querySelectorAll('#life .story article');L[currentLang].life[6].forEach((x,i)=>text(arts[i].querySelector('h3'),x));
+ renderDayPrograms(currentLang,steps);
  if(scroll)document.getElementById('life').scrollIntoView({behavior:'smooth',block:'start'});
 }
 document.querySelectorAll('.path-card').forEach(card=>card.onclick=()=>selectProfile(card));
@@ -826,7 +853,7 @@ function openModal(t){document.getElementById('mTitle').textContent=t||L[current
 function closeModal(){document.getElementById('modal').classList.remove('show');document.body.classList.remove('lock')}
 function sendCNVMessage(event){event.preventDefault();const first=(document.getElementById('contactFirstName')?.value||'').trim(),last=(document.getElementById('contactLastName')?.value||'').trim(),email=(document.getElementById('contactEmail')?.value||'').trim(),interest=(document.getElementById('interestSelect')?.value||'CNV').trim(),message=(document.getElementById('contactMessage')?.value||'').trim();const subject='CNV — '+interest+' — '+first+' '+last;const body=['Name: '+first+' '+last,'Email: '+email,'Interest: '+interest,'','Message:',message].join('\n');location.href='mailto:jet7club@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body)}
 
-window.addEventListener('DOMContentLoaded',()=>{PROFILE_FR=originalProfiles;const l=localStorage.getItem('cnvLang')||'fr';const b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);setLang(l,b)});
+window.addEventListener('DOMContentLoaded',()=>{PROFILE_FR=originalProfiles;const l=localStorage.getItem('cnvLang')||'fr';const b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);setLang(l,b);if(!selectedCard)renderDayPrograms(l,[])});
 </script>
 </body>
 </html>
