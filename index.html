@@ -131,21 +131,12 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
 </div>
 </section>
 
-<section class="section alt" id="life">
-<div class="kicker">Life at CNV</div><h2>Une journée en pleine nature, riche en belles expériences</h2>
-<p class="lead" id="lifeProfileIntro">Cliquez sur l’un des 50 profils « Art of Life » : cette journée se réécrit automatiquement pour illustrer son rythme, ses envies et les espaces CNV qui lui correspondent le mieux.</p>
-<div style="margin-top:24px;padding:18px 22px;border-radius:18px;background:rgba(195,154,87,.1);border:1px solid rgba(195,154,87,.18);max-width:900px"><span class="kicker" style="display:block;margin-bottom:7px">Profil sélectionné</span><strong id="selectedProfile" class="serif" style="font-size:28px;color:#173a2f">Expérience CNV découverte</strong><div id="selectedFit" style="color:#6a756f;margin-top:5px">Nature · Wellness · Community</div></div>
-<div class="story">
-<article><h3>Matin</h3><p id="dayMorning">Réveil sans précipitation, marche ou mouvement en pleine nature, petit-déjeuner frais puis un premier temps choisi entre création, travail concentré, exploration ou bien-être.</p></article>
-<article><h3>Après-midi</h3><p id="dayAfternoon">Déjeuner convivial, découverte des espaces CNV, activité physique, atelier, rencontre ou spa selon l’énergie du jour. La journée reste fluide et laisse une vraie place à l’imprévu.</p></article>
-<article><h3>Soir</h3><p id="dayEvening">Coucher du soleil, dîner partagé ou plus intime, puis conversation, musique, événement ou retour au calme. Chaque profil peut composer sa propre intensité sociale.</p></article>
-</div>
-</section>
+
 
 <section class="section aol" id="artoflife">
 <div class="kicker">Art of Life</div>
-<h2>50 parcours selon les personnalités types.</h2>
-<p class="lead">CNV n'est pas seulement un lieu : c'est une manière de composer sa vie. Pour montrer cette diversité, nous avons imaginé 50 parcours types. Chaque profil correspond à une énergie, à des besoins et à une manière d'habiter le village. Certains cherchent la concentration, d'autres la fête, la guérison, la famille, la création, la transmission ou l'aventure. Ces parcours servent à orienter l'expérience, le choix du micro-village et le rythme de vie.</p>
+<h2>50 parcours selon les personnalités types</h2>
+<p class="lead">CNV n'est pas seulement un lieu : c'est une manière de composer sa vie. Nous avons imaginé 50 personnalités types pour aider chaque visiteur à se projeter dans une expérience qui lui ressemble : plus contemplative, créative, sociale, familiale, entrepreneuriale, régénérative ou aventureuse.</p>
 <p class="lead">Tu peux filtrer les profils ci-dessous. Chaque carte propose un type de personnalité, les univers CNV les plus adaptés et un déroulé de journée ou de séjour entièrement en français, illustrant le parcours le plus naturel au sein du village. Cette section peut ensuite devenir un véritable outil de matching pour les visiteurs et les membres.</p>
 <div class="filters"><button class="filter-btn on" onclick="filterPaths('Tous',this)">Tous</button>
 <button class="filter-btn" onclick="filterPaths('Visionnaire',this)">Visionnaire</button>
@@ -562,6 +553,30 @@ footer{background:#051b16;color:#dfe8e4;padding:45px 5vw;display:flex;justify-co
     
 </div>
 </section>
+<section class="section alt" id="life">
+<div class="kicker">Votre expérience CNV</div>
+<h2>Une journée en pleine nature, riche en belles expériences</h2>
+<p class="lead" id="lifeProfileIntro">Voici un exemple de journée CNV. Sélectionnez ensuite l’un des 50 profils ci-dessus : cette proposition sera automatiquement adaptée à votre personnalité.</p>
+<div style="margin-top:24px;padding:18px 22px;border-radius:18px;background:rgba(195,154,87,.1);border:1px solid rgba(195,154,87,.18);max-width:900px">
+<span class="kicker" style="display:block;margin-bottom:7px">Type sélectionné</span>
+<strong id="selectedProfile" class="serif" style="font-size:28px;color:#173a2f">Expérience CNV découverte</strong>
+<div id="selectedFit" style="color:#6a756f;margin-top:5px">Sélectionnez un profil pour personnaliser cette journée</div>
+</div>
+<div class="story">
+<article>
+<h3>Matin</h3>
+<p id="dayMorning">La journée peut commencer avec une marche, du yoga, un café face au paysage ou un petit-déjeuner issu de la production locale. Ceux qui travaillent rejoignent ensuite le Collaborative Hub ou choisissent un endroit calme, intérieur ou extérieur. L'objectif n'est pas d'imposer un rythme collectif, mais de créer un environnement qui rend les bons choix plus simples.</p>
+</article>
+<article>
+<h3>Après-midi</h3>
+<p id="dayAfternoon">Le temps se partage entre projets, rencontres, activités physiques, baignade, spa, ateliers, rendez-vous ou découverte du territoire. Les familles disposent de leurs espaces, les entrepreneurs des leurs, tandis que la majorité des zones reste naturellement ouverte aux rencontres et aux usages spontanés.</p>
+</article>
+<article>
+<h3>Soir</h3>
+<p id="dayEvening">Un dîner peut se prolonger autour d'une grande table, d'un feu ou d'un événement. Certaines soirées sont calmes, d'autres plus musicales. La vie sociale est présente sans envahir le reste du village : la fête et le silence peuvent coexister parce qu'ils ont chacun leur place.</p>
+</article>
+</div>
+</section>
 
 <section class="section world" id="places">
 <div class="kicker">Global Villages</div><h2>Un même esprit. Des paysages différents.</h2>
@@ -664,7 +679,7 @@ function selectProfile(card){
 
   document.getElementById('selectedProfile').textContent=title;
   document.getElementById('selectedFit').textContent=fit ? 'Univers conseillé : '+fit : cat;
-  document.getElementById('lifeProfileIntro').textContent=desc+' La journée ci-dessous est adaptée à ce profil et peut encore évoluer selon la durée du séjour, les envies et les rencontres.';
+  document.getElementById('lifeProfileIntro').textContent='Proposition exemple pour « '+title+' » : '+desc+' Cette journée reste libre et peut évoluer selon la durée du séjour, les envies, les rencontres et la saison.';
   document.getElementById('dayMorning').textContent=(morningByCat[cat]||morningByCat['Lifestyle'])+(steps[0]?' Point de départ suggéré : '+steps[0]+'.':'');
   document.getElementById('dayAfternoon').textContent=(afternoonByCat[cat]||afternoonByCat['Lifestyle'])+(steps[1]?' Moment clé : '+steps[1]+'.':'')+(steps[2]?' Puis : '+steps[2]+'.':'');
   document.getElementById('dayEvening').textContent=(eveningByCat[cat]||eveningByCat['Lifestyle'])+(steps[steps.length-1]?' Final naturel : '+steps[steps.length-1]+'.':'');
