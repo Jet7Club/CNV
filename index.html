@@ -71,6 +71,18 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 .day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
 .day-program strong{color:#173a2f;font-weight:800}
 .story article{overflow:hidden}
+</style><style id="profile-dropdown-style">
+.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
+.profile-select-col{display:grid;gap:10px}
+.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
+.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
+.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
+.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
+.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
+.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
+#pathsGrid{display:none!important}
+.profile-prompt{max-width:980px}
+@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
 </style></head>
 <body>
 <header class="top">
@@ -166,19 +178,23 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <div id="artKicker" class="kicker">Art de vivre</div>
 <h2>50 parcours selon les personnalités types</h2>
 <p class="lead">CNV n'est pas seulement un lieu : c'est une manière de composer sa vie. Nous avons imaginé 50 personnalités types pour aider chaque visiteur à se projeter dans une expérience qui lui ressemble : plus contemplative, créative, sociale, familiale, entrepreneuriale, régénérative ou aventureuse.</p>
-<p class="lead"><strong>Étape 1 — Choisissez une catégorie.</strong> Les profils correspondants apparaissent ensuite. <strong>Étape 2 — Sélectionnez le profil qui vous ressemble le plus.</strong> Votre proposition de journée CNV sera alors personnalisée.</p>
-<div class="profile-steps"><span class="profile-step active" id="stepCat">1 · Catégorie</span><span class="profile-step" id="stepProfile">2 · Profil</span></div>
-<div class="filters"><button class="filter-btn" onclick="filterPaths('Visionnaire',this)">Visionnaire</button>
-<button class="filter-btn" onclick="filterPaths('Créatif',this)">Créatif</button>
-<button class="filter-btn" onclick="filterPaths('Bâtisseur',this)">Bâtisseur</button>
-<button class="filter-btn" onclick="filterPaths('Connecteur',this)">Connecteur</button>
-<button class="filter-btn" onclick="filterPaths('Régénération',this)">Régénération</button>
-<button class="filter-btn" onclick="filterPaths('Explorateur',this)">Explorateur</button>
-<button class="filter-btn" onclick="filterPaths('Famille',this)">Famille</button>
-<button class="filter-btn" onclick="filterPaths('Nature',this)">Nature</button>
-<button class="filter-btn" onclick="filterPaths('Leadership',this)">Leadership</button>
-<button class="filter-btn" onclick="filterPaths('Lifestyle',this)">Lifestyle</button></div>
-<div id="profilePrompt" class="profile-prompt">Choisissez d’abord une catégorie pour afficher les profils correspondants.</div>
+<p class="lead" id="profileSelectorIntro"><strong>Choisissez votre profil en 2 étapes.</strong> Sélectionnez d’abord une catégorie, puis le profil qui vous correspond le mieux. Votre journée CNV sera ensuite personnalisée automatiquement.</p>
+<div class="profile-selector-box">
+  <div class="profile-select-col">
+    <label id="categoryLabel" for="categorySelect"><span>1</span> Choisir une catégorie</label>
+    <select id="categorySelect" onchange="chooseCategory(this.value)">
+      <option value="">Sélectionnez une catégorie</option>
+    </select>
+  </div>
+  <div class="profile-select-arrow">→</div>
+  <div class="profile-select-col">
+    <label id="profileLabel" for="profileSelect"><span>2</span> Choisir votre profil</label>
+    <select id="profileSelect" onchange="chooseProfile(this.value)" disabled>
+      <option value="">Sélectionnez d’abord une catégorie</option>
+    </select>
+  </div>
+</div>
+<div id="profilePrompt" class="profile-prompt">Votre sélection apparaîtra ici.</div>
 <div class="paths-grid" id="pathsGrid">
 
     <article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
@@ -725,9 +741,52 @@ function translateProfiles(l){
   const ps=[...card.querySelectorAll('p')]; if(ps[1])ps[1].innerHTML='<strong>'+labels[0]+'</strong> '+p[2]; if(ps[2])ps[2].innerHTML='<strong>'+labels[1]+'</strong> '+p[3];
  });
 }
-function filterPaths(cat,btn){
- document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on')); if(btn)btn.classList.add('on');
- document.querySelectorAll('.path-card').forEach(card=>card.style.display=(cat==='Tous'||card.dataset.cat===cat)?'':'none');
+const PROFILE_CATEGORIES=['Visionnaire','Créatif','Bâtisseur','Connecteur','Régénération','Explorateur','Famille','Nature','Leadership','Lifestyle'];
+
+function profileUiText(lang){
+ return {
+  fr:{intro:'Choisissez votre profil en 2 étapes. Sélectionnez d’abord une catégorie, puis le profil qui vous correspond le mieux. Votre journée CNV sera ensuite personnalisée automatiquement.',cat:'Choisir une catégorie',profile:'Choisir votre profil',catPh:'Sélectionnez une catégorie',profilePh:'Sélectionnez d’abord une catégorie',chosen:'Profil sélectionné'},
+  en:{intro:'Choose your profile in 2 steps. First select a category, then the profile that best matches you. Your CNV day will then be personalised automatically.',cat:'Choose a category',profile:'Choose your profile',catPh:'Select a category',profilePh:'Select a category first',chosen:'Selected profile'},
+  es:{intro:'Elige tu perfil en 2 pasos. Primero selecciona una categoría y después el perfil que mejor te corresponda. Tu día CNV se personalizará automáticamente.',cat:'Elegir una categoría',profile:'Elegir tu perfil',catPh:'Selecciona una categoría',profilePh:'Primero selecciona una categoría',chosen:'Perfil seleccionado'}
+ }[lang]||this.fr;
+}
+
+function refreshProfileDropdowns(lang=currentLang){
+ const ui=profileUiText(lang);
+ const intro=document.getElementById('profileSelectorIntro'); if(intro)intro.innerHTML='<strong>'+ui.intro.split('. ')[0]+'.</strong> '+ui.intro.split('. ').slice(1).join('. ');
+ const cl=document.getElementById('categoryLabel'); if(cl)cl.innerHTML='<span>1</span> '+ui.cat;
+ const pl=document.getElementById('profileLabel'); if(pl)pl.innerHTML='<span>2</span> '+ui.profile;
+ const catSel=document.getElementById('categorySelect'), profSel=document.getElementById('profileSelect');
+ if(!catSel||!profSel)return;
+ const currentCat=catSel.value;
+ catSel.innerHTML='<option value="">'+ui.catPh+'</option>'+PROFILE_CATEGORIES.map(cat=>'<option value="'+cat+'">'+(CAT[lang]?.[cat]||cat)+'</option>').join('');
+ if(currentCat)catSel.value=currentCat;
+ if(currentCat) populateProfiles(currentCat,lang); else {profSel.innerHTML='<option value="">'+ui.profilePh+'</option>';profSel.disabled=true;}
+}
+
+function populateProfiles(cat,lang=currentLang){
+ const profSel=document.getElementById('profileSelect'); if(!profSel)return;
+ const cards=[...document.querySelectorAll('.path-card')].filter(card=>card.dataset.cat===cat);
+ profSel.innerHTML='<option value="">'+profileUiText(lang).profilePh+'</option>'+cards.map(card=>'<option value="'+card.querySelector('.path-num').textContent.trim()+'">'+card.querySelector('h3').textContent.trim()+'</option>').join('');
+ profSel.disabled=false;
+}
+
+function chooseCategory(cat){
+ selectedCard=null;
+ const profSel=document.getElementById('profileSelect');
+ if(!cat){ if(profSel){profSel.disabled=true;profSel.innerHTML='<option value="">'+profileUiText(currentLang).profilePh+'</option>';} return; }
+ populateProfiles(cat,currentLang);
+ const p=document.getElementById('profilePrompt'); if(p)p.textContent=currentLang==='fr'?'Choisissez maintenant votre profil.':currentLang==='en'?'Now choose your profile.':'Ahora elige tu perfil.';
+}
+
+function chooseProfile(num){
+ if(!num)return;
+ const card=[...document.querySelectorAll('.path-card')].find(c=>c.querySelector('.path-num')?.textContent.trim()===num);
+ if(card){
+   const p=document.getElementById('profilePrompt');
+   if(p)p.textContent=profileUiText(currentLang).chosen+' : '+card.querySelector('h3').textContent.trim();
+   selectProfile(card,true);
+ }
 }
 const BODY={
 fr:{
@@ -805,7 +864,7 @@ function setLang(l,b){
  const fe2=section('#experience');text(fe2.querySelector('.kicker'),t.feeling[0]);text(fe2.querySelector('h2'),t.feeling[1],true);const words=fe2.querySelectorAll('.word'),sp=fe2.querySelectorAll('.slide-copy p');t.feeling[2].forEach((x,i)=>text(words[i],x));
  const atm2=section('#atmospheres'); if(atm2){text(atm2.querySelector('.kicker'),t.atmos[0]);text(atm2.querySelector('h2'),t.atmos[1]);const caps=atm2.querySelectorAll('figcaption');t.atmos[2].forEach((x,i)=>text(caps[i],x));}
  const vi2=section('#village');text(vi2.querySelector('.kicker'),t.village[0]);text(vi2.querySelector('h2'),t.village[1]);text(vi2.querySelector('.panel .eyebrow'),t.village[2]);const tags=vi2.querySelectorAll('.tag');t.village[3].forEach((x,i)=>text(tags[i],x));
- const ar2=section('#artoflife');text(ar2.querySelector('.kicker'),t.art[0]);text(ar2.querySelector('h2'),t.art[1]);const al=ar2.querySelectorAll(':scope > .lead');if(al[1])text(al[1],t.art[2]);const fb=ar2.querySelectorAll('.filter-btn');t.art[3].forEach((x,i)=>text(fb[i],x));translateProfiles(l);
+ const ar2=section('#artoflife');text(ar2.querySelector('.kicker'),t.art[0]);text(ar2.querySelector('h2'),t.art[1]);const al=ar2.querySelectorAll(':scope > .lead');if(al[1])text(al[1],t.art[2]);const fb=ar2.querySelectorAll('.filter-btn');t.art[3].forEach((x,i)=>text(fb[i],x));translateProfiles(l);refreshProfileDropdowns(l);
  const life2=section('#life');text(life2.querySelector('.kicker'),t.life[0]);text(life2.querySelector('h2'),t.life[1]);text(document.getElementById('lifeProfileIntro'),t.life[2]);text(life2.querySelector('.kicker[style]'),t.life[3]);if(!selectedCard){text(document.getElementById('selectedProfile'),t.life[4]);text(document.getElementById('selectedFit'),t.life[5]);const arts=life2.querySelectorAll('.story article');t.life[6].forEach((x,i)=>text(arts[i].querySelector('h3'),x));}
  const pl2=section('#places');text(pl2.querySelector('.kicker'),t.places[0]);text(pl2.querySelector('h2'),t.places[1]);
  const jo2=section('#join');text(jo2.querySelector('.kicker'),t.join[0]);text(jo2.querySelector('h2'),t.join[1]);const cb=jo2.querySelectorAll('.choice');for(let i=0;i<6;i++){text(cb[i].querySelector('.choice-no'),t.join[i+2][0]);text(cb[i].querySelector('b'),t.join[i+2][1])}
@@ -838,7 +897,7 @@ function renderDayPrograms(lang,steps=[]){
 }
 
 function selectProfile(card,scroll=true){
- selectedCard=card;document.querySelectorAll('.path-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');const pp=document.getElementById('profilePrompt');if(pp)pp.textContent='Profil sélectionné : '+(card.querySelector('h3')?.textContent||'')+'. Votre journée CNV personnalisée est affichée ci-dessous.';
+ selectedCard=card;document.querySelectorAll('.path-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');const pp=document.getElementById('profilePrompt');if(pp)pp.textContent=profileUiText(currentLang).chosen+' : '+(card.querySelector('h3')?.textContent||'');
  const ps=[...card.querySelectorAll('p')], title=card.querySelector('h3')?.textContent.trim()||'',desc=card.querySelector('.path-desc')?.textContent.trim()||'',fit=(ps[1]?.textContent||'').replace(/^.*?:\s*/,'').trim(),path=(ps[2]?.textContent||'').replace(/^.*?:\s*/,'').trim(),steps=path.split('→').map(x=>x.trim()).filter(Boolean);
  text(document.getElementById('selectedProfile'),title);text(document.getElementById('selectedFit'),L[currentLang].art[5][0]+' '+fit);
  const intro=currentLang==='fr'?'Proposition exemple pour « '+title+' » : '+desc+' Cette journée reste libre et peut évoluer selon la durée du séjour, les envies, les rencontres et la saison.':currentLang==='en'?'Example proposal for “'+title+'”: '+desc+' This day remains flexible and can evolve with the length of stay, your wishes, encounters and the season.':'Propuesta de ejemplo para «'+title+'»: '+desc+' Este día sigue siendo flexible y puede evolucionar según la duración de la estancia, tus deseos, los encuentros y la temporada.';
@@ -853,7 +912,7 @@ function openModal(t){document.getElementById('mTitle').textContent=t||L[current
 function closeModal(){document.getElementById('modal').classList.remove('show');document.body.classList.remove('lock')}
 function sendCNVMessage(event){event.preventDefault();const first=(document.getElementById('contactFirstName')?.value||'').trim(),last=(document.getElementById('contactLastName')?.value||'').trim(),email=(document.getElementById('contactEmail')?.value||'').trim(),interest=(document.getElementById('interestSelect')?.value||'CNV').trim(),message=(document.getElementById('contactMessage')?.value||'').trim();const subject='CNV — '+interest+' — '+first+' '+last;const body=['Name: '+first+' '+last,'Email: '+email,'Interest: '+interest,'','Message:',message].join('\n');location.href='mailto:jet7club@proton.me?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body)}
 
-window.addEventListener('DOMContentLoaded',()=>{PROFILE_FR=originalProfiles;const l=localStorage.getItem('cnvLang')||'fr';const b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);setLang(l,b);if(!selectedCard)renderDayPrograms(l,[])});
+window.addEventListener('DOMContentLoaded',()=>{PROFILE_FR=originalProfiles;const l=localStorage.getItem('cnvLang')||'fr';const b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);setLang(l,b);refreshProfileDropdowns(l);if(!selectedCard)renderDayPrograms(l,[])});
 </script>
 </body>
 </html>
