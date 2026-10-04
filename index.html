@@ -759,7 +759,7 @@ function localizeFit(value,lang){
 }
 
 function translateProfiles(l){
- const cards=[...document.querySelectorAll('.path-card')], labels=L[l].art[5];
+ const cards=[...document.querySelectorAll('.path-card')], labels=L[l].art[4];
  cards.forEach((card,i)=>{
   const base=originalProfiles[i], p=l==='en'?P_EN[i]:l==='es'?P_ES[i]:[base.title,base.desc,base.fit,base.path];
   text(card.querySelector('h3'),p[0]); text(card.querySelector('.path-desc'),p[1]);
@@ -780,6 +780,8 @@ function profileUiText(lang){
 
 function refreshProfileDropdowns(lang=currentLang){
  const ui=profileUiText(lang);
+ const prompt=document.getElementById('profilePrompt');
+ if(prompt && !selectedCard && !document.getElementById('categorySelect')?.value) prompt.textContent='';
  const intro=document.getElementById('profileSelectorIntro'); if(intro)intro.innerHTML='<strong>'+ui.intro.split('. ')[0]+'.</strong> '+ui.intro.split('. ').slice(1).join('. ');
  const cl=document.getElementById('categoryLabel'); if(cl)cl.innerHTML='<span>1</span> '+ui.cat;
  const pl=document.getElementById('profileLabel'); if(pl)pl.innerHTML='<span>2</span> '+ui.profile;
@@ -969,16 +971,16 @@ function setLang(l,b){
   });
 
   // ART OF LIFE + SELECTORS + 50 PROFILES
-  safe('profiles',()=>{
+  safe('profile-selector',()=>{
     const ar=section('#artoflife'); if(ar){
       text(ar.querySelector('.kicker'),t.art[0]);
       text(ar.querySelector('h2'),t.art[1]);
       const leads=ar.querySelectorAll(':scope > .lead');
       if(leads[0])text(leads[0],bdy.artLead1);
     }
-    translateProfiles(l);
     refreshProfileDropdowns(l);
   });
+  safe('profile-cards',()=>translateProfiles(l));
 
   // PERSONALIZED DAY
   safe('day',()=>{
@@ -1028,7 +1030,8 @@ function setLang(l,b){
     renderJoinLocale(l);
   });
 
-  setTimeout(()=>auditLanguageMix(l),0);
+  safe('selector-final',()=>refreshProfileDropdowns(l));
+  setTimeout(()=>{checkProfileSelectorLanguage(l);auditLanguageMix(l)},0);
 }
 
 function renderDayPrograms(lang,steps=[]){
@@ -1057,7 +1060,7 @@ function renderDayPrograms(lang,steps=[]){
 function selectProfile(card,scroll=true){
  selectedCard=card;document.querySelectorAll('.path-card').forEach(x=>x.classList.remove('selected'));card.classList.add('selected');const pp=document.getElementById('profilePrompt');if(pp)pp.textContent=profileUiText(currentLang).chosen+' : '+(card.querySelector('h3')?.textContent||'');
  const ps=[...card.querySelectorAll('p')], title=card.querySelector('h3')?.textContent.trim()||'',desc=card.querySelector('.path-desc')?.textContent.trim()||'',fit=(ps[1]?.textContent||'').replace(/^.*?:\s*/,'').trim(),path=(ps[2]?.textContent||'').replace(/^.*?:\s*/,'').trim(),steps=path.split('→').map(x=>x.trim()).filter(Boolean);
- text(document.getElementById('selectedProfile'),title);text(document.getElementById('selectedFit'),L[currentLang].art[5][0]+' '+fit);
+ text(document.getElementById('selectedProfile'),title);text(document.getElementById('selectedFit'),L[currentLang].art[4][0]+' '+fit);
  const intro=currentLang==='fr'?'Proposition exemple pour « '+title+' » : '+desc+' Cette journée reste libre et peut évoluer selon la durée du séjour, les envies, les rencontres et la saison.':currentLang==='en'?'Example proposal for “'+title+'”: '+desc+' This day remains flexible and can evolve with the length of stay, your wishes, encounters and the season.':'Propuesta de ejemplo para «'+title+'»: '+desc+' Este día sigue siendo flexible y puede evolucionar según la duración de la estancia, tus deseos, los encuentros y la temporada.';
  text(document.getElementById('lifeProfileIntro'),intro);
  const arts=document.querySelectorAll('#life .story article');L[currentLang].life[6].forEach((x,i)=>text(arts[i].querySelector('h3'),x));
@@ -1074,6 +1077,20 @@ function openJoin(index){
 }
 function openModal(t){document.getElementById('mTitle').textContent=t||L[currentLang].modal[0];document.getElementById('modal').classList.add('show');document.body.classList.add('lock')}
 function closeModal(){document.getElementById('modal').classList.remove('show');document.body.classList.remove('lock')}
+
+function checkProfileSelectorLanguage(lang){
+ const intro=document.getElementById('profileSelectorIntro')?.textContent||'';
+ const cat=document.getElementById('categoryLabel')?.textContent||'';
+ const prof=document.getElementById('profileLabel')?.textContent||'';
+ const bad={
+  fr:/Choose your profile|Select a category|Choose a category|Elige tu perfil|Elegir una categoría/i,
+  en:/Choisissez votre profil|Choisir une catégorie|Choisir votre profil|Elige tu perfil|Elegir una categoría/i,
+  es:/Choisissez votre profil|Choisir une catégorie|Choisir votre profil|Choose your profile|Choose a category/i
+ };
+ const mix=bad[lang]?.test(intro+' '+cat+' '+prof)||false;
+ if(mix)console.error('CNV profile selector language mismatch',lang,{intro,cat,prof});
+ return !mix;
+}
 
 function auditLanguageMix(lang){
  const visible=[...document.querySelectorAll('body *')].filter(el=>{
