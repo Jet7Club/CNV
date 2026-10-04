@@ -696,7 +696,7 @@ en:{
 brandTagline:'Your Collaborative Hub',
 nav:['Vision','Experience','Village','Art of Life','Destinations','Join'],
 hero:['A new generation of nature-first villages','Live better by taking the time to truly connect with nature and with others.','Chill Natural Villages creates places where nature, freedom, wellbeing, creativity and meaningful human connection return to the heart of everyday life.','Discover the experience','Explore the 50 pathways'],
-vision:['Our vision','Nature is not around the village.<br>Nature is the village.',['Nature-dominant','Complementary micro-villages','Indicative natural sanctuary','International community','Reference village','Permaculture & local production','Premium glamping tents','Natural Village homes','Art of Life pathways','International regions considered','Bien-être & Spa','Activities & Sports']],
+vision:['Our vision','Nature is not around the village.<br>Nature is the village.',['Nature-dominant','Complementary micro-villages','Indicative natural sanctuary','International community','Reference village','Permaculture & local production','Premium glamping tents','Natural Village homes','Art of Life pathways','International regions considered','Wellness & Spa','Activities & Sports']],
 feeling:['The CNV Feeling','More than a place.<br>A way of living.',['Connect','Celebrate','Breathe','Move','Create','Belong']],
 atmos:['Atmospheres & places','Images that let you feel the atmosphere.',['Wellness atmosphere','Permaculture','Collaborative Hub','Nightlife','Mountain spa','Gardens & food']],
 village:['The village','A complete ecosystem designed at human scale.','Selected area',['Nature first','Low density','Walkable','Human scale'],['01 · Living','02 · Wellness','03 · Work','04 · Food']],
@@ -865,42 +865,170 @@ modalOptions:["Elige cómo quieres relacionarte con CNV","Hacerme miembro","Ser 
 };
 
 function setLang(l,b){
- currentLang=l;localStorage.setItem('cnvLang',l);document.documentElement.lang=l;
- document.querySelectorAll('.langs button').forEach(x=>x.classList.remove('on')); if(!b)b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l); if(b)b.classList.add('on');
- const t=L[l]; const bdy=BODY[l];
- const brandSpans=document.querySelectorAll('.brand span');brandSpans.forEach(x=>text(x,t.brandTagline));
- const footerTag=document.querySelector('footer span');if(footerTag)text(footerTag,t.brandTagline);
+  l=(l==='en'||l==='es')?l:'fr';
+  currentLang=l;
+  localStorage.setItem('cnvLang',l);
+  document.documentElement.lang=l;
 
- // Complete body copy translation
- const fe=section('#experience'); if(fe){text(fe.querySelector('.lead'),bdy.feelingLead); const sps=fe.querySelectorAll('.slide-copy p');bdy.slides.forEach((x,i)=>text(sps[i],x));}
- const atm=section('#atmospheres'); if(atm){const p=atm.querySelector('.lead');text(p,bdy.atmosLead);}
- const vi=section('#village'); if(vi){text(vi.querySelector('.lead'),bdy.villageLead);const cards=vi.querySelectorAll('.card');bdy.cards.forEach((x,i)=>{if(cards[i]){text(cards[i].querySelector('h3'),x[0]);text(cards[i].querySelector('p'),x[1]);}});}
- const ar=section('#artoflife'); if(ar){const leads=ar.querySelectorAll(':scope > .lead');if(leads[0])text(leads[0],bdy.artLead1);}
- const lifeSec=section('#life'); if(lifeSec && !selectedCard){renderDayPrograms(l,[]);}
- const pl=section('#places'); if(pl){text(pl.querySelector('.lead'),bdy.placesLead);const locs=pl.querySelectorAll('.loc');bdy.locations.forEach((x,i)=>{if(locs[i]){text(locs[i].querySelector('h3'),x[0]);text(locs[i].querySelector('p'),x[1]);}});}
- const jo=section('#join'); if(jo){text(jo.querySelector('.kicker'),t.join[0]);text(jo.querySelector('h2'),t.join[1]);text(jo.querySelector('.lead'),bdy.joinLead);const btns=jo.querySelectorAll('.choice');for(let i=0;i<6;i++){if(btns[i]){text(btns[i].querySelector('.choice-no'),t.join[i+2][0]);text(btns[i].querySelector('b'),t.join[i+2][1]);text(btns[i].querySelector('small'),bdy.joinSmall[i]);}}}
- const modal=document.getElementById('modal'); if(modal){const mp=modal.querySelector('.box>p');text(mp,bdy.modalDesc);const opts=document.getElementById('interestSelect')?.options;if(opts)bdy.modalOptions.forEach((x,i)=>{if(opts[i])opts[i].text=x;});}
+  const t=L[l]||L.fr;
+  const bdy=BODY[l]||BODY.fr;
+  const safe=(name,fn)=>{try{fn()}catch(err){console.error('CNV '+name+' translation error:',err)}};
 
- const nav=[...document.querySelectorAll('nav a')];t.nav.forEach((v,i)=>text(nav[i],v));
- text(document.querySelector('.head-actions .btn.gold'),t.join[0]);
+  document.querySelectorAll('.langs button').forEach(x=>x.classList.remove('on'));
+  if(!b)b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);
+  if(b)b.classList.add('on');
 
- const h=section('#home');text(h.querySelector('.eyebrow'),t.hero[0]);text(h.querySelector('h1'),t.hero[1],true);text(h.querySelector('.hero-copy>p'),t.hero[2]);const hb=h.querySelectorAll('.ctas button');text(hb[0],t.hero[3]);text(hb[1],t.hero[4]);
+  // HEADER + BRAND
+  safe('header',()=>{
+    const nav=[...document.querySelectorAll('nav a')];
+    (t.nav||[]).forEach((v,i)=>text(nav[i],v));
+    text(document.querySelector('.head-actions .btn.gold'),t.join?.[0]||'CNV');
+    document.querySelectorAll('.brand span').forEach(x=>text(x,t.brandTagline||''));
+    const footerTag=document.querySelector('footer span'); if(footerTag)text(footerTag,t.brandTagline||'');
+  });
 
- const v=section('#vision');text(v.querySelector('.kicker'),t.vision[0]);text(v.querySelector('h2'),t.vision[1],true);const stats=v.querySelectorAll('.stat span');t.vision[2].forEach((x,i)=>text(stats[i],x));
- if(l==='en'){const ps=v.querySelectorAll('.longcopy p');['CNV is conceived as an alternative to conventional residential and resort models. It brings together low-density living, large protected landscapes, wellbeing spaces, places to work and create, regenerative agriculture, social life by choice and high-quality services. The goal is not to fill the land with buildings, but to create a more balanced way of living.','Each village is designed to give more room to time, nature and relationships. You can work effectively, meet friends, connect with new people, step away to read or create, take care of your body, share a meal, walk for an hour without crossing a car, or simply watch the sun disappear behind the landscape.','CNV is neither a conventional resort, a housing estate nor simply a travail partagé space. It is a living ecosystem where residents, guests, entrepreneurs, creators, families, experts and partners can stay, collaborate, learn, build projects and contribute to a community without giving up their independence.','The experience is premium, never rigid. CNV’s luxury comes from space, calm, beautiful landscapes, meaningful encounters, architecture that belongs to its setting, good food, available time and the freedom to choose your own rhythm.'].forEach((x,i)=>text(ps[i],x));text(v.querySelector('.pull strong'),'Luxury without stiffness.');text(v.querySelector('.pull p'),'A thoughtfully designed environment that remains effortless to live in: beautiful spaces, excellent services, nature, freedom, and the choice to be alone or surrounded whenever you wish.')}
- if(l==='es'){const ps=v.querySelectorAll('.longcopy p');['CNV nace como una alternativa a los modelos residenciales y turísticos convencionales. Reúne espacios de vida de baja densidad, grandes paisajes protegidos, bienestar, lugares para trabajar y crear, agricultura regenerativa, vida social elegida y servicios de calidad. El objetivo no es llenar el territorio de edificios, sino crear una forma más equilibrada de habitar el mundo.','Cada pueblo está pensado para dar más espacio al tiempo, a la naturaleza y a las relaciones. Se puede trabajar con eficacia, reencontrarse con amigos, conocer gente nueva, aislarse para leer o crear, cuidar el cuerpo, compartir una comida, caminar durante una hora sin cruzarse con un coche o simplemente contemplar la puesta de sol.','CNV no es un resort convencional, ni una urbanización, ni un simple espacio de travail partagé. Es un ecosistema vivo donde residentes, visitantes, emprendedores, creadores, familias, expertos y socios pueden alojarse, colaborar, aprender, desarrollar proyectos y contribuir a una comunidad sin renunciar a su independencia.','La experiencia busca un nivel premium sin rigidez. El lujo de CNV nace del espacio, la calma, la belleza del paisaje, la calidad de los encuentros, una arquitectura integrada, la buena comida, el tiempo disponible y la libertad de elegir el propio ritmo.'].forEach((x,i)=>text(ps[i],x));text(v.querySelector('.pull strong'),'Lujo sin rigidez.');text(v.querySelector('.pull p'),'Un entorno cuidadosamente diseñado y fácil de vivir: espacios bellos, buenos servicios, naturaleza, libertad y la posibilidad de estar solo o acompañado cuando uno lo desea.')}
- if(l==='fr'){const ps=v.querySelectorAll('.longcopy p');const fp=["CNV est conçu comme une alternative aux modèles résidentiels et touristiques traditionnels. Le projet rassemble des espaces de vie à faible densité, de grands paysages protégés, des lieux de bien-être, des espaces de travail et de création, une agriculture régénérative, une vie sociale choisie et des services de qualité. L'objectif n'est pas de remplir le territoire de bâtiments, mais de créer une manière plus équilibrée d'habiter le monde.","Chaque village est pensé pour donner davantage de place au temps, à la nature et aux relations. On peut y travailler avec efficacité, retrouver des amis, rencontrer de nouvelles personnes, s'isoler pour lire ou créer, prendre soin de son corps, partager un repas, marcher pendant une heure sans croiser une voiture ou simplement regarder le soleil disparaître derrière le paysage.","CNV n'est ni un resort classique, ni un lotissement, ni un simple espace de travail partagé. C'est un écosystème vivant où résidents, visiteurs, entrepreneurs, créateurs, familles, experts et partenaires peuvent séjourner, collaborer, apprendre, construire des projets et contribuer à une communauté sans perdre leur indépendance.","La qualité recherchée est premium, mais jamais rigide. Le luxe CNV vient de l'espace, du calme, de la beauté du paysage, de la qualité des rencontres, de l'architecture bien intégrée, de la nourriture, du temps disponible et de la possibilité de choisir son propre rythme."];fp.forEach((x,i)=>text(ps[i],x));text(v.querySelector('.pull strong'),'Le luxe sans rigidité.');text(v.querySelector('.pull p'),"Un environnement exigeant dans sa conception, mais simple à vivre. De beaux espaces, de bons services, de la nature, de la liberté et la possibilité d'être seul ou entouré quand on le souhaite.")}
+  // HERO
+  safe('hero',()=>{
+    const h=section('#home'); if(!h)return;
+    text(h.querySelector('.eyebrow'),t.hero[0]);
+    text(h.querySelector('h1'),t.hero[1],true);
+    text(h.querySelector('.hero-copy>p'),t.hero[2]);
+    const hb=h.querySelectorAll('.ctas button');
+    text(hb[0],t.hero[3]); text(hb[1],t.hero[4]);
+  });
 
- const fe2=section('#experience');text(fe2.querySelector('.kicker'),t.feeling[0]);text(fe2.querySelector('h2'),t.feeling[1],true);const words=fe2.querySelectorAll('.word'),sp=fe2.querySelectorAll('.slide-copy p');t.feeling[2].forEach((x,i)=>text(words[i],x));
- const atm2=section('#atmospheres'); if(atm2){text(atm2.querySelector('.kicker'),t.atmos[0]);text(atm2.querySelector('h2'),t.atmos[1]);const caps=atm2.querySelectorAll('figcaption');t.atmos[2].forEach((x,i)=>text(caps[i],x));}
- const vi2=section('#village');text(vi2.querySelector('.kicker'),t.village[0]);text(vi2.querySelector('h2'),t.village[1]);text(vi2.querySelector('.panel .eyebrow'),t.village[2]);const tags=vi2.querySelectorAll('.tag');t.village[3].forEach((x,i)=>text(tags[i],x));const cardNs=vi2.querySelectorAll('.card .n');(t.village[4]||[]).forEach((x,i)=>text(cardNs[i],x));
- const ar2=section('#artoflife');text(ar2.querySelector('.kicker'),t.art[0]);text(ar2.querySelector('h2'),t.art[1]);const al=ar2.querySelectorAll(':scope > .lead');if(al[1])text(al[1],t.art[2]);const fb=ar2.querySelectorAll('.filter-btn');(t.art[3]||[]).forEach((x,i)=>text(fb[i],x));translateProfiles(l);refreshProfileDropdowns(l);
- const life2=section('#life');text(life2.querySelector('.kicker'),t.life[0]);text(life2.querySelector('h2'),t.life[1]);text(document.getElementById('lifeProfileIntro'),t.life[2]);text(life2.querySelector('.kicker[style]'),t.life[3]);if(!selectedCard){text(document.getElementById('selectedProfile'),t.life[4]);text(document.getElementById('selectedFit'),t.life[5]);const arts=life2.querySelectorAll('.story article');(t.life[6]||[]).forEach((x,i)=>{if(arts[i])text(arts[i].querySelector('h3'),x)});}
- const pl2=section('#places');text(pl2.querySelector('.kicker'),t.places[0]);text(pl2.querySelector('h2'),t.places[1]);
+  // VISION
+  safe('vision',()=>{
+    const v=section('#vision'); if(!v)return;
+    text(v.querySelector('.kicker'),t.vision[0]);
+    text(v.querySelector('h2'),t.vision[1],true);
+    const stats=v.querySelectorAll('.stat span');
+    (t.vision[2]||[]).forEach((x,i)=>text(stats[i],x));
 
- const footer=document.querySelector('footer div:last-child');if(footer)footer.innerHTML=t.footer+'<br><a href="mailto:jet7club@proton.me" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a>';
- const modal2=document.getElementById('modal');text(document.getElementById('mTitle'),t.modal[0]);const ids=['contactFirstName','contactLastName','contactEmail','contactMessage'];ids.forEach((id,i)=>{const e=document.getElementById(id);if(e)e.placeholder=t.modal[2][i]});text(document.getElementById('contactSend'),t.modal[3]);text(document.getElementById('contactEmailNote'),t.modal[4]);
- setZone(currentZone); if(selectedCard)selectProfile(selectedCard,false); setTimeout(()=>auditLanguageMix(l),0);
+    const visionCopy={
+      fr:[
+        "CNV est conçu comme une alternative aux modèles résidentiels et touristiques traditionnels. Le projet rassemble des espaces de vie à faible densité, de grands paysages protégés, des lieux de bien-être, des espaces de travail et de création, une agriculture régénérative, une vie sociale choisie et des services de qualité. L'objectif n'est pas de remplir le territoire de bâtiments, mais de créer une manière plus équilibrée d'habiter le monde.",
+        "Chaque village est pensé pour donner davantage de place au temps, à la nature et aux relations. On peut y travailler avec efficacité, retrouver des amis, rencontrer de nouvelles personnes, s'isoler pour lire ou créer, prendre soin de son corps, partager un repas, marcher pendant une heure sans croiser une voiture ou simplement regarder le soleil disparaître derrière le paysage.",
+        "CNV n'est ni un resort classique, ni un lotissement, ni un simple espace de coworking. C'est un écosystème vivant où résidents, visiteurs, entrepreneurs, créateurs, familles, experts et partenaires peuvent séjourner, collaborer, apprendre, construire des projets et contribuer à une communauté sans perdre leur indépendance.",
+        "La qualité recherchée est premium, mais jamais rigide. Le luxe CNV vient de l'espace, du calme, de la beauté du paysage, de la qualité des rencontres, de l'architecture bien intégrée, de la nourriture, du temps disponible et de la possibilité de choisir son propre rythme."
+      ],
+      en:[
+        "CNV is conceived as an alternative to conventional residential and resort models. It brings together low-density living, large protected landscapes, wellbeing spaces, places to work and create, regenerative agriculture, social life by choice and high-quality services. The goal is not to fill the land with buildings, but to create a more balanced way of living.",
+        "Each village is designed to give more room to time, nature and relationships. You can work effectively, meet friends, connect with new people, step away to read or create, take care of your body, share a meal, walk for an hour without crossing a car, or simply watch the sun disappear behind the landscape.",
+        "CNV is neither a conventional resort, a housing estate nor simply a coworking space. It is a living ecosystem where residents, guests, entrepreneurs, creators, families, experts and partners can stay, collaborate, learn, build projects and contribute to a community without giving up their independence.",
+        "The experience is premium, never rigid. CNV’s luxury comes from space, calm, beautiful landscapes, meaningful encounters, architecture that belongs to its setting, good food, available time and the freedom to choose your own rhythm."
+      ],
+      es:[
+        "CNV nace como una alternativa a los modelos residenciales y turísticos convencionales. Reúne espacios de vida de baja densidad, grandes paisajes protegidos, bienestar, lugares para trabajar y crear, agricultura regenerativa, vida social elegida y servicios de calidad. El objetivo no es llenar el territorio de edificios, sino crear una forma más equilibrada de habitar el mundo.",
+        "Cada pueblo está pensado para dar más espacio al tiempo, a la naturaleza y a las relaciones. Se puede trabajar con eficacia, reencontrarse con amigos, conocer gente nueva, aislarse para leer o crear, cuidar el cuerpo, compartir una comida, caminar durante una hora sin cruzarse con un coche o simplemente contemplar la puesta de sol.",
+        "CNV no es un resort convencional, ni una urbanización, ni un simple espacio de coworking. Es un ecosistema vivo donde residentes, visitantes, emprendedores, creadores, familias, expertos y socios pueden alojarse, colaborar, aprender, desarrollar proyectos y contribuir a una comunidad sin renunciar a su independencia.",
+        "La experiencia busca un nivel premium sin rigidez. El lujo de CNV nace del espacio, la calma, la belleza del paisaje, la calidad de los encuentros, una arquitectura integrada, la buena comida, el tiempo disponible y la libertad de elegir el propio ritmo."
+      ]
+    };
+    const ps=v.querySelectorAll('.longcopy p');
+    (visionCopy[l]||visionCopy.fr).forEach((x,i)=>text(ps[i],x));
+    const pullTitle={fr:'Le luxe sans rigidité.',en:'Luxury without stiffness.',es:'Lujo sin rigidez.'}[l];
+    const pullText={
+      fr:"Un environnement exigeant dans sa conception, mais simple à vivre. De beaux espaces, de bons services, de la nature, de la liberté et la possibilité d'être seul ou entouré quand on le souhaite.",
+      en:"A thoughtfully designed environment that remains effortless to live in: beautiful spaces, excellent services, nature, freedom, and the choice to be alone or surrounded whenever you wish.",
+      es:"Un entorno cuidadosamente diseñado y fácil de vivir: espacios bellos, buenos servicios, naturaleza, libertad y la posibilidad de estar solo o acompañado cuando uno lo desea."
+    }[l];
+    text(v.querySelector('.pull strong'),pullTitle);
+    text(v.querySelector('.pull p'),pullText);
+  });
+
+  // EXPERIENCE / ATMOSPHERES
+  safe('experience',()=>{
+    const fe=section('#experience'); if(fe){
+      text(fe.querySelector('.kicker'),t.feeling[0]);
+      text(fe.querySelector('h2'),t.feeling[1],true);
+      text(fe.querySelector('.lead'),bdy.feelingLead);
+      const words=fe.querySelectorAll('.word'); (t.feeling[2]||[]).forEach((x,i)=>text(words[i],x));
+      const sps=fe.querySelectorAll('.slide-copy p'); (bdy.slides||[]).forEach((x,i)=>text(sps[i],x));
+    }
+    const atm=section('#atmospheres'); if(atm){
+      text(atm.querySelector('.kicker'),t.atmos[0]);
+      text(atm.querySelector('h2'),t.atmos[1]);
+      text(atm.querySelector('.lead'),bdy.atmosLead);
+      const caps=atm.querySelectorAll('figcaption'); (t.atmos[2]||[]).forEach((x,i)=>text(caps[i],x));
+    }
+  });
+
+  // VILLAGE
+  safe('village',()=>{
+    const vi=section('#village'); if(!vi)return;
+    text(vi.querySelector('.kicker'),t.village[0]);
+    text(vi.querySelector('h2'),t.village[1]);
+    text(vi.querySelector('.lead'),bdy.villageLead);
+    text(vi.querySelector('.panel .eyebrow'),t.village[2]);
+    const tags=vi.querySelectorAll('.tag'); (t.village[3]||[]).forEach((x,i)=>text(tags[i],x));
+    const cards=vi.querySelectorAll('.card');
+    (bdy.cards||[]).forEach((x,i)=>{if(cards[i]){text(cards[i].querySelector('h3'),x[0]);text(cards[i].querySelector('p'),x[1]);}});
+    const cardNs=vi.querySelectorAll('.card .n'); (t.village[4]||[]).forEach((x,i)=>text(cardNs[i],x));
+    setZone(currentZone);
+  });
+
+  // ART OF LIFE + SELECTORS + 50 PROFILES
+  safe('profiles',()=>{
+    const ar=section('#artoflife'); if(ar){
+      text(ar.querySelector('.kicker'),t.art[0]);
+      text(ar.querySelector('h2'),t.art[1]);
+      const leads=ar.querySelectorAll(':scope > .lead');
+      if(leads[0])text(leads[0],bdy.artLead1);
+    }
+    translateProfiles(l);
+    refreshProfileDropdowns(l);
+  });
+
+  // PERSONALIZED DAY
+  safe('day',()=>{
+    const life=section('#life'); if(!life)return;
+    text(life.querySelector('.kicker'),t.life[0]);
+    text(life.querySelector('h2'),t.life[1]);
+    text(life.querySelector('.kicker[style]'),t.life[3]);
+    const arts=life.querySelectorAll('.story article');
+    (t.life[6]||[]).forEach((x,i)=>{if(arts[i])text(arts[i].querySelector('h3'),x)});
+    if(selectedCard){selectProfile(selectedCard,false);}
+    else{
+      text(document.getElementById('lifeProfileIntro'),t.life[2]);
+      text(document.getElementById('selectedProfile'),t.life[4]);
+      text(document.getElementById('selectedFit'),t.life[5]);
+      renderDayPrograms(l,[]);
+    }
+  });
+
+  // GLOBAL VILLAGES — heading AND body are switched in the SAME block.
+  safe('places',()=>{
+    const pl=section('#places'); if(!pl)return;
+    text(pl.querySelector('.kicker'),t.places[0]);
+    text(pl.querySelector('h2'),t.places[1]);
+    text(pl.querySelector('.lead'),bdy.placesLead);
+    const locs=pl.querySelectorAll('.loc');
+    (bdy.locations||[]).forEach((x,i)=>{
+      if(locs[i]){text(locs[i].querySelector('h3'),x[0]);text(locs[i].querySelector('p'),x[1]);}
+    });
+  });
+
+  // JOIN — heading, lead, 6 buttons and descriptions switched atomically.
+  safe('join',()=>{renderJoinLocale(l)});
+
+  // FOOTER
+  safe('footer',()=>{
+    const footer=document.querySelector('footer div:last-child');
+    if(footer)footer.innerHTML=t.footer+'<br><a href="mailto:jet7club@proton.me" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a>';
+  });
+
+  // MODAL / FORM
+  safe('modal',()=>{
+    const modal=document.getElementById('modal'); if(!modal)return;
+    const ids=['contactFirstName','contactLastName','contactEmail','contactMessage'];
+    ids.forEach((id,i)=>{const e=document.getElementById(id);if(e)e.placeholder=t.modal[2][i]});
+    text(document.getElementById('contactSend'),t.modal[3]);
+    text(document.getElementById('contactEmailNote'),t.modal[4]);
+    renderJoinLocale(l);
+  });
+
+  setTimeout(()=>auditLanguageMix(l),0);
 }
 
 function renderDayPrograms(lang,steps=[]){
@@ -967,10 +1095,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   PROFILE_FR=originalProfiles;
   const l=localStorage.getItem('cnvLang')||'fr';
   const b=[...document.querySelectorAll('.langs button')].find(x=>x.textContent.trim().toLowerCase()===l);
-  refreshProfileDropdowns(l);
-  try{ setLang(l,b); }catch(err){ console.error('CNV language init:',err); }
-  refreshProfileDropdowns(l);
-  if(!selectedCard)renderDayPrograms(l,[]);
+  setLang(l,b);
 });
 </script>
 </body>
