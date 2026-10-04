@@ -19,7 +19,7 @@ nav{display:flex;gap:22px}nav a{color:#fff;text-decoration:none;font-size:12px;t
 h1{font-size:clamp(58px,8vw,126px);line-height:.95;margin:0 0 18px}.hero p{font-size:22px;line-height:1.62;max-width:760px;color:#eef3f0}.hero-quote{font-family:Georgia,serif;font-size:24px;font-style:italic;color:#f0e0bb;margin-top:18px}.ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .section{padding:105px 5vw}.section.alt{background:var(--paper)}.section h2{font-size:clamp(43px,6vw,78px);line-height:1.02;color:#10372c;margin:12px 0 20px}.lead{font-size:20px;line-height:1.68;color:#52615a;max-width:900px}
 .copy-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:start}.longcopy p{font-size:16.6px;line-height:1.82;color:#4f5d57;margin:0 0 18px}.pull{background:#fff;border-radius:32px;padding:38px;box-shadow:var(--shadow);position:sticky;top:110px}.pull strong{display:block;font:34px/1.15 Georgia,serif;color:#173b30;margin-bottom:16px}.pull p{line-height:1.72;color:#59655f}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:48px}.stats .stat:nth-child(n+5){background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(247,241,232,.9))}.stat{background:rgba(255,255,255,.78);border:1px solid rgba(195,154,87,.14);border-radius:26px;padding:28px;box-shadow:0 14px 36px rgba(0,0,0,.05)}.stat b{display:block;font:42px Georgia,serif;color:#a77a3d;margin-bottom:7px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:48px}.stats .stat:nth-child(n+5){background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(247,241,232,.9))}.stat{background:rgba(255,255,255,.78);border:1px solid rgba(195,154,87,.14);border-radius:26px;padding:28px;box-shadow:0 14px 36px rgba(0,0,0,.05)}.stat b{display:block;font:42px Georgia,serif;color:#a77a3d;margin-bottom:7px}
 
 .feeling{background:#071f19;color:#fff;padding:110px 0;overflow:hidden}.feeling-head{padding:0 5vw 40px}.feeling h2{font-size:clamp(43px,6vw,78px);line-height:1.02;margin:12px 0 20px}.feeling .lead{color:#d9e3df}
 .rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 5vw 28px;scrollbar-width:none}.rail::-webkit-scrollbar{display:none}.slide{position:relative;flex:0 0 min(78vw,980px);height:min(68vh,620px);border-radius:34px;overflow:hidden;scroll-snap-align:center;box-shadow:0 28px 70px rgba(0,0,0,.28)}.slide img{width:100%;height:100%;object-fit:cover}.slide:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.74))}.slide-copy{position:absolute;left:34px;right:34px;bottom:28px;z-index:2}.slide-copy .word{font:60px/1 Georgia,serif;color:#fff;margin-bottom:8px}.slide-copy p{max-width:680px;color:#f0f4f2;line-height:1.72}
@@ -127,20 +127,17 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
   <aside class="pull"><strong>Le luxe sans rigidité.</strong><p>Un environnement exigeant dans sa conception, mais simple à vivre. De beaux espaces, de bons services, de la nature, de la liberté et la possibilité d'être seul ou entouré quand on le souhaite.</p></aside>
 </div>
 <div class="stats">
-<div class="stat"><b>80%</b><span>Nature dominante</span></div>
-<div class="stat"><b>8</b><span>Micro-villages complémentaires</span></div>
-<div class="stat"><b>+ 30%</b><span>Sanctuaire naturel</span></div>
-<div class="stat"><b>1</b><span>Communauté internationale</span></div>
-
 <div class="stat"><b>1,000 ha</b><span>Village de référence</span></div>
+<div class="stat"><b>30%</b><span>Sanctuaire naturel indicatif</span></div>
 <div class="stat"><b>50 ha</b><span>Permaculture & production locale</span></div>
-<div class="stat"><b>100</b><span>Tentes premium Glamping</span></div>
-<div class="stat"><b>500 à 2000</b><span>Habitats</span></div>
-
-<div class="stat"><b>50</b><span>Parcours Art of Life</span></div>
-<div class="stat"><b>5</b><span>Régions internationales envisagées</span></div>
 <div class="stat"><b>3 ha</b><span>Bien-être & Spa</span></div>
 <div class="stat"><b>5 ha</b><span>Activités & Sports</span></div>
+
+<div class="stat"><b>1</b><span>Communauté internationale</span></div>
+<div class="stat"><b>5</b><span>Régions internationales envisagées</span></div>
+<div class="stat"><b>8</b><span>Micro-villages complémentaires</span></div>
+<div class="stat"><b>+100</b><span>Activités sportives et culturelles</span></div>
+<div class="stat"><b>+50</b><span>Parcours Art de vivre</span></div>
 </div>
 </section>
 
@@ -693,7 +690,7 @@ fr:{
 brandTagline:'Votre Hub Collaboratif',
 nav:['Vision','Expérience','Village','Art de vivre','Destinations'],
 hero:['Une nouvelle génération de villages naturels','Vivre mieux en prenant le temps de se connecter vraiment à la nature et aux autres.','Chill Natural Villages imagine des lieux où la nature, la liberté, le bien-être, la créativité et les relations humaines redeviennent le centre de la vie quotidienne.',"Découvrir l’expérience",'Découvrir les 50 parcours'],
-vision:['Notre vision',"La nature n’entoure pas le village.<br>La nature est le village.",['Nature dominante','Micro-villages complémentaires','Sanctuaire naturel','Communauté internationale','Village de référence','Permaculture & production locale','Tentes premium Glamping','Habitats','Parcours Art de vivre','Régions internationales envisagées','Bien-être & Spa','Activités & Sports']],
+vision:['Notre vision',"La nature n’entoure pas le village.<br>La nature est le village.",['Village de référence','Sanctuaire naturel indicatif','Permaculture & production locale','Bien-être & Spa','Activités & Sports','Communauté internationale','Régions internationales envisagées','Micro-villages complémentaires','Activités sportives et culturelles','Parcours Art de vivre']],
 feeling:["L’esprit CNV","Plus qu’un lieu.<br>Une façon de vivre.",['Connecter','Célébrer','Respirer','Bouger','Créer','Appartenir']],
 atmos:['Ambiances & lieux',"Des images pour ressentir l’atmosphère.",['Ambiance bien-être','Permaculture','Hub collaboratif','Vie nocturne','Spa en montagne','Jardins & alimentation']],
 village:['Le village',"Un écosystème complet, pensé à l’échelle humaine.",'Zone sélectionnée',['Nature avant tout','Faible densité','Tout à pied','Échelle humaine'],['01 · Habiter','02 · Bien-être','03 · Travail','04 · Alimentation']],
@@ -708,7 +705,7 @@ en:{
 brandTagline:'Votre Hub Collaboratif',
 nav:['Vision','Experience','Village','Art of Life','Destinations'],
 hero:['A new generation of nature-first villages','Live better by taking the time to truly connect with nature and with others.','Chill Natural Villages creates places where nature, freedom, wellbeing, creativity and meaningful human connection return to the heart of everyday life.','Discover the experience','Explore the 50 pathways'],
-vision:['Our vision','Nature is not around the village.<br>Nature is the village.',['Nature-dominant','Complementary micro-villages','Natural sanctuary','International community','Reference village','Permaculture & local production','Premium glamping tents','Homes','Art of Life pathways','International regions considered','Wellness & Spa','Activities & Sports']],
+vision:['Our vision','Nature is not around the village.<br>Nature is the village.',['Reference village','Indicative natural sanctuary','Permaculture & local production','Wellness & Spa','Activities & Sports','International community','International regions considered','Complementary micro-villages','Sports & cultural activities','Art of Life pathways']],
 feeling:['The CNV Feeling','More than a place.<br>A way of living.',['Connect','Celebrate','Breathe','Move','Create','Belong']],
 atmos:['Atmospheres & places','Images that let you feel the atmosphere.',['Ambiance bien-être','Permaculture','Collaborative Hub','Vie nocturne','Mountain spa','Jardins & alimentation']],
 village:['The village','A complete ecosystem designed at human scale.','Selected area',['Nature first','Low density','Walkable','Human scale'],['01 · Living','02 · Wellness','03 · Work','04 · Food']],
@@ -723,7 +720,7 @@ es:{
 brandTagline:'Tu Hub Colaborativo',
 nav:['Visión','Experiencia','Pueblo','Arte de vivir','Destinos'],
 hero:['Una nueva generación de pueblos centrados en la naturaleza','Vivir mejor, tomándose el tiempo de conectar de verdad con la naturaleza y con los demás.','Chill Natural Villages crea lugares donde la naturaleza, la libertad, el bienestar, la creatividad y las relaciones humanas vuelven al centro de la vida cotidiana.','Descubrir la experiencia','Explorar los 50 recorridos'],
-vision:['Nuestra visión','La naturaleza no rodea el pueblo.<br>La naturaleza es el pueblo.',['Naturaleza dominante','Micro-pueblos complementarios','Santuario natural','Comunidad internacional','Pueblo de referencia','Permacultura & producción local','Tiendas glamping premium','Viviendas','Recorridos Arte de vivir','Regiones internacionales consideradas','Bienestar & Spa','Actividades & Deportes']],
+vision:['Nuestra visión','La naturaleza no rodea el pueblo.<br>La naturaleza es el pueblo.',['Pueblo de referencia','Santuario natural indicativo','Permacultura & producción local','Bienestar & Spa','Actividades & Deportes','Comunidad internacional','Regiones internacionales consideradas','Micro-pueblos complementarios','Actividades deportivas y culturales','Recorridos Arte de vivir']],
 feeling:['El espíritu CNV','Más que un lugar.<br>Una forma de vivir.',['Conectar','Celebrar','Respirar','Moverse','Crear','Pertenecer']],
 atmos:['Ambientes & lugares','Imágenes para sentir la atmósfera.',['Ambiente de bienestar','Permacultura','Hub colaborativo','Vida nocturna','Spa de montaña','Jardines & alimentación']],
 village:['El pueblo','Un ecosistema completo, pensado a escala humana.','Zona seleccionada',['Naturaleza primero','Baja densidad','Todo a pie','Escala humana'],['01 · Vivir','02 · Bienestar','03 · Trabajo','04 · Alimentación']],
