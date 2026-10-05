@@ -828,7 +828,7 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 </div>
 </section>
 <footer><div><strong class="serif" style="font-size:24px">Chill Natural Villages</strong><br/><span style="opacity:.65">Votre Hub Collaboratif</span></div><div id="footerValues" style="opacity:.7">Nature · Communauté · Bien-être · Collaboration<br/><a href="#" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a></div></footer>
-<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="box"><button onclick="closeModal()" style="float:right;border:0;background:none;font-size:24px;cursor:pointer">×</button><div class="kicker">CNV</div><h3 id="mTitle" style="font-size:38px;color:#10372c;margin:10px 0">Rejoindre CNV</h3><p>Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.</p><form id="cnvContactForm" onsubmit="sendCNVMessage(event)"><input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" id="contactSend" style="margin-top:8px;color:#11231c" type="submit">Envoyer à CNV</button><p id="contactFormStatus" aria-live="polite" style="font-size:13px;margin:10px 0 0;min-height:18px"></p><p id="contactEmailNote" style="font-size:12px;color:#7b817e;margin:12px 0 0">Votre message sera adressé à jet7club@proton.me.</p></form></div></div>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="box"><button onclick="closeModal()" style="float:right;border:0;background:none;font-size:24px;cursor:pointer">×</button><div class="kicker">CNV</div><h3 id="mTitle" style="font-size:38px;color:#10372c;margin:10px 0">Rejoindre CNV</h3><p>Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.</p><form id="cnvContactForm"><input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" id="contactSend" style="margin-top:8px;color:#11231c" type="submit">Envoyer à CNV</button><p id="contactFormStatus" aria-live="polite" style="font-size:13px;margin:10px 0 0;min-height:18px"></p><p id="contactEmailNote" style="font-size:12px;color:#7b817e;margin:12px 0 0">Votre message sera adressé à jet7club@proton.me.</p></form></div></div>
 <script>
 let currentLang='fr', currentZone='sanctuary', selectedCard=null;
 const originalProfiles=[...document.querySelectorAll('.path-card')].map(card=>{
@@ -1647,45 +1647,138 @@ window.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 
-<script id="CNV_CONTACT_FORCE_AJAX">
-document.addEventListener('DOMContentLoaded', function(){
-  const btn=document.getElementById('contactSend');
-  const form=btn ? btn.closest('form') : null;
+<script id="CNV_CONTACT_FINAL">
+(function(){
+  "use strict";
+  const ENDPOINT="https://formsubmit.co/ajax/jet7club@proton.me";
 
-  if(btn){
-    btn.setAttribute('type','submit');
-    btn.removeAttribute('onclick');
-    btn.removeAttribute('href');
+  function currentLang(){
+    return (document.documentElement.getAttribute("lang")||"fr").toLowerCase().slice(0,2);
   }
 
-  if(form){
-    form.removeAttribute('action');
-    form.removeAttribute('method');
+  function messages(kind){
+    const t={
+      fr:{sending:"Envoi en cours…",success:"Message envoyé à CNV. Merci.",error:"Envoi impossible. Réessayez."},
+      en:{sending:"Sending…",success:"Message sent to CNV. Thank you.",error:"Unable to send. Please try again."},
+      es:{sending:"Enviando…",success:"Mensaje enviado a CNV. Gracias.",error:"No se pudo enviar. Inténtelo de nuevo."}
+    };
+    const l=t[currentLang()]?currentLang():"fr";
+    return t[l][kind];
+  }
 
-    const clean=form.cloneNode(true);
-    form.replaceWith(clean);
+  function statusNode(form){
+    let n=document.getElementById("cnvContactStatus");
+    if(!n){
+      n=document.createElement("div");
+      n.id="cnvContactStatus";
+      n.style.marginTop="12px";
+      n.style.fontSize="14px";
+      form.appendChild(n);
+    }
+    return n;
+  }
 
-    const cleanBtn=clean.querySelector('#contactSend');
-    if(cleanBtn){
-      cleanBtn.setAttribute('type','submit');
-      cleanBtn.removeAttribute('onclick');
-      cleanBtn.removeAttribute('href');
+  function collect(form){
+    const data={};
+    const fd=new FormData(form);
+
+    for(const [k,v] of fd.entries()){
+      if(typeof v==="string" && v.trim()) data[k]=v.trim();
     }
 
-    clean.addEventListener('submit', function(e){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      if(typeof window.sendCNVMessage==='function'){
-        window.sendCNVMessage(e);
-      } else if(typeof sendCNVMessage==='function'){
-        sendCNVMessage(e);
-      } else {
-        console.error('CNV: sendCNVMessage introuvable');
+    for(const el of form.querySelectorAll("input,textarea,select")){
+      if(!el.name && el.id){
+        const v=(el.value||"").trim();
+        if(v) data[el.id]=v;
       }
-    }, true);
+    }
+
+    data["_subject"]="CNV — Nouveau message";
+    data["_template"]="table";
+    data["Langue / Language"]=currentLang().toUpperCase();
+    data["Page"]=location.href;
+    return data;
   }
-});
+
+  async function send(form,button){
+    if(!form || form.dataset.cnvSending==="1") return;
+
+    form.dataset.cnvSending="1";
+    const status=statusNode(form);
+    const old=button?button.textContent:"";
+
+    if(button){
+      button.disabled=true;
+      button.textContent=messages("sending");
+    }
+    status.textContent=messages("sending");
+
+    try{
+      const r=await fetch(ENDPOINT,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Accept":"application/json"
+        },
+        body:JSON.stringify(collect(form))
+      });
+
+      if(!r.ok) throw new Error("HTTP "+r.status);
+
+      status.textContent=messages("success");
+      form.reset();
+    }catch(err){
+      console.error("CNV contact error",err);
+      status.textContent=messages("error");
+    }finally{
+      form.dataset.cnvSending="0";
+      if(button){
+        button.disabled=false;
+        button.textContent=old;
+      }
+    }
+  }
+
+  document.addEventListener("click",function(e){
+    const b=e.target && e.target.closest ? e.target.closest("#contactSend") : null;
+    if(!b) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    const f=b.closest("form")||document.getElementById("cnvContactForm");
+    send(f,b);
+  },true);
+
+  document.addEventListener("submit",function(e){
+    const f=e.target;
+    if(!f || f.id!=="cnvContactForm") return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    send(f,f.querySelector("#contactSend"));
+  },true);
+
+  document.addEventListener("DOMContentLoaded",function(){
+    const f=document.getElementById("cnvContactForm");
+    const b=document.getElementById("contactSend");
+
+    if(f){
+      f.removeAttribute("action");
+      f.removeAttribute("method");
+      f.removeAttribute("onsubmit");
+    }
+
+    if(b){
+      b.removeAttribute("href");
+      b.removeAttribute("onclick");
+      b.setAttribute("type","button");
+    }
+  });
+})();
 </script>
-<script>window.sendCNVMessage=sendCNVMessage;</script>
 </body>
 </html>
