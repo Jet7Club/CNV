@@ -827,7 +827,7 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <button class="choice" onclick="openJoin(5)"><span class="choice-no">06 · Investir</span><b>Je veux devenir investisseur</b><small>Découvrir le modèle, les premiers sites, la stratégie de développement et les opportunités d’investissement.</small></button>
 </div>
 </section>
-<footer><div><strong class="serif" style="font-size:24px">Chill Natural Villages</strong><br/><span style="opacity:.65">Votre Hub Collaboratif</span></div><div id="footerValues" style="opacity:.7">Nature · Communauté · Bien-être · Collaboration<br/><a href="mailto:jet7club@proton.me" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a></div></footer>
+<footer><div><strong class="serif" style="font-size:24px">Chill Natural Villages</strong><br/><span style="opacity:.65">Votre Hub Collaboratif</span></div><div id="footerValues" style="opacity:.7">Nature · Communauté · Bien-être · Collaboration<br/><a href="#" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a></div></footer>
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="box"><button onclick="closeModal()" style="float:right;border:0;background:none;font-size:24px;cursor:pointer">×</button><div class="kicker">CNV</div><h3 id="mTitle" style="font-size:38px;color:#10372c;margin:10px 0">Rejoindre CNV</h3><p>Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.</p><form id="cnvContactForm" onsubmit="sendCNVMessage(event)"><input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" id="contactSend" style="margin-top:8px;color:#11231c" type="submit">Envoyer à CNV</button><p id="contactFormStatus" aria-live="polite" style="font-size:13px;margin:10px 0 0;min-height:18px"></p><p id="contactEmailNote" style="font-size:12px;color:#7b817e;margin:12px 0 0">Votre message sera adressé à jet7club@proton.me.</p></form></div></div>
 <script>
 let currentLang='fr', currentZone='sanctuary', selectedCard=null;
@@ -1236,7 +1236,7 @@ function setLang(l,b){
   // FOOTER
   safe('footer',()=>{
     const footer=document.querySelector('footer div:last-child');
-    if(footer)footer.innerHTML=t.footer+'<br><a href="mailto:jet7club@proton.me" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a>';
+    if(footer)footer.innerHTML=t.footer+'<br><a href="#" style="color:#e0c58f;text-decoration:none">jet7club@proton.me</a>';
   });
 
   // MODAL / FORM
@@ -1647,5 +1647,45 @@ window.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 
+<script id="CNV_CONTACT_FORCE_AJAX">
+document.addEventListener('DOMContentLoaded', function(){
+  const btn=document.getElementById('contactSend');
+  const form=btn ? btn.closest('form') : null;
+
+  if(btn){
+    btn.setAttribute('type','submit');
+    btn.removeAttribute('onclick');
+    btn.removeAttribute('href');
+  }
+
+  if(form){
+    form.removeAttribute('action');
+    form.removeAttribute('method');
+
+    const clean=form.cloneNode(true);
+    form.replaceWith(clean);
+
+    const cleanBtn=clean.querySelector('#contactSend');
+    if(cleanBtn){
+      cleanBtn.setAttribute('type','submit');
+      cleanBtn.removeAttribute('onclick');
+      cleanBtn.removeAttribute('href');
+    }
+
+    clean.addEventListener('submit', function(e){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if(typeof window.sendCNVMessage==='function'){
+        window.sendCNVMessage(e);
+      } else if(typeof sendCNVMessage==='function'){
+        sendCNVMessage(e);
+      } else {
+        console.error('CNV: sendCNVMessage introuvable');
+      }
+    }, true);
+  }
+});
+</script>
+<script>window.sendCNVMessage=sendCNVMessage;</script>
 </body>
 </html>
