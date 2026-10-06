@@ -1,0 +1,70 @@
+name: Fix CNV FormSubmit return
+
+on:
+  push:
+    branches:
+      - fix-formsubmit-return
+    paths:
+      - .github/workflows/fix-formsubmit-return.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-form:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix-formsubmit-return
+          fetch-depth: 0
+
+      - name: Add CNV return URL to FormSubmit form
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+
+          m = re.search(r'<form\b[^>]*\bid=["\']cnvContactForm["\'][^>]*>.*?</form>', html, re.S|re.I)
+          if not m:
+              raise SystemExit('cnvContactForm introuvable')
+
+          form = m.group(0)
+          form = re.sub(r'\s+action=(["\'])https://formsubmit\.co/(?:ajax/)?jet7club@proton\.me\1', ' action="https://formsubmit.co/jet7club@proton.me"', form, flags=re.I)
+          form = re.sub(r'<input\b[^>]*\bname=(["\'])_next\1[^>]*>\s*', '', form, flags=re.I)
+
+          open_end = form.find('>') + 1
+          hidden = '\n  <input type="hidden" name="_next" value="https://www.cnvillages.com/">'
+          form = form[:open_end] + hidden + form[open_end:]
+
+          html = html[:m.start()] + form + html[m.end():]
+          p.write_text(html, encoding='utf-8')
+
+          check = re.search(r'<form\b[^>]*\bid=["\']cnvContactForm["\'][^>]*>.*?</form>', html, re.S|re.I).group(0)
+          if 'action="https://formsubmit.co/jet7club@proton.me"' not in check:
+              raise SystemExit('Action FormSubmit incorrecte')
+          if 'name="_next" value="https://www.cnvillages.com/"' not in check:
+              raise SystemExit('_next absent')
+          if 'formsubmit.co/ajax/' in check:
+              raise SystemExit('Endpoint AJAX encore présent')
+          print('OK: formulaire CNV corrigé')
+          PY
+
+      - name: Commit fix
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "CNV: redirect FormSubmit back to site"
+          git push origin HEAD:fix-formsubmit-return
