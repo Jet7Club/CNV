@@ -1,0 +1,127 @@
+name: Fix CNV FormSubmit JS redirect
+
+on:
+  push:
+    branches:
+      - fix-formsubmit-js
+    paths:
+      - .github/workflows/fix-formsubmit-js.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-form:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix-formsubmit-js
+          fetch-depth: 0
+
+      - name: Convert CNV contact form to AJAX and redirect home
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+
+          m = re.search(r'<form\b[^>]*\bid=["\']cnvContactForm["\'][^>]*>.*?</form>', html, re.S|re.I)
+          if not m:
+              raise SystemExit('cnvContactForm introuvable')
+
+          form = m.group(0)
+          form = re.sub(r'\s+action=(["\'])https://formsubmit\.co/(?:ajax/)?jet7club@proton\.me\1', '', form, flags=re.I)
+          form = re.sub(r'\s+method=(["\'])post\1', '', form, flags=re.I)
+          form = re.sub(r'<input\b[^>]*\bname=(["\'])_next\1[^>]*>\s*', '', form, flags=re.I)
+          html = html[:m.start()] + form + html[m.end():]
+
+          # Remove any older CNV AJAX override block if it exists.
+          html = re.sub(r'<script id="CNV_FORM_AJAX_REDIRECT">.*?</script>\s*', '', html, flags=re.S|re.I)
+
+          js = r'''
+<script id="CNV_FORM_AJAX_REDIRECT">
+(function(){
+  "use strict";
+  const ENDPOINT = "https://formsubmit.co/ajax/jet7club@proton.me";
+  const HOME = "https://www.cnvillages.com/";
+
+  document.addEventListener("submit", async function(e){
+    const form = e.target;
+    if(!form || form.id !== "cnvContactForm") return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const button = form.querySelector("#contactSend, button[type='submit'], input[type='submit']");
+    const oldText = button && 'textContent' in button ? button.textContent : '';
+    if(button) button.disabled = true;
+
+    const payload = {};
+    const fd = new FormData(form);
+    for(const [k,v] of fd.entries()){
+      if(typeof v === "string") payload[k] = v;
+    }
+    payload._subject = payload._subject || "CNV — Nouveau message";
+    payload._template = payload._template || "table";
+    payload._captcha = "false";
+
+    try {
+      const r = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await r.json().catch(() => ({}));
+      if(!r.ok || data.success === false) throw new Error(data.message || ("HTTP " + r.status));
+
+      window.location.replace(HOME);
+    } catch(err) {
+      console.error("CNV FormSubmit error", err);
+      alert("Envoi impossible. Merci de réessayer.");
+      if(button){
+        button.disabled = false;
+        if(oldText && 'textContent' in button) button.textContent = oldText;
+      }
+    }
+  }, true);
+})();
+</script>
+'''.strip()
+
+          if '</body>' not in html.lower():
+              raise SystemExit('</body> introuvable')
+          html = re.sub(r'</body>', js + '\n</body>', html, count=1, flags=re.I)
+          p.write_text(html, encoding='utf-8')
+
+          check = p.read_text(encoding='utf-8')
+          if 'https://formsubmit.co/ajax/jet7club@proton.me' not in check:
+              raise SystemExit('Endpoint AJAX absent')
+          if 'window.location.replace(HOME)' not in check:
+              raise SystemExit('Redirect JS absent')
+          if check.count('id="CNV_FORM_AJAX_REDIRECT"') != 1:
+              raise SystemExit('Bloc JS dupliqué')
+          print('OK: CNV FormSubmit AJAX + redirect home configuré')
+          PY
+
+      - name: Commit fix
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No change needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "CNV: submit contact form by AJAX and redirect home"
+          git push origin HEAD:fix-formsubmit-js
