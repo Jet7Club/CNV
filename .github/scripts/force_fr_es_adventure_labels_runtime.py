@@ -1,11 +1,9 @@
 from pathlib import Path
+import re
 
 p=Path('index.html')
 s=p.read_text(encoding='utf-8')
 marker='cnv-fr-es-adventure-labels-runtime-20261008'
-if marker in s:
-    print('already patched')
-    raise SystemExit(0)
 
 js=r'''
 <script id="cnv-fr-es-adventure-labels-runtime-20261008">
@@ -24,16 +22,17 @@ js=r'''
     });
     if(!heading)return;
     const section=heading.closest('section')||heading.parentElement?.parentElement||document;
+    const expected=l.map((x,i)=>String(i+1).padStart(2,'0')+' · '+x);
     const candidates=[...section.querySelectorAll('h3,strong,b')].filter(el=>/^\s*0?[1-6]\s*[·.-]?\s*/.test((el.textContent||'').trim()));
     if(candidates.length>=6){
-      candidates.slice(0,6).forEach((el,i)=>{el.textContent=String(i+1).padStart(2,'0')+' · '+l[i]});
+      candidates.slice(0,6).forEach((el,i)=>{el.textContent=expected[i]});
       return;
     }
     const all=[...section.querySelectorAll('*')].filter(el=>{
       const t=(el.textContent||'').trim();
       return /^(0?[1-6]\s*[·.-]?\s*)?(Belong|Build|Invest|Empower|Support|Contribute|Appartenir|Construire|Investir|Soutenir|Contribuer|Pertenecer|Construir|Invertir|Apoyar|Contribuir)$/i.test(t);
     });
-    all.slice(0,6).forEach((el,i)=>{el.textContent=String(i+1).padStart(2,'0')+' · '+l[i]});
+    all.slice(0,6).forEach((el,i)=>{el.textContent=expected[i]});
   }
   apply();
   new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['lang']});
@@ -41,9 +40,17 @@ js=r'''
 </script>
 '''
 
-if '</body>' in s:
-    s=s.replace('</body>',js+'\n</body>',1)
+pat=r'<script id="cnv-fr-es-adventure-labels-runtime-20261008">.*?</script>'
+if marker in s:
+    s,n=re.subn(pat,js.strip(),s,count=1,flags=re.S)
+    if n!=1:
+        raise SystemExit('Existing runtime block marker found but replacement failed')
+    print('Updated existing runtime enforcement for FR/ES/EN adventure labels')
 else:
-    s+=js
+    if '</body>' in s:
+        s=s.replace('</body>',js+'\n</body>',1)
+    else:
+        s+=js
+    print('Injected runtime enforcement for FR/ES/EN adventure labels')
+
 p.write_text(s,encoding='utf-8')
-print('Injected runtime enforcement for FR/ES/EN adventure labels')
