@@ -1,0 +1,30 @@
+name: Fix mobile nav and translations
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-mobile-nav-translations.yml'
+      - '.github/scripts/fix_mobile_nav_translations.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        run: python .github/scripts/fix_mobile_nav_translations.py
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Fix mobile Members navigation and translation issues"
+          git push
