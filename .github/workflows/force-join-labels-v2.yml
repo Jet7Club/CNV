@@ -28,3 +28,4 @@ jobs:
           git add index.html
           git commit -m "Force exact CNV join labels in FR EN ES"
           git push
+# retrigger 2026-10-08
