@@ -1,0 +1,30 @@
+name: Force final CNV join labels
+
+on:
+  push:
+    paths:
+      - '.github/workflows/force-join-labels-final.yml'
+      - '.github/scripts/force_join_labels_final.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply exact FR EN ES labels
+        run: python .github/scripts/force_join_labels_final.py
+      - name: Commit index.html now
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Apply final CNV join labels in FR EN ES"
+          git push
