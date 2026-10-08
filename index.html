@@ -1164,7 +1164,7 @@ function setLang(l,b){
     };
     const ps=v.querySelectorAll('.longcopy p');
     (visionCopy[l]||visionCopy.fr).forEach((x,i)=>text(ps[i],x));
-    const pullTitle={fr:'L'abondance de la nature.',en:'L'abondance de la nature.',es:'Lujo sin rigidez.'}[l];
+    const pullTitle={fr:"L'abondance de la nature.",en:'Nature in abundance.',es:'La abundancia de la naturaleza.'}[l];
     const pullText={
       fr:"Un environnement exigeant dans sa conception, mais simple à vivre. De beaux espaces, de bons services, de la nature, de la liberté et la possibilité d'être seul ou entouré quand on le souhaite.",
       en:"A thoughtfully designed environment that remains effortless to live in: beautiful spaces, excellent services, nature, freedom, and the choice to be alone or surrounded whenever you wish.",
@@ -1685,10 +1685,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     menu.addEventListener('click',e=>{if(e.target.closest('a')){menu.classList.remove('open');b.setAttribute('aria-expanded','false')}});
   }
 
-  // Fix the known EN mixed-language sentence without disturbing markup.
-  document.querySelectorAll('strong,b,h1,h2,h3,h4,p,div,span').forEach(el=>{
-    if(el.children.length===0 && el.textContent.trim()==='L'abondance de la nature.') el.textContent='Nature in abundance.';
-  });
   syncLabels();
   new MutationObserver(syncLabels).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();
