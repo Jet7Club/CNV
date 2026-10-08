@@ -42,7 +42,7 @@ js=r'''
 
 pat=r'<script id="cnv-fr-es-adventure-labels-runtime-20261008">.*?</script>'
 if marker in s:
-    s,n=re.subn(pat,js.strip(),s,count=1,flags=re.S)
+    s,n=re.subn(pat,lambda m: js.strip(),s,count=1,flags=re.S)
     if n!=1:
         raise SystemExit('Existing runtime block marker found but replacement failed')
     print('Updated existing runtime enforcement for FR/ES/EN adventure labels')
