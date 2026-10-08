@@ -8,6 +8,7 @@ on:
       - '.github/scripts/force_fr_es_adventure_labels_runtime.py'
       - '.github/scripts/translate_empower_labels.py'
       - '.github/scripts/remove_gallery_all_runtime.py'
+      - '.github/scripts/optimize_image_loading.py'
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,9 @@ jobs:
         run: python .github/scripts/translate_empower_labels.py
       - name: Remove All/Tout gallery button
         run: python .github/scripts/remove_gallery_all_runtime.py
-      - name: Commit index.html now
+      - name: Optimize image loading
+        run: python .github/scripts/optimize_image_loading.py
+      - name: Commit optimized index.html
         run: |
           if git diff --quiet -- index.html; then
             echo "No index changes"
@@ -35,5 +38,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Update CNV translations and gallery controls"
+          git commit -m "Optimize CNV display and navigation loading"
           git push
