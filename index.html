@@ -1632,20 +1632,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   },true);
 })();
 </script>
-<script id="members-nav-translation">
-(function(){
-  const labels={fr:'Membres',en:'Members',es:'Miembros'};
-  function updateMembersNav(){
-    const a=document.getElementById('membersNavLink');
-    if(!a)return;
-    const lang=(document.documentElement.lang||'fr').toLowerCase().slice(0,2);
-    a.textContent=labels[lang]||labels.fr;
-  }
-  updateMembersNav();
-  new MutationObserver(updateMembersNav).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-})();
-</script>
-
 <script id="cnv-mobile-nav-script-20261008">
 (function(){
   const nav=document.querySelector('.top nav')||document.querySelector('nav');
