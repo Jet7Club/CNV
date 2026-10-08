@@ -9,8 +9,8 @@ js=r'''
 <script id="cnv-fr-es-adventure-labels-runtime-20261008">
 (function(){
   const labels={
-    fr:['Appartenir','Construire','Investir','Empower','Soutenir','Contribuer'],
-    es:['Pertenecer','Construir','Invertir','Empower','Apoyar','Contribuir'],
+    fr:['Appartenir','Construire','Investir','Valoriser','Soutenir','Contribuer'],
+    es:['Pertenecer','Construir','Invertir','Potenciar','Apoyar','Contribuir'],
     en:['Belong','Build','Invest','Empower','Support','Contribute']
   };
   function lang(){return (document.documentElement.lang||'en').toLowerCase().slice(0,2)}
@@ -25,17 +25,17 @@ js=r'''
     const expected=l.map((x,i)=>String(i+1).padStart(2,'0')+' · '+x);
     const candidates=[...section.querySelectorAll('h3,strong,b')].filter(el=>/^\s*0?[1-6]\s*[·.-]?\s*/.test((el.textContent||'').trim()));
     if(candidates.length>=6){
-      candidates.slice(0,6).forEach((el,i)=>{el.textContent=expected[i]});
+      candidates.slice(0,6).forEach((el,i)=>{if(el.textContent!==expected[i]) el.textContent=expected[i]});
       return;
     }
     const all=[...section.querySelectorAll('*')].filter(el=>{
       const t=(el.textContent||'').trim();
-      return /^(0?[1-6]\s*[·.-]?\s*)?(Belong|Build|Invest|Empower|Support|Contribute|Appartenir|Construire|Investir|Soutenir|Contribuer|Pertenecer|Construir|Invertir|Apoyar|Contribuir)$/i.test(t);
+      return /^(0?[1-6]\s*[·.-]?\s*)?(Belong|Build|Invest|Empower|Support|Contribute|Appartenir|Construire|Investir|Valoriser|Soutenir|Contribuer|Pertenecer|Construir|Invertir|Potenciar|Apoyar|Contribuir)$/i.test(t);
     });
-    all.slice(0,6).forEach((el,i)=>{el.textContent=expected[i]});
+    all.slice(0,6).forEach((el,i)=>{if(el.textContent!==expected[i]) el.textContent=expected[i]});
   }
-  apply();
-  new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['lang']});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  new MutationObserver(apply).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();
 </script>
 '''
@@ -45,12 +45,12 @@ if marker in s:
     s,n=re.subn(pat,lambda m: js.strip(),s,count=1,flags=re.S)
     if n!=1:
         raise SystemExit('Existing runtime block marker found but replacement failed')
-    print('Updated existing runtime enforcement for FR/ES/EN adventure labels')
+    print('Updated lightweight runtime enforcement for FR/ES/EN adventure labels')
 else:
     if '</body>' in s:
         s=s.replace('</body>',js+'\n</body>',1)
     else:
         s+=js
-    print('Injected runtime enforcement for FR/ES/EN adventure labels')
+    print('Injected lightweight runtime enforcement for FR/ES/EN adventure labels')
 
 p.write_text(s,encoding='utf-8')
