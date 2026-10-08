@@ -1,0 +1,30 @@
+name: Fix CNV join choices all languages
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-join-order-all-languages.yml'
+      - '.github/scripts/fix_join_order_all_languages.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch join choices
+        run: python .github/scripts/fix_join_order_all_languages.py
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Align CNV join choices in FR EN ES"
+          git push
