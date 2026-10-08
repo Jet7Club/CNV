@@ -1,0 +1,30 @@
+name: Change Patron to Ambassador
+
+on:
+  push:
+    paths:
+      - '.github/workflows/change-patron-to-ambassador.yml'
+      - '.github/scripts/change_patron_to_ambassador.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply ambassador wording
+        run: python .github/scripts/change_patron_to_ambassador.py
+      - name: Commit changes
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Change Patron wording to Ambassador in FR EN ES"
+          git push
