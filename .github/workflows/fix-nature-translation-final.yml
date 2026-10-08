@@ -1,0 +1,30 @@
+name: Fix nature translation final
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-nature-translation-final.yml'
+      - '.github/scripts/fix_nature_translation_final.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix nature translations
+        run: python .github/scripts/fix_nature_translation_final.py
+      - name: Commit index changes
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "No index changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Fix nature title translations in FR EN ES"
+          git push
