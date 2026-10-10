@@ -3,6 +3,7 @@ name: Force final CNV join labels
 on:
   push:
     paths:
+      - 'members.html'
       - '.github/workflows/force-join-labels-final.yml'
       - '.github/scripts/force_join_labels_final.py'
       - '.github/scripts/force_fr_es_adventure_labels_runtime.py'
