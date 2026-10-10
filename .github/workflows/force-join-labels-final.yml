@@ -13,6 +13,7 @@ on:
       - '.github/scripts/cleanup_runtime_patches.py'
       - '.github/scripts/integrate_members_nav_native.py'
       - '.github/scripts/sync_members_language_runtime.py'
+      - '.github/scripts/full_translation_audit_runtime.py'
   workflow_dispatch:
 
 permissions:
@@ -39,6 +40,10 @@ jobs:
         run: python .github/scripts/integrate_members_nav_native.py
       - name: Sync Members language with main site
         run: python .github/scripts/sync_members_language_runtime.py
+      - name: Full translation audit pass 1
+        run: python .github/scripts/full_translation_audit_runtime.py
+      - name: Full translation audit pass 2
+        run: python .github/scripts/full_translation_audit_runtime.py
       - name: Commit optimized index.html
         run: |
           if git diff --quiet -- index.html; then
@@ -48,5 +53,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Integrate Members natively and clean navigation"
+          git commit -m "Audit and fix EN ES FR translations twice"
           git push
