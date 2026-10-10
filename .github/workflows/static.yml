@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-# Redeploy marker: corrected Members navigation + EN ES FR
+# Redeploy marker: geographic Local price stars + geographic notes
 name: Deploy static content to Pages
 
 on:
