@@ -6,39 +6,35 @@ members_path = Path('members.html')
 s = index_path.read_text(encoding='utf-8')
 members = members_path.read_text(encoding='utf-8')
 
-# 1) Main navigation: one native anchor to the embedded Members section.
+# MAIN NAV: exactly one Members link immediately after Art of Life.
 nav_match = re.search(r'<nav\b[^>]*>.*?</nav>', s, flags=re.I|re.S)
 if not nav_match:
     raise SystemExit('Navigation block not found')
 nav = nav_match.group(0)
-nav = re.sub(
-    r'\s*<a\b[^>]*href=["\'](?:\./)?members\.html["\'][^>]*>.*?</a>\s*',
-    '\n', nav, flags=re.I|re.S,
-)
-nav = re.sub(
-    r'\s*<a\b[^>]*href=["\']#members["\'][^>]*>.*?</a>\s*',
-    '\n', nav, flags=re.I|re.S,
-)
+nav = re.sub(r'\s*<a\b[^>]*href=["\'](?:\./)?members\.html["\'][^>]*>.*?</a>\s*', '\n', nav, flags=re.I|re.S)
+nav = re.sub(r'\s*<a\b[^>]*href=["\']#members["\'][^>]*>.*?</a>\s*', '\n', nav, flags=re.I|re.S)
 art = re.search(r'<a\b[^>]*href=["\']#artoflife["\'][^>]*>.*?</a>', nav, flags=re.I|re.S)
 if not art:
     raise SystemExit('Art of Life link not found in main nav')
 link = ('<a href="#members" id="membersNavLink" '
         'style="display:inline-flex!important;visibility:visible!important;opacity:1!important;'
         'align-items:center!important;white-space:nowrap!important;color:#d9b762!important;'
-        'font-weight:700!important;position:relative!important;z-index:9999!important;">Membres</a>')
+        'font-weight:700!important;position:relative!important;z-index:9999!important;">Members</a>')
 nav = nav[:art.end()] + '\n' + link + '\n' + nav[art.end():]
 s = s[:nav_match.start()] + nav + s[nav_match.end():]
 
-# 2) Remove any prior embedded Members block so the script is idempotent.
-s = re.sub(
-    r'\s*<!-- CNV MEMBERS EMBED START -->.*?<!-- CNV MEMBERS EMBED END -->\s*',
-    '\n', s, flags=re.I|re.S,
-)
+# Remove obsolete runtime patches that can recreate a duplicate Members link.
+s = re.sub(r'\s*<script id=["\']members-nav-translation["\']>.*?</script>\s*', '\n', s, flags=re.I|re.S)
+s = re.sub(r'\s*<script id=["\']cnv-mobile-nav-script-20261008["\']>.*?</script>\s*', '\n', s, flags=re.I|re.S)
+s = re.sub(r'\s*<script id=["\']cnv-nav-language-final-20261010["\']>.*?</script>\s*', '\n', s, flags=re.I|re.S)
 
-# 3) Embed the complete members.html document into index.html via srcdoc.
-# This keeps its CSS/JS isolated and avoids collisions with the 19 MB main page.
-# The members page's own sticky nav is removed because the main CNV nav remains visible.
+# Remove previous Members embed so this script is repeatable.
+s = re.sub(r'\s*<!-- CNV MEMBERS EMBED START -->.*?<!-- CNV MEMBERS EMBED END -->\s*', '\n', s, flags=re.I|re.S)
+
+# Embed members.html, isolated from the large main-page CSS/JS.
 members_embedded = re.sub(r'<nav\b[^>]*>.*?</nav>', '', members, count=1, flags=re.I|re.S)
+members_embedded = re.sub(r'<html\b([^>]*)lang=["\']?fr["\']?', r'<html\1lang="en"', members_embedded, count=1, flags=re.I)
+members_embedded = members_embedded.replace('let lang="fr",ed="life";', 'let lang="en",ed="life";')
 escaped = html.escape(members_embedded, quote=True)
 section = f'''\n<!-- CNV MEMBERS EMBED START -->
 <section id="members" class="cnv-members-embedded" style="padding:0;margin:0;background:#07110d;scroll-margin-top:90px;">
@@ -48,42 +44,111 @@ section = f'''\n<!-- CNV MEMBERS EMBED START -->
 (function(){{
   const f=document.getElementById('cnvMembersFrame');
   if(!f)return;
-  const fit=()=>{{
-    try{{
-      const d=f.contentDocument;
-      if(d) f.style.height=Math.max(1200,d.documentElement.scrollHeight,d.body?d.body.scrollHeight:0)+'px';
-    }}catch(e){{}}
-  }};
+  const fit=()=>{{try{{const d=f.contentDocument;if(d)f.style.height=Math.max(1200,d.documentElement.scrollHeight,d.body?d.body.scrollHeight:0)+'px';}}catch(e){{}}}};
   f.addEventListener('load',()=>{{fit();setTimeout(fit,100);setTimeout(fit,500);}});
   window.addEventListener('resize',fit);
 }})();
 </script>
 <!-- CNV MEMBERS EMBED END -->\n'''
 
-# Insert before footer when possible, otherwise before </body>.
-footer = re.search(r'<footer\b', s, flags=re.I)
-if footer:
-    s = s[:footer.start()] + section + s[footer.start():]
+# POSITION: Members immediately before Destinations (#places), therefore after Art de vivre.
+places = re.search(r'<section\b[^>]*\bid=["\']places["\'][^>]*>', s, flags=re.I|re.S)
+if not places:
+    places = re.search(r'<[^>]+\bid=["\']places["\'][^>]*>', s, flags=re.I|re.S)
+if not places:
+    raise SystemExit('Destinations section #places not found')
+s = s[:places.start()] + section + s[places.start():]
+
+# English is the source/default language.
+s = re.sub(r'<html\b([^>]*?)lang=["\'][^"\']+["\']', r'<html\1lang="en"', s, count=1, flags=re.I)
+
+# Clean runtime controller: labels, mobile menu, language order/default.
+runtime = r'''
+<script id="cnv-nav-language-final-20261010">
+(function(){
+  const nav=document.querySelector('.top nav')||document.querySelector('nav');
+  if(!nav)return;
+  const labels={
+    en:{members:'Members',dest:'Destinations'},
+    es:{members:'Miembros',dest:'Destinos'},
+    fr:{members:'Membres',dest:'Destinations'}
+  };
+  const lang=()=>((document.documentElement.lang||'en').toLowerCase().slice(0,2));
+  function syncLabels(){
+    const l=labels[lang()]||labels.en;
+    [...nav.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#members').forEach(a=>a.textContent=l.members);
+    [...nav.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#places').forEach(a=>a.textContent=l.dest);
+    const mm=document.getElementById('cnvMobileMenu');
+    if(mm){
+      [...mm.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#members').forEach(a=>a.textContent=l.members);
+      [...mm.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#places').forEach(a=>a.textContent=l.dest);
+    }
+  }
+  // Delete legacy or duplicate Members links everywhere in navigation.
+  [...nav.querySelectorAll('a')].filter(a=>/members\.html$/i.test(a.getAttribute('href')||'')).forEach(a=>a.remove());
+  const members=[...nav.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#members');
+  members.slice(1).forEach(a=>a.remove());
+
+  // Mobile menu rebuilt from the corrected desktop navigation.
+  let actions=document.querySelector('.head-actions');
+  let btn=document.getElementById('cnvMenuBtn');
+  if(actions && !btn){
+    btn=document.createElement('button');
+    btn.id='cnvMenuBtn'; btn.type='button'; btn.setAttribute('aria-label','Menu'); btn.setAttribute('aria-expanded','false'); btn.innerHTML='<span></span>';
+    actions.appendChild(btn);
+  }
+  let mm=document.getElementById('cnvMobileMenu');
+  if(!mm){ mm=document.createElement('div'); mm.id='cnvMobileMenu'; document.body.appendChild(mm); }
+  mm.innerHTML=''; [...nav.querySelectorAll('a')].forEach(a=>mm.appendChild(a.cloneNode(true)));
+  if(btn && !btn.dataset.cnvBound){
+    btn.dataset.cnvBound='1';
+    btn.addEventListener('click',()=>{const o=mm.classList.toggle('open');btn.setAttribute('aria-expanded',o?'true':'false')});
+    mm.addEventListener('click',e=>{if(e.target.closest('a')){mm.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
+  }
+
+  // Language controls: EN, ES, FR. English is active on first load.
+  function reorderLanguages(){
+    const controls=[...document.querySelectorAll('button,a')].filter(el=>['EN','ES','FR'].includes((el.textContent||'').trim().toUpperCase()));
+    const groups=new Map();
+    controls.forEach(el=>{if(el.parentElement){const arr=groups.get(el.parentElement)||[];arr.push(el);groups.set(el.parentElement,arr);}});
+    groups.forEach((els,parent)=>{
+      const by={}; els.forEach(el=>by[(el.textContent||'').trim().toUpperCase()]=el);
+      ['EN','ES','FR'].forEach(k=>{if(by[k])parent.appendChild(by[k]);});
+    });
+    return controls;
+  }
+  const controls=reorderLanguages();
+  document.documentElement.lang='en';
+  const en=controls.find(el=>(el.textContent||'').trim().toUpperCase()==='EN');
+  if(en && !sessionStorage.getItem('cnv-default-lang-applied')){
+    sessionStorage.setItem('cnv-default-lang-applied','1');
+    try{en.click();}catch(e){}
+  }
+  document.documentElement.lang='en';
+  syncLabels();
+  new MutationObserver(syncLabels).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+})();
+</script>
+'''
+if '</body>' in s:
+    s=s.replace('</body>',runtime+'\n</body>',1)
 else:
-    body_end = re.search(r'</body>', s, flags=re.I)
-    if not body_end:
-        raise SystemExit('Could not find footer or </body> insertion point')
-    s = s[:body_end.start()] + section + s[body_end.start():]
+    s+=runtime
 
-# 4) Remove obsolete runtime Members-link creator/translator if present.
-s = re.sub(
-    r'\s*<script id=["\']members-nav-translation["\']>.*?</script>\s*',
-    '\n', s, count=1, flags=re.I|re.S,
-)
-
-# 5) Validate the final source.
+# Validate final structure.
 final_nav = re.search(r'<nav\b[^>]*>.*?</nav>', s, flags=re.I|re.S).group(0)
 if len(re.findall(r'href=["\']#members["\']', final_nav, flags=re.I)) != 1:
     raise SystemExit('Expected exactly one #members link in main nav')
 if re.search(r'href=["\'](?:\./)?members\.html["\']', final_nav, flags=re.I):
-    raise SystemExit('members.html link still present in main nav')
-if s.count('<!-- CNV MEMBERS EMBED START -->') != 1 or 'id="cnvMembersFrame"' not in s:
-    raise SystemExit('Embedded Members section validation failed')
+    raise SystemExit('Legacy members.html nav link remains')
+if not re.search(r'href=["\']#artoflife["\'].*?href=["\']#members["\'].*?href=["\']#places["\']', final_nav, flags=re.I|re.S):
+    raise SystemExit('Nav order must be Art of Life -> Members -> Destinations')
+member_pos=s.find('<!-- CNV MEMBERS EMBED START -->')
+places_pos=s.find('id="places"')
+if member_pos < 0 or places_pos < 0 or member_pos > places_pos:
+    raise SystemExit('Members section is not immediately before Destinations')
+if 'cnv-nav-language-final-20261010' not in s:
+    raise SystemExit('Language/navigation controller missing')
 
 index_path.write_text(s, encoding='utf-8')
-print('OK: members.html embedded into index.html; main nav points to #members')
+print('OK: Art of Life -> Members -> Destinations; no duplicate; EN ES FR; English default')
