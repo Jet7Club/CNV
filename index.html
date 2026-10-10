@@ -1814,5 +1814,27 @@ window.addEventListener('DOMContentLoaded',()=>{
 })();
 </script>
 
+
+<script id="cnv-members-language-sync">
+(function(){
+  const frame=document.getElementById('cnvMembersFrame');
+  if(!frame)return;
+  function currentLang(){
+    return (document.documentElement.lang||'en').toLowerCase().slice(0,2);
+  }
+  function syncMembersLanguage(){
+    const l=currentLang();
+    if(!['en','es','fr'].includes(l))return;
+    try{
+      const w=frame.contentWindow;
+      if(w && typeof w.L==='function') w.L(l,null);
+    }catch(e){}
+  }
+  frame.addEventListener('load',syncMembersLanguage);
+  new MutationObserver(syncMembersLanguage).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  syncMembersLanguage();
+})();
+</script>
+
 </body>
 </html>
