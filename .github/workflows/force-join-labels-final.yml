@@ -14,6 +14,7 @@ on:
       - '.github/scripts/integrate_members_nav_native.py'
       - '.github/scripts/sync_members_language_runtime.py'
       - '.github/scripts/full_translation_audit_runtime.py'
+      - '.github/scripts/normalize_visible_asterisks.py'
   workflow_dispatch:
 
 permissions:
@@ -44,6 +45,8 @@ jobs:
         run: python .github/scripts/full_translation_audit_runtime.py
       - name: Full translation audit pass 2
         run: python .github/scripts/full_translation_audit_runtime.py
+      - name: Normalize visible double asterisks
+        run: python .github/scripts/normalize_visible_asterisks.py
       - name: Commit optimized index.html
         run: |
           if git diff --quiet -- index.html; then
@@ -53,5 +56,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Audit and fix EN ES FR translations twice"
+          git commit -m "Audit translations and normalize visible asterisks"
           git push
