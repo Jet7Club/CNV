@@ -35,6 +35,54 @@ s = re.sub(r'\s*<!-- CNV MEMBERS EMBED START -->.*?<!-- CNV MEMBERS EMBED END --
 members_embedded = re.sub(r'<nav\b[^>]*>.*?</nav>', '', members, count=1, flags=re.I|re.S)
 members_embedded = re.sub(r'<html\b([^>]*)lang=["\']?fr["\']?', r'<html\1lang="en"', members_embedded, count=1, flags=re.I)
 members_embedded = members_embedded.replace('let lang="fr",ed="life";', 'let lang="en",ed="life";')
+
+# Geographic-price markers requested for Local membership.
+members_embedded = members_embedded.replace('3 000 € à 8 000 €', '3 000 € à 8 000 € *')
+members_embedded = members_embedded.replace('300 € à 800 €', '300 € à 800 € *')
+members_embedded = members_embedded.replace('600 € à 1 600 €', '600 € à 1600 € *')
+members_embedded = members_embedded.replace('1 200 € à 3 200 €', '1200 € à 3200 € *')
+
+# Show the geographic note below both the cards and the table whenever the selected edition contains a starred price.
+geo_runtime = r'''
+<script id="cnv-members-geographic-note">
+(function(){
+  function applyGeoNote(){
+    try{
+      const d=(typeof D!=='undefined' && typeof ed!=='undefined')?D[ed]:null;
+      const hasStar=!!(d && d.p && d.p.some(v=>String(v).includes('*')));
+      const geo=(typeof q==='function')?q('geo'):'* En fonction de la zone géographique';
+      const cardsNote=document.getElementById('en');
+      const tableNote=document.getElementById('gn');
+      if(hasStar){
+        if(cardsNote) cardsNote.textContent=geo;
+        if(tableNote) tableNote.textContent=geo;
+      }else{
+        if(cardsNote && ed!=='visionary') cardsNote.textContent='';
+        if(tableNote) tableNote.textContent='';
+      }
+    }catch(e){}
+  }
+  if(typeof R==='function'){
+    const originalR=R;
+    R=function(){originalR();applyGeoNote();};
+  }
+  if(typeof L==='function'){
+    const originalL=L;
+    L=function(x,b){originalL(x,b);applyGeoNote();};
+  }
+  if(typeof E==='function'){
+    const originalE=E;
+    E=function(x){originalE(x);applyGeoNote();};
+  }
+  applyGeoNote();
+})();
+</script>
+'''
+if '</body>' in members_embedded:
+    members_embedded = members_embedded.replace('</body>', geo_runtime+'\n</body>', 1)
+else:
+    members_embedded += geo_runtime
+
 escaped = html.escape(members_embedded, quote=True)
 section = f'''\n<!-- CNV MEMBERS EMBED START -->
 <section id="members" class="cnv-members-embedded" style="padding:0;margin:0;background:#07110d;scroll-margin-top:90px;">
@@ -84,12 +132,10 @@ runtime = r'''
       [...mm.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#places').forEach(a=>a.textContent=l.dest);
     }
   }
-  // Delete legacy or duplicate Members links everywhere in navigation.
   [...nav.querySelectorAll('a')].filter(a=>/members\.html$/i.test(a.getAttribute('href')||'')).forEach(a=>a.remove());
   const members=[...nav.querySelectorAll('a')].filter(a=>a.getAttribute('href')==='#members');
   members.slice(1).forEach(a=>a.remove());
 
-  // Mobile menu rebuilt from the corrected desktop navigation.
   let actions=document.querySelector('.head-actions');
   let btn=document.getElementById('cnvMenuBtn');
   if(actions && !btn){
@@ -106,7 +152,6 @@ runtime = r'''
     mm.addEventListener('click',e=>{if(e.target.closest('a')){mm.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
   }
 
-  // Language controls: EN, ES, FR. English is active on first load.
   function reorderLanguages(){
     const controls=[...document.querySelectorAll('button,a')].filter(el=>['EN','ES','FR'].includes((el.textContent||'').trim().toUpperCase()));
     const groups=new Map();
@@ -151,4 +196,4 @@ if 'cnv-nav-language-final-20261010' not in s:
     raise SystemExit('Language/navigation controller missing')
 
 index_path.write_text(s, encoding='utf-8')
-print('OK: Art of Life -> Members -> Destinations; no duplicate; EN ES FR; English default')
+print('OK: geographic Local prices starred and geographic note shown under cards and tables')
