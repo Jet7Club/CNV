@@ -12,6 +12,7 @@ on:
       - '.github/scripts/optimize_image_loading.py'
       - '.github/scripts/cleanup_runtime_patches.py'
       - '.github/scripts/integrate_members_nav_native.py'
+      - '.github/scripts/sync_members_language_runtime.py'
   workflow_dispatch:
 
 permissions:
@@ -36,6 +37,8 @@ jobs:
         run: python .github/scripts/cleanup_runtime_patches.py
       - name: Integrate Members natively in navigation
         run: python .github/scripts/integrate_members_nav_native.py
+      - name: Sync Members language with main site
+        run: python .github/scripts/sync_members_language_runtime.py
       - name: Commit optimized index.html
         run: |
           if git diff --quiet -- index.html; then
