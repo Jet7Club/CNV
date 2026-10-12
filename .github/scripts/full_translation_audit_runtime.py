@@ -24,7 +24,7 @@ runtime=r'''
       'Soir':'Evening','Coucher du soleil :':'Sunset:',
       'Un moment dehors pour ralentir et profiter du paysage.':'Time outdoors to slow down and enjoy the landscape.',
       'Dîner :':'Dinner:','Grande table, dîner intime ou expérience culinaire partagée.':'A communal table, an intimate dinner, or a shared culinary experience.',
-      'Après-dîner :':'After dinner:','Musique, conversation, feu, événement ou retour au calme selon l’énergie of the day.'
+      'Après-dîner :':'After dinner:','Musique, conversation, feu, événement ou retour au calme selon l’énergie du jour.':'Music, conversation, a fire, an event, or quiet time depending on the energy of the day.'
     },
     es:{
       'contre :':'Encuentros:','Contre :':'Encuentros:','Rencontre :':'Encuentros:','Rencontres :':'Encuentros:',
@@ -32,7 +32,7 @@ runtime=r'''
       'Soir':'Noche','Coucher du soleil :':'Puesta de sol:',
       'Un moment dehors pour ralentir et profiter du paysage.':'Un momento al aire libre para bajar el ritmo y disfrutar del paisaje.',
       'Dîner :':'Cena:','Grande table, dîner intime ou expérience culinaire partagée.':'Una gran mesa, una cena íntima o una experiencia culinaria compartida.',
-      'Après-dîner :':'Después de cenar:','Musique, conversation, feu, événement ou retour au calme según la energía del día.'
+      'Après-dîner :':'Después de cenar:','Musique, conversation, feu, événement ou retour au calme selon l’énergie du jour.':'Música, conversación, fuego, un evento o volver a la calma según la energía del día.'
     }
   };
 
@@ -84,9 +84,11 @@ required=[
     'Open time for meeting people, family, or a spontaneous activity.',
     'Time outdoors to slow down and enjoy the landscape.',
     'A communal table, an intimate dinner, or a shared culinary experience.',
+    'Music, conversation, a fire, an event, or quiet time depending on the energy of the day.',
     'Un tiempo abierto para encuentros, la familia o una actividad espontánea.',
     'Un momento al aire libre para bajar el ritmo y disfrutar del paisaje.',
     'Una gran mesa, una cena íntima o una experiencia culinaria compartida.',
+    'Música, conversación, fuego, un evento o volver a la calma según la energía del día.',
     'Un temps ouvert aux rencontres, à la famille ou à une activité spontanée.'
 ]
 missing=[x for x in required if x not in s]
@@ -94,4 +96,4 @@ if missing: raise SystemExit('Translation audit validation failed: '+repr(missin
 if s.count('id="cnv-full-translation-audit-20261010"')!=1: raise SystemExit('Translation audit runtime must exist exactly once')
 
 p.write_text(s,encoding='utf-8')
-print('Translation audit stabilized: no permanent body MutationObserver')
+print('Translation audit stabilized with exact EN/ES/FR translations')
