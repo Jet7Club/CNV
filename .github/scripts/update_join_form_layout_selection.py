@@ -10,8 +10,9 @@ s=re.sub(r'\s*<script id=["\']cnv-join-layout-runtime["\']>.*?</script>\s*','\n'
 
 style=r'''
 <style id="cnv-join-layout-style">
-#cnvContactForm .cnv-compact-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
-#cnvContactForm .cnv-compact-row>*{min-width:0;margin:0!important}
+#cnvContactForm .cnv-compact-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;width:100%;margin:0 0 14px}
+#cnvContactForm .cnv-compact-row>*{min-width:0;width:100%!important;margin:0!important}
+#cnvContactForm .cnv-compact-row input,#cnvContactForm .cnv-compact-row label{width:100%!important}
 #cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{max-width:100%}
 @media(max-width:700px){#cnvContactForm .cnv-compact-row{grid-template-columns:1fr}}
 </style>
@@ -21,9 +22,9 @@ runtime=r'''
 <script id="cnv-join-layout-runtime">
 (function(){
   const labels={
-    en:{amb:'Ambassador'},
-    fr:{amb:'Ambassadeur'},
-    es:{amb:'Embajador'}
+    en:{amb:'Ambassador',friend:'Friend'},
+    fr:{amb:'Ambassadeur',friend:'Ami'},
+    es:{amb:'Embajador',friend:'Amigo'}
   };
   function lang(){return (document.documentElement.lang||'en').toLowerCase().slice(0,2)}
   function holder(el){return el&&(el.closest('label,.field,.form-group,.input-group,.control,.form-field')||el)}
@@ -44,13 +45,19 @@ runtime=r'''
       return hints.some(h=>hay.includes(h))&&!exclude.includes(el);
     });
   }
-  function fixAmbassador(form){
+  function fixMenu(form){
     const l=labels[lang()]||labels.en;
     const sel=form.querySelector('select'); if(!sel)return;
     [...sel.options].forEach(o=>{
       const t=norm(o.textContent+' '+o.value);
-      if(t.includes('patron')||t.includes('patran')){o.textContent=l.amb;o.value=l.amb}
-      if(t.includes('ambassador')||t.includes('ambassadeur')||t.includes('embajador')){o.textContent=l.amb}
+      if(t.includes('patron')||t.includes('patran')||t.includes('ambassador')||t.includes('ambassadeur')||t.includes('embajador')){
+        o.textContent=l.amb;
+        if(t.includes('patron')||t.includes('patran')) o.value=l.amb;
+      }
+      if(t.includes('ami de cnv')||t.includes('friend of cnv')||t.includes('amigo de cnv')||t==='ami'||t==='friend'||t==='amigo'){
+        o.textContent=l.friend;
+        if(t.includes(' de cnv')||t.includes(' of cnv')) o.value=l.friend;
+      }
     });
   }
   function layout(form){
@@ -72,7 +79,7 @@ runtime=r'''
   }
   function matchChoice(text){
     const t=norm(text);
-    if(/ambassador|ambassadeur|embajador|empower/.test(t))return ['ambassador','ambassadeur','embajador'];
+    if(/ambassador|ambassadeur|embajador|patron|empower/.test(t))return ['ambassador','ambassadeur','embajador'];
     if(/investor|investisseur|inversor|invest/.test(t))return ['investor','investisseur','inversor'];
     if(/partner|partenaire|socio|build|construire|construir/.test(t))return ['partner','partenaire','socio'];
     if(/friend|ami|amigo|support|soutenir|apoyar/.test(t))return ['friend','ami','amigo'];
@@ -82,9 +89,10 @@ runtime=r'''
   }
   function preselect(form,sourceText){
     const sel=form.querySelector('select'); if(!sel)return;
+    fixMenu(form);
     const keys=matchChoice(sourceText); if(!keys)return;
     const opt=[...sel.options].find(o=>keys.some(k=>norm(o.textContent+' '+o.value).includes(k)));
-    if(opt){sel.value=opt.value;sel.dispatchEvent(new Event('change',{bubbles:true}))}
+    if(opt){sel.value=opt.value;sel.selectedIndex=[...sel.options].indexOf(opt);sel.dispatchEvent(new Event('change',{bubbles:true}))}
   }
   function bind(form){
     if(document.documentElement.dataset.cnvJoinBound==='1')return;
@@ -96,12 +104,14 @@ runtime=r'''
       });
       const section=heading&&(heading.closest('section')||heading.parentElement?.parentElement);
       if(!section||!section.contains(e.target))return;
-      const card=e.target.closest('a,button,.card,article,[role="button"],div');
-      if(card)preselect(form,card.innerText||card.textContent||'');
-      setTimeout(()=>{layout(form);fixAmbassador(form)},60);
+      const card=e.target.closest('a,button,article,.card,[role="button"],[class*="join"],[class*="card"]')||e.target.parentElement;
+      const sourceText=card?(card.innerText||card.textContent||''):'';
+      if(sourceText) preselect(form,sourceText);
+      setTimeout(()=>{fixMenu(form);layout(form);if(sourceText)preselect(form,sourceText)},80);
+      setTimeout(()=>{fixMenu(form);layout(form);if(sourceText)preselect(form,sourceText)},250);
     },true);
   }
-  function apply(){const form=document.getElementById('cnvContactForm');if(!form)return;fixAmbassador(form);layout(form);bind(form)}
+  function apply(){const form=document.getElementById('cnvContactForm');if(!form)return;fixMenu(form);layout(form);bind(form)}
   apply();
   new MutationObserver(apply).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['lang']});
 })();
@@ -114,4 +124,4 @@ if '</body>' in s:s=s.replace('</body>',runtime+'\n</body>',1)
 else:s+=runtime
 
 p.write_text(s,encoding='utf-8')
-print('Join form: Patron→Ambassador, click preselection, compact two-column rows')
+print('Join form: Patron→Ambassador, Friend of CNV→Friend, click preselection, compact two-column rows')
