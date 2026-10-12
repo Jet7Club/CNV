@@ -20,6 +20,7 @@ on:
       - '.github/scripts/add_join_form_profile_fields.py'
       - '.github/scripts/update_join_form_layout_selection.py'
       - '.github/scripts/fix_visionary_royalties_colors.py'
+      - '.github/scripts/audit_site_controls.py'
   workflow_dispatch:
 
 permissions:
@@ -62,7 +63,9 @@ jobs:
         run: python .github/scripts/normalize_visible_asterisks.py
       - name: Lock member price stars to one
         run: python .github/scripts/fix_member_price_double_stars.py
-      - name: Commit Members and optimized index
+      - name: Audit links buttons forms and Members controls
+        run: python .github/scripts/audit_site_controls.py
+      - name: Commit stabilized site
         run: |
           if git diff --quiet -- members.html index.html; then
             echo "No Members/index changes"
@@ -71,5 +74,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add members.html index.html
-          git commit -m "Finalize CNV join form layout and preselection"
+          git commit -m "Stabilize CNV site controls and runtime"
           git push
