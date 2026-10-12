@@ -288,7 +288,35 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <style id="cnv-image-loading-stability-20261008">
 img{max-width:100%;height:auto}
 </style>
-<style id="cnv-join-extra-fields-style">@media(max-width:700px){#cnvJoinExtraFields{grid-template-columns:1fr!important}#cnvJoinExtraFields label{grid-column:1/-1!important}}</style>
+
+<style id="cnv-join-extra-fields-style">
+#cnvContactForm{
+  max-height:72vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:12px!important;
+  scrollbar-gutter:stable;
+  scrollbar-width:auto;
+  scrollbar-color:#c7a85b #efe7d7;
+}
+#cnvContactForm::-webkit-scrollbar{width:12px}
+#cnvContactForm::-webkit-scrollbar-track{background:#efe7d7;border-radius:10px}
+#cnvContactForm::-webkit-scrollbar-thumb{background:#c7a85b;border-radius:10px;border:2px solid #efe7d7}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{padding:10px 12px!important}
+#cnvContactForm textarea{min-height:78px!important}
+#cnvJoinExtraFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:10px 0 12px}
+#cnvJoinExtraFields label{display:flex;flex-direction:column;gap:5px;min-width:0}
+#cnvJoinExtraFields .cnv-intro-field{grid-column:1/-1}
+#cnvJoinExtraFields input,#cnvJoinExtraFields textarea{width:100%;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit}
+#cnvJoinExtraFields textarea{resize:vertical}
+#cnvContactForm button[type="submit"],#cnvContactForm input[type="submit"]{position:sticky;bottom:0;z-index:4}
+@media(max-width:700px){
+  #cnvContactForm{max-height:76vh!important;padding-right:8px!important}
+  #cnvJoinExtraFields{grid-template-columns:1fr!important}
+  #cnvJoinExtraFields label{grid-column:1/-1!important}
+}
+</style>
+
 </head>
 <body>
 <header class="top">
@@ -909,23 +937,24 @@ function L(x,b){lang=x;document.documentElement.lang=x;document.querySelectorAll
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
 <input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea>
+
 <!-- CNV JOIN EXTRA FIELDS START -->
-<div id="cnvJoinExtraFields" class="cnv-join-extra-fields" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0;">
-  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+<div id="cnvJoinExtraFields" class="cnv-join-extra-fields">
+  <label>
     <span data-cnv-extra-label="cell">Cell / WhatsApp *</span>
-    <input type="tel" name="Cell / WhatsApp" required autocomplete="tel" data-cnv-extra-input="cell" placeholder="Cell / WhatsApp" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+    <input type="tel" name="Cell / WhatsApp" required autocomplete="tel" data-cnv-extra-input="cell" placeholder="Cell / WhatsApp">
   </label>
-  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+  <label>
     <span data-cnv-extra-label="linkedin">LinkedIn</span>
-    <input type="url" name="LinkedIn" autocomplete="url" data-cnv-extra-input="linkedin" placeholder="https://www.linkedin.com/in/..." style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+    <input type="url" name="LinkedIn" autocomplete="url" data-cnv-extra-input="linkedin" placeholder="https://www.linkedin.com/in/...">
   </label>
-  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+  <label>
     <span data-cnv-extra-label="instagram">Instagram</span>
-    <input type="text" name="Instagram" data-cnv-extra-input="instagram" placeholder="@instagram" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+    <input type="text" name="Instagram" data-cnv-extra-input="instagram" placeholder="@instagram">
   </label>
-  <label style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1;">
+  <label class="cnv-intro-field">
     <span data-cnv-extra-label="intro">Quick introduction *</span>
-    <textarea name="Quick introduction" required rows="4" data-cnv-extra-input="intro" placeholder="Tell us briefly who you are and what brings you to CNV..." style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;resize:vertical;"></textarea>
+    <textarea name="Quick introduction" required rows="3" data-cnv-extra-input="intro" placeholder="Tell us briefly who you are and what brings you to CNV..."></textarea>
   </label>
 </div>
 <!-- CNV JOIN EXTRA FIELDS END -->
