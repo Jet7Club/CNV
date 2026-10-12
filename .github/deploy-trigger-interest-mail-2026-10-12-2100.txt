@@ -1,0 +1,2 @@
+Force deploy final CNV join interest email aggregation fix.
+Source commit: 8130e499d5fdb8f5f5fa1483c49681cef373374a
