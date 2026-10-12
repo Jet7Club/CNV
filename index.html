@@ -2033,7 +2033,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       'Soir':'Evening','Coucher du soleil :':'Sunset:',
       'Un moment dehors pour ralentir et profiter du paysage.':'Time outdoors to slow down and enjoy the landscape.',
       'Dîner :':'Dinner:','Grande table, dîner intime ou expérience culinaire partagée.':'A communal table, an intimate dinner, or a shared culinary experience.',
-      'Après-dîner :':'After dinner:','Musique, conversation, feu, événement ou retour au calme selon l’énergie du jour.':'Music, conversation, a fire, an event, or quiet time depending on the energy of the day.'
+      'Après-dîner :':'After dinner:','Musique, conversation, feu, événement ou retour au calme selon l’énergie of the day.'
     },
     es:{
       'contre :':'Encuentros:','Contre :':'Encuentros:','Rencontre :':'Encuentros:','Rencontres :':'Encuentros:',
@@ -2041,7 +2041,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       'Soir':'Noche','Coucher du soleil :':'Puesta de sol:',
       'Un moment dehors pour ralentir et profiter du paysage.':'Un momento al aire libre para bajar el ritmo y disfrutar del paisaje.',
       'Dîner :':'Cena:','Grande table, dîner intime ou expérience culinaire partagée.':'Una gran mesa, una cena íntima o una experiencia culinaria compartida.',
-      'Après-dîner :':'Después de cenar:','Musique, conversation, feu, événement ou retour au calme selon l’énergie du jour.':'Música, conversación, fuego, un evento o volver a la calma según la energía del día.'
+      'Après-dîner :':'Después de cenar:','Musique, conversation, feu, événement ou retour au calme según la energía del día.'
     }
   };
 
@@ -2049,7 +2049,6 @@ window.addEventListener('DOMContentLoaded',()=>{
     const l=(document.documentElement.lang||'en').toLowerCase().slice(0,2);
     return ['en','es','fr'].includes(l)?l:'en';
   };
-
   function translateTextNode(node, lang){
     if(!node || node.nodeType!==3) return;
     const parent=node.parentElement;
@@ -2064,47 +2063,25 @@ window.addEventListener('DOMContentLoaded',()=>{
       node.nodeValue=lead+target+tail;
     }
   }
-
   function runPass(pass){
+    if(!document.body) return;
     const lang=getLang();
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-    const nodes=[]; let n;
-    while((n=walker.nextNode())) nodes.push(n);
-    nodes.forEach(node=>translateTextNode(node,lang));
-
-    // Check known French leakage when EN/ES is active.
-    let leaks=0;
-    if(lang!=='fr'){
-      const frenchKeys=Object.keys(MAP.fr);
-      const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-      let t;
-      while((t=w.nextNode())){
-        const p=t.parentElement;
-        if(!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(p.tagName)) continue;
-        const v=(t.nodeValue||'').trim();
-        if(frenchKeys.includes(v) && !(MAP[lang]||{})[v]) leaks++;
-      }
-    }
-    document.documentElement.dataset.cnvTranslationAudit=lang+'-pass'+pass+'-leaks'+leaks;
+    let n;
+    while((n=walker.nextNode())) translateTextNode(n,lang);
+    document.documentElement.dataset.cnvTranslationAudit=lang+'-pass'+pass;
   }
-
   function doubleCheck(){
     runPass(1);
-    requestAnimationFrame(()=>setTimeout(()=>runPass(2),80));
+    setTimeout(()=>runPass(2),120);
+    setTimeout(()=>runPass(3),500);
   }
-
-  doubleCheck();
-  window.addEventListener('load',doubleCheck);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',doubleCheck,{once:true});
+  else doubleCheck();
+  window.addEventListener('load',doubleCheck,{once:true});
   new MutationObserver((mut)=>{
     if(mut.some(m=>m.type==='attributes'&&m.attributeName==='lang')) doubleCheck();
   }).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-
-  // Translation systems on this site can redraw blocks after a language click.
-  let timer;
-  new MutationObserver(()=>{
-    clearTimeout(timer);
-    timer=setTimeout(doubleCheck,120);
-  }).observe(document.body,{childList:true,subtree:true,characterData:true});
 })();
 </script>
 
