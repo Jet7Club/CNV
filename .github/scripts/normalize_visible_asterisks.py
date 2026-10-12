@@ -11,17 +11,18 @@ runtime=r'''
 <script id="cnv-normalize-visible-asterisks">
 (function(){
   function normalize(){
+    if(!document.body) return;
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     let n;
     while((n=walker.nextNode())){
       const p=n.parentElement;
-      if(!p || /^(SCRIPT|STYLE,NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(p.tagName)) continue;
+      if(!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(p.tagName)) continue;
       if((n.nodeValue||'').includes('**')) n.nodeValue=n.nodeValue.replace(/\*\*/g,'*');
     }
   }
-  normalize();
-  window.addEventListener('load',normalize);
-  new MutationObserver(()=>normalize()).observe(document.body,{childList:true,subtree:true,characterData:true});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',normalize,{once:true});
+  else normalize();
+  window.addEventListener('load',normalize,{once:true});
 })();
 </script>
 '''
@@ -32,4 +33,4 @@ else:
     s+=runtime
 
 p.write_text(s,encoding='utf-8')
-print('Visible double asterisks normalized to single asterisk')
+print('Visible double asterisks normalized safely without permanent DOM scanning')
