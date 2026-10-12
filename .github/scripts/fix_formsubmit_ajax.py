@@ -29,7 +29,14 @@ js = '''<script id="CNV_FORM_AJAX_REDIRECT">
     const button=form.querySelector("#contactSend,button[type='submit'],input[type='submit']");
     if(button) button.disabled=true;
     const payload={};
-    for(const [k,v] of new FormData(form).entries()) if(typeof v==="string") payload[k]=v;
+    for(const [k,v] of new FormData(form).entries()){
+      if(typeof v!=="string") continue;
+      if(Object.prototype.hasOwnProperty.call(payload,k)){
+        payload[k]=payload[k] ? payload[k]+", "+v : v;
+      }else{
+        payload[k]=v;
+      }
+    }
     payload._subject=payload._subject||"CNV — Nouveau message";
     payload._template=payload._template||"table";
     payload._captcha="false";
@@ -55,5 +62,6 @@ p.write_text(html, encoding='utf-8')
 check = p.read_text(encoding='utf-8')
 assert 'https://formsubmit.co/ajax/jet7club@proton.me' in check
 assert 'window.location.replace(HOME)' in check
+assert 'payload[k]+", "+v' in check
 assert check.count('id="CNV_FORM_AJAX_REDIRECT"') == 1
-print('OK: AJAX redirect installed')
+print('OK: AJAX redirect installed with multi-value checkbox aggregation')
