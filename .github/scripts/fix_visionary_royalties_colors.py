@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# Rebuild trigger: Visionary royalties + Ambassador red + Investor blue.
 p=Path('members.html')
 s=p.read_text(encoding='utf-8')
 
@@ -21,7 +22,6 @@ if old_body not in s and new_body not in s:
     raise SystemExit('Visionary body color logic not found')
 s=s.replace(old_body,new_body,1)
 
-# Also show the royalty benefit in every Visionary card, not only Investor.
 old_card='<li><b>${q("pe")}</b> · ${pl(life.pe[i])}</li></ul></article>`'
 new_card='<li><b>${q("pe")}</b> · ${pl(life.pe[i])}</li><li><b>${q("roy")}</b></li></ul></article>`'
 if old_card in s:
