@@ -16,6 +16,7 @@ on:
       - '.github/scripts/full_translation_audit_runtime.py'
       - '.github/scripts/normalize_visible_asterisks.py'
       - '.github/scripts/fix_member_price_double_stars.py'
+      - '.github/scripts/update_members_edition_buttons.py'
   workflow_dispatch:
 
 permissions:
@@ -26,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Update Members edition buttons EN ES FR
+        run: python .github/scripts/update_members_edition_buttons.py
       - name: Apply exact FR EN ES labels
         run: python .github/scripts/force_join_labels_final.py
       - name: Enforce visible labels after language switching
@@ -50,14 +53,14 @@ jobs:
         run: python .github/scripts/normalize_visible_asterisks.py
       - name: Lock member price stars to one
         run: python .github/scripts/fix_member_price_double_stars.py
-      - name: Commit optimized index.html
+      - name: Commit Members and optimized index
         run: |
-          if git diff --quiet -- index.html; then
-            echo "No index changes"
+          if git diff --quiet -- members.html index.html; then
+            echo "No Members/index changes"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "Audit translations and lock member prices to one asterisk"
+          git add members.html index.html
+          git commit -m "Update Members edition buttons EN ES FR and set Visionary default"
           git push
