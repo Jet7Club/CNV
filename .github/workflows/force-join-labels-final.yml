@@ -17,6 +17,7 @@ on:
       - '.github/scripts/normalize_visible_asterisks.py'
       - '.github/scripts/fix_member_price_double_stars.py'
       - '.github/scripts/update_members_edition_buttons.py'
+      - '.github/scripts/add_join_form_profile_fields.py'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +36,8 @@ jobs:
         run: python .github/scripts/force_fr_es_adventure_labels_runtime.py
       - name: Translate Empower in FR and ES
         run: python .github/scripts/translate_empower_labels.py
+      - name: Add join form contact and profile fields
+        run: python .github/scripts/add_join_form_profile_fields.py
       - name: Remove All/Tout gallery button
         run: python .github/scripts/remove_gallery_all_runtime.py
       - name: Optimize image loading
@@ -62,5 +65,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add members.html index.html
-          git commit -m "Update Members edition buttons EN ES FR and set Visionary default"
+          git commit -m "Update CNV join form fields and Members"
           git push
