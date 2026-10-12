@@ -288,7 +288,6 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <style id="cnv-image-loading-stability-20261008">
 img{max-width:100%;height:auto}
 </style>
-
 <style id="cnv-join-extra-fields-style">
 #cnvContactForm{
   max-height:72vh!important;
@@ -2113,17 +2112,18 @@ window.addEventListener('DOMContentLoaded',()=>{
 <script id="cnv-normalize-visible-asterisks">
 (function(){
   function normalize(){
+    if(!document.body) return;
     const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
     let n;
     while((n=walker.nextNode())){
       const p=n.parentElement;
-      if(!p || /^(SCRIPT|STYLE,NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(p.tagName)) continue;
+      if(!p || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/i.test(p.tagName)) continue;
       if((n.nodeValue||'').includes('**')) n.nodeValue=n.nodeValue.replace(/\*\*/g,'*');
     }
   }
-  normalize();
-  window.addEventListener('load',normalize);
-  new MutationObserver(()=>normalize()).observe(document.body,{childList:true,subtree:true,characterData:true});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',normalize,{once:true});
+  else normalize();
+  window.addEventListener('load',normalize,{once:true});
 })();
 </script>
 
