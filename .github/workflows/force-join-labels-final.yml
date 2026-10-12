@@ -20,6 +20,7 @@ on:
       - '.github/scripts/add_join_form_profile_fields.py'
       - '.github/scripts/update_join_form_layout_selection.py'
       - '.github/scripts/add_join_interest_checkboxes.py'
+      - '.github/scripts/fix_formsubmit_ajax.py'
       - '.github/scripts/fix_visionary_royalties_colors.py'
       - '.github/scripts/audit_site_controls.py'
   workflow_dispatch:
@@ -46,6 +47,8 @@ jobs:
         run: python .github/scripts/update_join_form_layout_selection.py
       - name: Add grouped join interest checkboxes
         run: python .github/scripts/add_join_interest_checkboxes.py
+      - name: Preserve all checked interests in email
+        run: python .github/scripts/fix_formsubmit_ajax.py
       - name: Fix Visionary royalties and colors
         run: python .github/scripts/fix_visionary_royalties_colors.py
       - name: Remove All/Tout gallery button
@@ -77,5 +80,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add members.html index.html
-          git commit -m "Add grouped CNV join interests"
+          git commit -m "Preserve all checked CNV interests in email"
           git push
