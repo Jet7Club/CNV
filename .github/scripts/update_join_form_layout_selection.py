@@ -164,7 +164,7 @@ runtime=r'''
 
 if '</head>' in s:s=s.replace('</head>',style+'\n</head>',1)
 else:s=style+'\n'+s
-if '</body>' in s:s.replace('</body>',runtime+'\n</body>',1)
+if '</body>' in s:s=s.replace('</body>',runtime+'\n</body>',1)
 else:s+=runtime
 
 p.write_text(s,encoding='utf-8')
