@@ -288,6 +288,7 @@ section[id]{scroll-margin-top:calc(var(--cnv-header-h) + 22px)}
 <style id="cnv-image-loading-stability-20261008">
 img{max-width:100%;height:auto}
 </style>
+<style id="cnv-join-extra-fields-style">@media(max-width:700px){#cnvJoinExtraFields{grid-template-columns:1fr!important}#cnvJoinExtraFields label{grid-column:1/-1!important}}</style>
 </head>
 <body>
 <header class="top">
@@ -907,7 +908,29 @@ function L(x,b){lang=x;document.documentElement.lang=x;document.querySelectorAll
   <input type="hidden" name="_subject" value="CNV — Nouveau message">
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
-<input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea><button class="btn gold" id="contactSend" style="margin-top:8px;color:#11231c" type="submit">Envoyer à CNV</button><p id="contactFormStatus" aria-live="polite" style="font-size:13px;margin:10px 0 0;min-height:18px"></p><p id="contactEmailNote" style="font-size:12px;color:#7b817e;margin:12px 0 0">Votre message sera adressé à jet7club@proton.me.</p></form></div></div>
+<input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea>
+<!-- CNV JOIN EXTRA FIELDS START -->
+<div id="cnvJoinExtraFields" class="cnv-join-extra-fields" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:16px 0;">
+  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+    <span data-cnv-extra-label="cell">Cell / WhatsApp *</span>
+    <input type="tel" name="Cell / WhatsApp" required autocomplete="tel" data-cnv-extra-input="cell" placeholder="Cell / WhatsApp" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+  </label>
+  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+    <span data-cnv-extra-label="linkedin">LinkedIn</span>
+    <input type="url" name="LinkedIn" autocomplete="url" data-cnv-extra-input="linkedin" placeholder="https://www.linkedin.com/in/..." style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+  </label>
+  <label style="display:flex;flex-direction:column;gap:7px;grid-column:span 1;">
+    <span data-cnv-extra-label="instagram">Instagram</span>
+    <input type="text" name="Instagram" data-cnv-extra-input="instagram" placeholder="@instagram" style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;">
+  </label>
+  <label style="display:flex;flex-direction:column;gap:7px;grid-column:1/-1;">
+    <span data-cnv-extra-label="intro">Quick introduction *</span>
+    <textarea name="Quick introduction" required rows="4" data-cnv-extra-input="intro" placeholder="Tell us briefly who you are and what brings you to CNV..." style="width:100%;padding:13px 14px;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit;resize:vertical;"></textarea>
+  </label>
+</div>
+<!-- CNV JOIN EXTRA FIELDS END -->
+
+<button class="btn gold" id="contactSend" style="margin-top:8px;color:#11231c" type="submit">Envoyer à CNV</button><p id="contactFormStatus" aria-live="polite" style="font-size:13px;margin:10px 0 0;min-height:18px"></p><p id="contactEmailNote" style="font-size:12px;color:#7b817e;margin:12px 0 0">Votre message sera adressé à jet7club@proton.me.</p></form></div></div>
 <script>
 let currentLang='fr', currentZone='sanctuary', selectedCard=null;
 const originalProfiles=[...document.querySelectorAll('.path-card')].map(card=>{
@@ -1750,6 +1773,28 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run,{once:true}); else run();
 })();
 </script>
+<script id="cnv-join-extra-fields-i18n">
+(function(){
+  const copy={
+    en:{cell:'Cell / WhatsApp *',linkedin:'LinkedIn',instagram:'Instagram',intro:'Quick introduction *',cellPh:'Cell / WhatsApp',linkedinPh:'https://www.linkedin.com/in/...',instagramPh:'@instagram',introPh:'Tell us briefly who you are and what brings you to CNV...'},
+    fr:{cell:'Téléphone / WhatsApp *',linkedin:'LinkedIn',instagram:'Instagram',intro:'Présentation rapide *',cellPh:'Téléphone / WhatsApp',linkedinPh:'https://www.linkedin.com/in/...',instagramPh:'@instagram',introPh:'Présentez-vous brièvement et dites-nous ce qui vous amène vers CNV...'},
+    es:{cell:'Móvil / WhatsApp *',linkedin:'LinkedIn',instagram:'Instagram',intro:'Presentación breve *',cellPh:'Móvil / WhatsApp',linkedinPh:'https://www.linkedin.com/in/...',instagramPh:'@instagram',introPh:'Cuéntanos brevemente quién eres y qué te acerca a CNV...'}
+  };
+  function apply(){
+    const l=(document.documentElement.lang||'en').toLowerCase().slice(0,2);
+    const c=copy[l]||copy.en;
+    document.querySelectorAll('[data-cnv-extra-label]').forEach(el=>{const k=el.getAttribute('data-cnv-extra-label');if(c[k])el.textContent=c[k];});
+    const cell=document.querySelector('[data-cnv-extra-input="cell"]'); if(cell)cell.placeholder=c.cellPh;
+    const li=document.querySelector('[data-cnv-extra-input="linkedin"]'); if(li)li.placeholder=c.linkedinPh;
+    const ig=document.querySelector('[data-cnv-extra-input="instagram"]'); if(ig)ig.placeholder=c.instagramPh;
+    const intro=document.querySelector('[data-cnv-extra-input="intro"]'); if(intro)intro.placeholder=c.introPh;
+  }
+  apply();
+  new MutationObserver(apply).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+})();
+</script>
+
+
 <script id="cnv-nav-language-final-20261010">
 (function(){
   const nav=document.querySelector('.top nav')||document.querySelector('nav');
