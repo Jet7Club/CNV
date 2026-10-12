@@ -337,6 +337,19 @@ img{max-width:100%;height:auto}
 @media(max-width:700px){#cnvContactForm .cnv-compact-row{grid-template-columns:1fr!important}}
 </style>
 
+
+<style id="cnv-join-interests-style">
+#cnvJoinInterests{grid-column:1/-1!important;width:100%!important;margin:12px 0 14px!important;padding:0!important;box-sizing:border-box!important}
+#cnvJoinInterests h3{margin:0 0 10px!important;font-size:15px!important;line-height:1.2!important;font-weight:800!important}
+#cnvJoinInterests .cnv-interest-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important}
+#cnvJoinInterests .cnv-interest-group{margin:0!important;padding:10px 12px!important;border:1px solid #d9b76255!important;border-radius:12px!important;min-width:0!important}
+#cnvJoinInterests .cnv-interest-group legend{padding:0 5px!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important}
+#cnvJoinInterests .cnv-interest-item{display:flex!important;align-items:flex-start!important;gap:8px!important;margin:6px 0!important;cursor:pointer!important;line-height:1.2!important;font-size:12px!important}
+#cnvJoinInterests .cnv-interest-item input{width:16px!important;height:16px!important;min-width:16px!important;margin:0!important;accent-color:#c7a85b!important}
+#cnvJoinInterests .cnv-interest-item span{display:block!important;min-width:0!important}
+@media(max-width:700px){#cnvJoinInterests .cnv-interest-grid{grid-template-columns:1fr!important}}
+</style>
+
 </head>
 <body>
 <header class="top">
@@ -956,7 +969,53 @@ function L(x,b){lang=x;document.documentElement.lang=x;document.querySelectorAll
   <input type="hidden" name="_subject" value="CNV — Nouveau message">
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
-<input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea>
+<input id="contactFirstName" name="firstName" placeholder="Prénom" required=""/><input id="contactLastName" name="lastName" placeholder="Nom" required=""/><input id="contactEmail" name="email" placeholder="Email" required="" type="email"/><select id="interestSelect" name="interest"><option>Choisissez votre relation avec CNV</option><option>Devenir membre</option><option>Être volontaire</option><option>Devenir ami de CNV</option><option>Devenir Patron de CNV</option><option>Devenir partenaire</option><option>Devenir investisseur</option></select>
+<!-- CNV JOIN INTERESTS START -->
+<section id="cnvJoinInterests" class="cnv-join-interests">
+  <h3 data-cnv-interest-title>What are you seeking?</h3>
+  <div class="cnv-interest-grid">
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g1">
+      <legend data-cnv-interest-group-label="g1">Nature & lifestyle</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Live closer to nature" data-cnv-interest-key="nature"><span data-cnv-interest-label="nature">Live closer to nature</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Find better balance" data-cnv-interest-key="balance"><span data-cnv-interest-label="balance">Find better balance</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Recharge regularly" data-cnv-interest-key="recharge"><span data-cnv-interest-label="recharge">Recharge regularly</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Stay several months" data-cnv-interest-key="months"><span data-cnv-interest-label="months">Stay several months</span></label>
+    </fieldset>
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g2">
+      <legend data-cnv-interest-group-label="g2">Wellbeing & creativity</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Improve my wellbeing" data-cnv-interest-key="wellbeing"><span data-cnv-interest-label="wellbeing">Improve my wellbeing</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Join retreats" data-cnv-interest-key="retreats"><span data-cnv-interest-label="retreats">Join retreats</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Develop my creativity" data-cnv-interest-key="creativity"><span data-cnv-interest-label="creativity">Develop my creativity</span></label>
+    </fieldset>
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g3">
+      <legend data-cnv-interest-group-label="g3">Community & relationships</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Join a great community" data-cnv-interest-key="community"><span data-cnv-interest-label="community">Join a great community</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Meet inspiring people" data-cnv-interest-key="inspiring"><span data-cnv-interest-label="inspiring">Meet inspiring people</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Build new friendships" data-cnv-interest-key="friendships"><span data-cnv-interest-label="friendships">Build new friendships</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Live with my family" data-cnv-interest-key="family"><span data-cnv-interest-label="family">Live with my family</span></label>
+    </fieldset>
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g4">
+      <legend data-cnv-interest-group-label="g4">Work & projects</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Grow my network" data-cnv-interest-key="network"><span data-cnv-interest-label="network">Grow my network</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Work remotely" data-cnv-interest-key="remote"><span data-cnv-interest-label="remote">Work remotely</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Launch a new project" data-cnv-interest-key="project"><span data-cnv-interest-label="project">Launch a new project</span></label>
+    </fieldset>
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g5">
+      <legend data-cnv-interest-group-label="g5">Ecology & activities</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Support ecology" data-cnv-interest-key="ecology"><span data-cnv-interest-label="ecology">Support ecology</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Learn permaculture" data-cnv-interest-key="permaculture"><span data-cnv-interest-label="permaculture">Learn permaculture</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Practice sports activities" data-cnv-interest-key="sports"><span data-cnv-interest-label="sports">Practice sports activities</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Practice cultural activities" data-cnv-interest-key="culture"><span data-cnv-interest-label="culture">Practice cultural activities</span></label>
+    </fieldset>
+    <fieldset class="cnv-interest-group" data-cnv-interest-group="g6">
+      <legend data-cnv-interest-group-label="g6">Contribution & development</legend>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Contribute actively to CNV" data-cnv-interest-key="contribute"><span data-cnv-interest-label="contribute">Contribute actively to CNV</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Become a CNV ambassador" data-cnv-interest-key="ambassador"><span data-cnv-interest-label="ambassador">Become a CNV ambassador</span></label>
+      <label class="cnv-interest-item"><input type="checkbox" name="CNV interests" value="Invest in CNV" data-cnv-interest-key="invest"><span data-cnv-interest-label="invest">Invest in CNV</span></label>
+    </fieldset>
+  </div>
+</section>
+<!-- CNV JOIN INTERESTS END --><textarea id="contactMessage" name="message" placeholder="Dites-nous ce que vous cherchez"></textarea>
 
 <!-- CNV JOIN EXTRA FIELDS START -->
 <div id="cnvJoinExtraFields" class="cnv-join-extra-fields">
@@ -1972,6 +2031,26 @@ window.addEventListener('DOMContentLoaded',()=>{
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
   window.addEventListener('load',apply,{once:true});
   new MutationObserver(apply).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+})();
+</script>
+
+
+<script id="cnv-join-interests-i18n">
+(function(){
+ const copy={
+  en:{title:'What are you seeking?',groups:{g1:'Nature & lifestyle',g2:'Wellbeing & creativity',g3:'Community & relationships',g4:'Work & projects',g5:'Ecology & activities',g6:'Contribution & development'},items:{nature:'Live closer to nature',balance:'Find better balance',recharge:'Recharge regularly',months:'Stay several months',wellbeing:'Improve my wellbeing',retreats:'Join retreats',creativity:'Develop my creativity',community:'Join a great community',inspiring:'Meet inspiring people',friendships:'Build new friendships',family:'Live with my family',network:'Grow my network',remote:'Work remotely',project:'Launch a new project',ecology:'Support ecology',permaculture:'Learn permaculture',sports:'Practice sports activities',culture:'Practice cultural activities',contribute:'Contribute actively to CNV',ambassador:'Become a CNV ambassador',invest:'Invest in CNV'}},
+  fr:{title:'Que recherchez-vous chez CNV ?',groups:{g1:'Nature & qualité de vie',g2:'Bien-être & créativité',g3:'Communauté & relations',g4:'Travail & projets',g5:'Écologie & activités',g6:'Contribution & développement'},items:{nature:'Vivre proche de la nature',balance:'Retrouver un meilleur équilibre',recharge:'Me ressourcer régulièrement',months:'Séjourner plusieurs mois',wellbeing:'Améliorer mon bien-être',retreats:'Participer à des retraites',creativity:'Développer ma créativité',community:'Rejoindre une belle communauté',inspiring:'Rencontrer des personnes inspirantes',friendships:'Créer de nouvelles amitiés',family:'Vivre avec ma famille',network:'Développer mon réseau',remote:'Travailler à distance',project:'Lancer un nouveau projet',ecology:'Participer à l’écologie',permaculture:'Apprendre la permaculture',sports:'Pratiquer des activités sportives',culture:'Pratiquer des activités culturelles',contribute:'Contribuer activement à CNV',ambassador:'Devenir ambassadeur CNV',invest:'Investir dans CNV'}},
+  es:{title:'¿Qué buscas en CNV?',groups:{g1:'Naturaleza & calidad de vida',g2:'Bienestar & creatividad',g3:'Comunidad & relaciones',g4:'Trabajo & proyectos',g5:'Ecología & actividades',g6:'Contribución & desarrollo'},items:{nature:'Vivir cerca de la naturaleza',balance:'Encontrar mejor equilibrio',recharge:'Recargarme regularmente',months:'Quedarme varios meses',wellbeing:'Mejorar mi bienestar',retreats:'Participar en retiros',creativity:'Desarrollar mi creatividad',community:'Unirme a una comunidad',inspiring:'Conocer personas inspiradoras',friendships:'Crear nuevas amistades',family:'Vivir con mi familia',network:'Desarrollar mi red',remote:'Trabajar a distancia',project:'Lanzar un nuevo proyecto',ecology:'Participar en ecología',permaculture:'Aprender permacultura',sports:'Practicar actividades deportivas',culture:'Practicar actividades culturales',contribute:'Contribuir activamente a CNV',ambassador:'Ser embajador CNV',invest:'Invertir en CNV'}}
+ };
+ function apply(){
+  const l=(document.documentElement.lang||'en').toLowerCase().slice(0,2); const c=copy[l]||copy.en;
+  const title=document.querySelector('[data-cnv-interest-title]'); if(title)title.textContent=c.title;
+  document.querySelectorAll('[data-cnv-interest-group-label]').forEach(el=>{const k=el.dataset.cnvInterestGroupLabel;if(c.groups[k])el.textContent=c.groups[k]});
+  document.querySelectorAll('[data-cnv-interest-label]').forEach(el=>{const k=el.dataset.cnvInterestLabel;if(c.items[k])el.textContent=c.items[k]});
+  document.querySelectorAll('[data-cnv-interest-key]').forEach(el=>{const k=el.dataset.cnvInterestKey;if(c.items[k])el.value=c.items[k]});
+ }
+ apply();
+ new MutationObserver(apply).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 })();
 </script>
 
