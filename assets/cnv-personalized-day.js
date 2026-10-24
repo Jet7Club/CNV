@@ -80,11 +80,53 @@ if(/nature|natural|forest|contemplat|regenerat|ecolog|jardin|garden/.test(value)
 if(/social|community|connect|family|famille|familia|relation|human|rencontre/.test(value))return "social";
 return "creative";
 }
+
+// Each of the 50 existing selector options has a stable, independent itinerary.
+// Themes stay grounded in the facilities already planned for CNV.
+const itineraryThemes={
+fr:[
+[["Rencontre inspirante","Échangez avec des personnes qui partagent vos ambitions autour d'un café.","Pro Hub"],["Atelier d'idées","Transformez une intuition en projet lors d'un atelier collaboratif.","Pro Hub"],["Réseau international","Retrouvez des créateurs et entrepreneurs dans une atmosphère détendue.","Business Club"]],
+[["Balade sensorielle","Découvrez les parfums, textures et sons d'un sentier préservé.","Sanctuary"],["Jardins vivants","Explorez la forêt nourricière et les cultures en permaculture.","Permaculture"],["Ciel étoilé","Observez les étoiles et appréciez le calme de la nature.","Espace nature"]],
+[["Élan créatif","Expérimentez peinture, photographie ou sculpture en plein air.","Ateliers créatifs"],["Scène ouverte","Partagez vos créations et découvrez celles des autres.","Espace culturel"],["Concert intimiste","Profitez de musiques vivantes sous les arbres.","Scène culturelle"]],
+[["Équilibre du corps","Essayez une séance de yoga ou de respiration consciente.","Spa & Bien-être"],["Pause profonde","Offrez-vous un massage ou un bain relaxant.","Spa & Bien-être"],["Méditation au crépuscule","Terminez la journée dans la sérénité.","Jardin zen"]],
+[["Découverte active","Essayez un parcours nature, le vélo ou une activité de plein air.","Activités & Expériences"],["Défi ludique","Partagez une activité sportive adaptée à votre rythme.","Pôle activités"],["Soirée aventure","Échangez vos découvertes autour d'une ambiance conviviale.","Espace communautaire"]],
+[["Rencontres spontanées","Rejoignez une tablée conviviale et faites connaissance.","Place du village"],["Expérience collective","Participez à un jeu, un atelier ou une activité en équipe.","Espace communautaire"],["Fête et convivialité","Retrouvez de nouveaux amis autour de musique et de danse.","Nightlife"]]
+],
+en:[
+[["Inspiring connections","Exchange ideas with like-minded people over coffee.","Pro Hub"],["Ideas workshop","Turn a spark of inspiration into a collaborative project.","Pro Hub"],["International networking","Meet creators and founders in a relaxed setting.","Business Club"]],
+[["Sensory nature walk","Discover the scents, textures and sounds of a protected trail.","Sanctuary"],["Living gardens","Explore the food forest and permaculture gardens.","Permaculture"],["Starry skies","Watch the stars and enjoy the silence of nature.","Nature area"]],
+[["Creative energy","Experiment with painting, photography or outdoor sculpture.","Creative Studios"],["Open stage","Share your creations and discover the work of others.","Cultural Hub"],["Intimate concert","Enjoy live music beneath the trees.","Cultural Stage"]],
+[["Body balance","Try yoga or mindful breathing.","Spa & Wellness"],["Deep relaxation","Enjoy a massage or a soothing bath.","Spa & Wellness"],["Sunset meditation","End the day in calm and stillness.","Zen Garden"]],
+[["Active discovery","Try a nature trail, cycling or an outdoor activity.","Activities & Experiences"],["Playful challenge","Share an activity at your own pace.","Activities Hub"],["Adventure stories","Swap stories from the day in a friendly setting.","Community Hub"]],
+[["Spontaneous connections","Join a welcoming shared table and meet new people.","Village Square"],["Together is better","Take part in a game, workshop or group experience.","Community Hub"],["Music and friendship","Meet new friends for music and dancing.","Nightlife"]]
+],
+es:[
+[["Conexiones inspiradoras","Intercambia ideas con personas afines mientras tomas un café.","Pro Hub"],["Taller de ideas","Convierte una inspiración en un proyecto colaborativo.","Pro Hub"],["Red internacional","Conoce a creadores y emprendedores en un ambiente relajado.","Business Club"]],
+[["Paseo sensorial","Descubre aromas, texturas y sonidos de un sendero protegido.","Sanctuary"],["Jardines vivos","Explora el bosque comestible y los huertos de permacultura.","Permacultura"],["Cielo estrellado","Observa las estrellas y disfruta del silencio de la naturaleza.","Zona natural"]],
+[["Energía creativa","Experimenta con pintura, fotografía o escultura al aire libre.","Talleres creativos"],["Escenario abierto","Comparte tus creaciones y descubre las de otras personas.","Espacio cultural"],["Concierto íntimo","Disfruta de música en vivo bajo los árboles.","Escenario cultural"]],
+[["Equilibrio corporal","Prueba yoga o respiración consciente.","Spa y bienestar"],["Relajación profunda","Disfruta de un masaje o un baño relajante.","Spa y bienestar"],["Meditación al atardecer","Termina el día en calma.","Jardín zen"]],
+[["Descubrimiento activo","Prueba un sendero, ciclismo o una actividad al aire libre.","Actividades y experiencias"],["Reto divertido","Comparte una actividad a tu ritmo.","Zona de actividades"],["Historias de aventura","Comparte tus descubrimientos en un ambiente acogedor.","Espacio comunitario"]],
+[["Encuentros espontáneos","Comparte mesa y conoce gente nueva.","Plaza del pueblo"],["Mejor juntos","Participa en un juego, taller o experiencia en grupo.","Espacio comunitario"],["Música y amistad","Reúnete con nuevos amigos para escuchar música y bailar.","Vida nocturna"]]
+]};
+function stableIndex(value){let h=2166136261;for(const c of value){h=Math.imul(h^c.charCodeAt(0),16777619);}return h>>>0;}
+function themedExperiences(name,category,locale,dayVariant){
+const v=clean(name+" "+category);
+let theme=/yoga|wellness|bien.tre|bienestar|sant.|health|meditat|spa|senior|repos|relax/.test(v)?3:
+/nature|natural|forest|contemplat|regenerat|ecolog|jardin|garden|agric|permacult|animal/.test(v)?1:
+/art|creat|music|musique|musica|design|artist|photograph|culture|maker/.test(v)?2:
+/sport|advent|aventur|explor|outdoor|athlet|randonn|travel|voyage/.test(v)?4:
+/social|community|connect|family|famille|familia|relation|human|rencontre|f.te|fiesta/.test(v)?5:0;
+const pool=itineraryThemes[locale]||itineraryThemes.en;
+const hash=stableIndex(v);
+const offset=(hash+dayVariant)%3;
+return [pool[theme][offset],pool[theme][(offset+1)%3],pool[theme][(offset+2)%3]];
+}
+
 let variation=0,last="";
-function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=tr[lang()]||tr.en;const key=profile();const fingerprint=key+"|"+lang()+"|"+variation;if(last===fingerprint)return;last=fingerprint;const p=profiles[key];root.innerHTML="";const heading=document.createElement("h3");heading.textContent=l.title;root.appendChild(heading);const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=l.sub;root.appendChild(intro);const bar=document.createElement("div");bar.className="cnv-day-bar";const pill=document.createElement("span");pill.className="cnv-day-pill";pill.textContent="✧ "+(selectedProfile()||translations[lang()]?.profiles[key]||p[0]);bar.appendChild(pill);const btn=document.createElement("button");btn.type="button";btn.textContent="↻ "+l.again;btn.addEventListener("click",()=>{variation++;last="";render()});bar.appendChild(btn);root.appendChild(bar);
-const timeline=document.createElement("div");timeline.className="cnv-day-timeline";
+function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=tr[lang()]||tr.en;const key=profile();const fingerprint=key+"|"+selectedProfile()+"|"+lang()+"|"+variation;if(last===fingerprint)return;last=fingerprint;const p=profiles[key];root.innerHTML="";const heading=document.createElement("h3");heading.textContent=l.title;root.appendChild(heading);const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=l.sub;root.appendChild(intro);const bar=document.createElement("div");bar.className="cnv-day-bar";const pill=document.createElement("span");pill.className="cnv-day-pill";pill.textContent="✧ "+(selectedProfile()||translations[lang()]?.profiles[key]||p[0]);bar.appendChild(pill);const btn=document.createElement("button");btn.type="button";btn.textContent="↻ "+l.again;btn.addEventListener("click",()=>{variation++;last="";render()});bar.appendChild(btn);root.appendChild(bar);
+const timeline=document.createElement("div");timeline.className="cnv-day-timeline";const unique=themedExperiences(selectedProfile(),key,lang(),variation);
 base.forEach((entry,i)=>{let data=entry.slice();if([3,6,9].includes(i)){const v=p[[3,6,9].indexOf(i)+2];data=[p[1],...v];}if(variation%2){if(i===2)data=["trees","A mindful nature walk","Discover hidden paths and beautiful green spaces.","Nature trails"];if(i===5)data=["heart","A peaceful reset","Try gentle movement, a spa ritual or simply unwind.","Spa & Wellness"];}
-const locale=translations[lang()];if(locale){const v=locale.entries[i];data=[data[0],...v];if([3,6,9].includes(i))data=[data[0],...locale.special[key][[3,6,9].indexOf(i)]];if(variation%2&&i===2)data=["trees",...locale.alternate[0]];if(variation%2&&i===5)data=["heart",...locale.alternate[1]];}const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
+const locale=translations[lang()];if(locale){const v=locale.entries[i];data=[data[0],...v];if([3,6,9].includes(i))data=[data[0],...locale.special[key][[3,6,9].indexOf(i)]];if(variation%2&&i===2)data=["trees",...locale.alternate[0]];if(variation%2&&i===5)data=["heart",...locale.alternate[1]];}if([3,6,9].includes(i))data=[data[0],...unique[[3,6,9].indexOf(i)]];const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
 function init(){
 if(document.getElementById("cnv-day-experience"))return;
 const art=document.getElementById("artoflife"),life=document.getElementById("life");
