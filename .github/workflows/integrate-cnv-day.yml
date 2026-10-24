@@ -18,11 +18,35 @@ jobs:
           persist-credentials: true
       - name: Add personalized day to CNV
         run: python .github/scripts/integrate_cnv_day.py
+      - name: Extract original profile selectors for personalization audit
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import json
+          class Selects(HTMLParser):
+              def __init__(self): super().__init__(); self.groups=[]; self.current=None; self.option=None
+              def handle_starttag(self,tag,attrs):
+                  if tag=='select': self.current={'attrs':dict(attrs),'options':[]}
+                  elif tag=='option' and self.current is not None: self.option=[]
+              def handle_data(self,data):
+                  if self.option is not None: self.option.append(data)
+              def handle_endtag(self,tag):
+                  if tag=='option' and self.option is not None and self.current is not None:
+                      v=' '.join(''.join(self.option).split()); self.option=None
+                      if v and v not in self.current['options']: self.current['options'].append(v)
+                  elif tag=='select' and self.current is not None:
+                      if len(self.current['options'])>=10: self.groups.append(self.current)
+                      self.current=None
+          parser=Selects(); parser.feed(Path('index.html').read_text(encoding='utf-8'))
+          Path('assets/cnv-profile-selectors.json').write_text(json.dumps(parser.groups,ensure_ascii=False,indent=2),encoding='utf-8')
+          print('Extracted',len(parser.groups),'profile-like selectors')
+          PY
       - name: Commit and publish
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
+          git add index.html assets/cnv-profile-selectors.json
           if ! git diff --cached --quiet; then
             git commit -m "Publish personalized CNV day on website"
             git push
