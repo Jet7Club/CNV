@@ -69,10 +69,13 @@ const stored=["lang","language","cnv_lang","cnv_language"].map(k=>{try{return lo
 return (stored||document.documentElement.lang||"fr").slice(0,2).toLowerCase();
 }
 function selectedProfile(){
-const selects=[...document.querySelectorAll("select")].filter(e=>!e.closest("#cnv-day-experience"));
-const p=selects.find(e=>/profil|profile|perfil/i.test((e.closest("label")?.textContent||"")+" "+(e.previousElementSibling?.textContent||"")+" "+(e.id||"")+" "+(e.name||"")))||selects[1]||selects[0];
-return p?.selectedOptions?.[0]?.textContent?.trim()||"";
+const p=document.getElementById("profileSelect");
+if(p && p.value && p.selectedOptions?.[0])return p.selectedOptions[0].textContent.trim();
+const selected=document.querySelector(".path-card.selected,.path-card.active,.path-card[aria-selected='true']");
+if(selected)return selected.querySelector("h3")?.textContent?.trim()||"";
+return "";
 }
+
 function profile(){
 const value=clean(selectedProfile()+" "+[...document.querySelectorAll("select")].map(e=>e.selectedOptions?.[0]?.textContent||"").join(" "));
 if(/leader|startup|start.up|business|entrepren|nomad|digital|profession|b.tisseur|constructor|builder|invest|founder|fondateur|innov/.test(value))return "entrepreneur";
