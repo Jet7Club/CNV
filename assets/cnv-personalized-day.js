@@ -163,23 +163,44 @@ es:[
 [["Observar las estrellas","Contempla el cielo nocturno en paz.","Zona natural"],["Noche de descanso","Termina el día leyendo tranquilamente.","Tu microaldea"]]
 ]};
 function cnvChoicesForSlot(i,profileName,key,locale,current){
-const pool=itineraryThemes[locale]||itineraryThemes.en;
-const text=clean(profileName);
-const theme=/nature|forest|ecolog|jardin|garden|natural/.test(text)?1:/art|creat|music|design|photo/.test(text)?2:/sport|advent|explor|active|aventur/.test(text)?4:/wellness|yoga|spa|senior|meditat/.test(text)?3:/social|family|famille|community|connect/.test(text)?5:0;
-const morning=[0,1,2],day=[0,1,2,3,4,5],evening=[0,1,2,3,4,5];
-const allowedThemes=(i===2||i===3||i===6)?day:i===9?evening:[];
-const themeEntries=allowedThemes.includes(theme)?pool[theme]:[];
-const filtered=themeEntries.filter(e=>{
-const title=clean(e[0]);
-if(i<7&&/star|night|stargaz|etoil|estrell|cielo|sunset|atardecer|evening|soir|noche|dinner|diner|cena/.test(title))return false;
-if(i===9&&/breakfast|morning|sunrise|desayuno|petit.dejeuner|matinal|amanecer|lunch|almuerzo|dejeuner/.test(title))return false;
-if(i===2||i===3||i===6)return !/dinner|diner|cena|breakfast|desayuno|petit.dejeuner|lunch|almuerzo|dejeuner/.test(title);
-return i===9;
-});
-const options=[current,...filtered,...(cnvSlotPools[locale]||cnvSlotPools.en)[i]];
-const unique=[],seen=new Set();
-for(const e of options){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);}
-return unique;
+const L=locale==="fr"?"fr":locale==="es"?"es":"en";
+const pools=cnvSlotPools[L]||cnvSlotPools.en;
+const p=clean(profileName);
+const theme=/advent|aventur|sport|explor|trek|voyag|travel|outdoor|vtt|active/.test(p)?"adventure":/art|creat|music|design|photo|artist|writer|auteur|escrit|peint/.test(p)?"creative":/nature|forest|ecolog|jardin|garden|natural|permacult|regenerat/.test(p)?"nature":/wellness|yoga|spa|senior|meditat|health|bien.tre|bienestar/.test(p)?"wellness":/social|family|famille|familia|community|connect|human|friend|amiti/.test(p)?"social":"business";
+const themed={
+en:{
+business:[["Founder breakfast conversation","Exchange ideas over coffee before the day begins.","Dining & Gastronomy"],["Startup strategy lab","Work on an idea with other founders.","Pro Hub"],["Investor and founder roundtable","Share practical insights in a small professional group.","Business Club"],["Focused coworking session","Advance your project in a quiet workspace.","Pro Hub"],["Mentoring exchange","Discuss challenges and opportunities with peers.","Pro Hub"],["International networking evening","Connect with entrepreneurs over relaxed conversations.","Business Club"]],
+adventure:[["Trail runner's warm-up","Prepare gently for the day's outdoor experiences.","Nature Trails"],["Guided mountain-bike ride","Discover the surroundings on a planned cycling route.","Activities Hub"],["Archery introduction","Practice technique and focus with an instructor.","Activities Hub"],["Tree-top adventure","Try a supervised climbing and rope course.","Adventure Area"],["Outdoor skills workshop","Learn useful skills through hands-on exploration.","Activities Hub"],["Adventure stories by the fire","Swap experiences after a day outdoors.","Community Lounge"]],
+creative:[["Morning sketchbook","Capture the landscape in the soft morning light.","Creative Garden"],["Outdoor photography walk","Explore composition and natural light.","Nature Trails"],["Open-air painting studio","Create alongside other artists.","Creative Studio"],["Artist collaboration session","Develop a shared work or creative concept.","Creative Studio"],["Music and creative workshop","Explore rhythm or sound with other makers.","Cultural Hub"],["Intimate live performance","Discover musicians and artists on stage.","Cultural Stage"]],
+nature:[["Birdwatching at sunrise","Observe local birds without disturbing their habitat.","Nature Trails"],["Guided biodiversity walk","Learn about plants and wildlife on protected paths.","Sanctuary"],["Food-forest discovery","Explore edible ecosystems and regenerative gardens.","Permaculture"],["Seed-saving workshop","Learn how seeds are collected and preserved.","Permaculture"],["Nature photography walk","Capture details of the landscape.","Nature Trails"],["Evening nature talk","Discuss conservation and local biodiversity.","Nature Hub"]],
+wellness:[["Mindful morning breathing","Start slowly with guided breathing.","Wellness Garden"],["Gentle yoga practice","Stretch and restore your energy.","Yoga Terrace"],["Herbal garden discovery","Learn about aromatic and medicinal plants.","Wellness Garden"],["Guided relaxation session","Reconnect with your body and unwind.","Spa & Wellness"],["Sound meditation","Experience a quiet guided sound practice.","Wellness Pavilion"],["Calm evening meditation","End the day with a restorative practice.","Zen Garden"]],
+social:[["Morning community coffee","Meet neighbours over a relaxed drink.","Garden Lounge"],["Small-group discovery walk","Explore the village with new friends.","Village Trails"],["Collaborative cooking workshop","Prepare seasonal food together.","Dining Workshop"],["Community games","Enjoy a friendly group challenge.","Activities Hub"],["Shared cultural experience","Join a creative or cultural group activity.","Cultural Hub"],["Music and dancing with friends","Enjoy a lively social evening.","Nightlife"]]
+},
+fr:{
+business:[["Café des entrepreneurs","Échangez vos idées autour d'un café matinal.","Gastronomie"],["Atelier stratégie startup","Développez un projet avec d'autres fondateurs.","Pro Hub"],["Table ronde entrepreneurs","Partagez des retours d'expérience concrets.","Business Club"],["Session de coworking","Avancez sur vos projets dans un espace calme.","Pro Hub"],["Rencontre de mentorat","Échangez sur vos défis et vos opportunités.","Pro Hub"],["Networking international","Rencontrez des entrepreneurs dans une ambiance conviviale.","Business Club"]],
+adventure:[["Échauffement avant la randonnée","Préparez votre corps en douceur.","Sentiers nature"],["Sortie VTT accompagnée","Découvrez les environs sur un itinéraire adapté.","Pôle activités"],["Initiation au tir à l'arc","Travaillez votre précision avec un encadrant.","Pôle activités"],["Parcours accrobranche","Explorez un parcours aérien encadré.","Parc aventure"],["Atelier de techniques nature","Apprenez des gestes utiles en plein air.","Pôle activités"],["Récits d'aventure au coin du feu","Partagez les découvertes de la journée.","Salon communautaire"]],
+creative:[["Carnet de croquis matinal","Dessinez les paysages dans la lumière du matin.","Jardin créatif"],["Balade photo guidée","Explorez cadrages et lumière naturelle.","Sentiers nature"],["Atelier peinture en plein air","Créez aux côtés d'autres artistes.","Atelier créatif"],["Création collaborative","Imaginez une œuvre collective.","Atelier créatif"],["Atelier musique et création","Expérimentez rythmes et sons.","Espace culturel"],["Spectacle intimiste","Découvrez des musiciens et artistes sur scène.","Scène culturelle"]],
+nature:[["Observation des oiseaux","Découvrez les oiseaux à l'aube sans les déranger.","Sentiers nature"],["Balade biodiversité","Explorez les plantes et la faune avec un guide.","Sanctuary"],["Découverte de la forêt nourricière","Visitez les jardins régénératifs.","Permaculture"],["Atelier conservation des semences","Découvrez la récolte et la conservation des graines.","Permaculture"],["Photographie de nature","Observez les détails des paysages.","Sentiers nature"],["Rencontre autour de la biodiversité","Échangez sur la protection du vivant.","Espace nature"]],
+wellness:[["Respiration consciente","Commencez la journée dans le calme.","Jardin bien-être"],["Yoga doux","Retrouvez votre énergie avec des mouvements adaptés.","Terrasse yoga"],["Découverte du jardin aromatique","Explorez les plantes et leurs usages.","Jardin bien-être"],["Relaxation guidée","Détendez-vous profondément.","Spa & Bien-être"],["Méditation sonore","Découvrez une séance de sons apaisants.","Pavillon bien-être"],["Méditation du soir","Terminez la journée en douceur.","Jardin zen"]],
+social:[["Café des voisins","Rencontrez les membres autour d'une boisson.","Lounge jardin"],["Balade découverte en groupe","Explorez le village avec de nouveaux amis.","Sentiers du village"],["Atelier cuisine collectif","Préparez ensemble des recettes de saison.","Atelier gastronomie"],["Jeux communautaires","Partagez un défi convivial.","Pôle activités"],["Expérience culturelle collective","Participez à une activité artistique en groupe.","Espace culturel"],["Musique et danse entre amis","Retrouvez les membres pour une soirée festive.","Nightlife"]]
+},
+es:{
+business:[["Café de emprendedores","Intercambia ideas durante el desayuno.","Gastronomía"],["Taller de estrategia startup","Desarrolla un proyecto con otros fundadores.","Pro Hub"],["Mesa redonda de emprendedores","Comparte experiencias prácticas.","Business Club"],["Sesión de coworking","Avanza en tus proyectos en un lugar tranquilo.","Pro Hub"],["Encuentro de mentoría","Comparte desafíos y oportunidades.","Pro Hub"],["Networking internacional","Conoce emprendedores en un ambiente relajado.","Business Club"]],
+adventure:[["Calentamiento antes de caminar","Prepara el cuerpo con suavidad.","Senderos naturales"],["Ruta guiada en bicicleta","Descubre el entorno sobre dos ruedas.","Zona de actividades"],["Iniciación al tiro con arco","Practica la precisión con un instructor.","Zona de actividades"],["Circuito de aventura en árboles","Explora un recorrido supervisado.","Parque de aventura"],["Taller de habilidades naturales","Aprende técnicas prácticas al aire libre.","Zona de actividades"],["Historias de aventura","Comparte experiencias al final del día.","Salón comunitario"]],
+creative:[["Cuaderno de dibujo matinal","Dibuja paisajes con la luz de la mañana.","Jardín creativo"],["Paseo fotográfico","Explora encuadres y luz natural.","Senderos naturales"],["Taller de pintura al aire libre","Crea junto a otros artistas.","Taller creativo"],["Creación colaborativa","Desarrolla una obra en equipo.","Taller creativo"],["Taller de música y creación","Explora ritmos y sonidos.","Espacio cultural"],["Espectáculo íntimo","Descubre artistas y músicos en directo.","Escenario cultural"]],
+nature:[["Observación de aves","Descubre las aves al amanecer sin molestarlas.","Senderos naturales"],["Paseo de biodiversidad","Conoce plantas y animales con un guía.","Sanctuary"],["Bosque comestible","Explora jardines regenerativos.","Permacultura"],["Taller de semillas","Aprende a recolectar y conservar semillas.","Permacultura"],["Fotografía de naturaleza","Captura detalles del paisaje.","Senderos naturales"],["Encuentro sobre biodiversidad","Conversa sobre la protección de la naturaleza.","Espacio natural"]],
+wellness:[["Respiración consciente","Comienza el día en calma.","Jardín de bienestar"],["Yoga suave","Recupera energía con movimientos tranquilos.","Terraza de yoga"],["Jardín de plantas aromáticas","Descubre plantas y sus usos.","Jardín de bienestar"],["Relajación guiada","Disfruta de una pausa reparadora.","Spa y bienestar"],["Meditación sonora","Participa en una sesión de sonidos relajantes.","Pabellón de bienestar"],["Meditación nocturna","Termina el día con serenidad.","Jardín zen"]],
+social:[["Café entre vecinos","Conoce a otros miembros durante la mañana.","Salón del jardín"],["Paseo en grupo","Explora la aldea con nuevos amigos.","Senderos"],["Taller de cocina colectiva","Prepara recetas de temporada en equipo.","Taller gastronómico"],["Juegos comunitarios","Disfruta de un reto amistoso.","Zona de actividades"],["Experiencia cultural compartida","Participa en una actividad creativa en grupo.","Espacio cultural"],["Música y baile con amigos","Disfruta de una noche festiva.","Vida nocturna"]]
+}};
+const schedule={0:[0],1:[],2:[1],3:[1,2],4:[],5:[3],6:[2,3,4],7:[],8:[],9:[4,5],10:[]};
+const thematic=(schedule[i]||[]).map(n=>themed[L][theme][n]);
+const defaults=pools[i]||[];
+const seen=new Set(),unique=[];
+for(const entry of [...thematic,...defaults]){
+if(!entry||entry.length!==3||seen.has(entry[0]))continue;
+seen.add(entry[0]);unique.push(entry);
+}
+return unique.length?unique:[current];
 }
 
 let variation=0,last="";
@@ -189,6 +210,7 @@ base.forEach((entry,i)=>{let data=entry.slice();if([3,6,9].includes(i)){const v=
 const locale=translations[lang()];if(locale){const v=locale.entries[i];data=[data[0],...v];if([3,6,9].includes(i))data=[data[0],...locale.special[key][[3,6,9].indexOf(i)]];if(variation%2&&i===2)data=["trees",...locale.alternate[0]];if(variation%2&&i===5)data=["heart",...locale.alternate[1]];}if([3,6,9].includes(i))data=[data[0],...unique[[3,6,9].indexOf(i)]];const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);
 const langCode=lang();
 const choices=cnvChoicesForSlot(i,selectedProfile(),key,langCode,data.slice(1));
+if(choices.length){h.textContent=choices[0][0];desc.textContent=choices[0][1];place.textContent="⌖ "+choices[0][2];}
 let choiceIndex=0;
 const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";
 next.textContent=langCode==="fr"?"↻ Autre proposition":langCode==="es"?"↻ Otra propuesta":"↻ Another suggestion";
