@@ -1,0 +1,29 @@
+name: Integrate CNV personalized day
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'assets/cnv-personalized-day.js'
+      - 'assets/cnv-personalized-day.css'
+      - '.github/scripts/integrate_cnv_day.py'
+      - '.github/workflows/integrate-cnv-day.yml'
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Add personalized day to CNV
+        run: python .github/scripts/integrate_cnv_day.py
+      - name: Commit and publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish personalized CNV day on website"
+            git push
+          fi
