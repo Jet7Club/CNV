@@ -254,12 +254,13 @@ const cnvThemesEn=[["long-term vision","meaningful impact","international strate
 const cnvThemesEs=[["visión a largo plazo","impacto significativo","estrategia internacional","diálogos entre fundadores","proyectos de futuro"],["inspiración creativa","práctica artística","exploración del diseño","intercambio cultural","creación compartida"],["emprendimiento práctico","innovación de startups","crecimiento responsable","contactos entre fundadores","colaboración en equipo"],["confianza comunitaria","conversaciones significativas","conexiones culturales","experiencias compartidas","relaciones humanas"],["rituales de bienestar","movimiento consciente","relajación profunda","prácticas reparadoras","equilibrio interior"],["descubrimiento al aire libre","inmersión en la naturaleza","aventuras al aire libre","exploración pausada","aprendizaje ecológico"],["vínculos familiares","aprendizaje en la naturaleza","aventuras familiares","descubrimiento entre generaciones","tiempo de calidad"],["jardinería regenerativa","gastronomía local","vida sencilla","equilibrio natural","hábitos sostenibles"],["claridad estratégica","liderazgo consciente","cohesión del equipo","diálogo público","intercambio de mentoría"],["libertad y movimiento","relajación exclusiva","escapadas románticas","vida tranquila","aventuras sencillas al aire libre"]];
 const normalized=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 const profileData=cnvProfiles.find(x=>/^\d{1,2}$/.test(String(profileName).trim())&&Number(x.number)===Number(profileName))||cnvProfiles.find(x=>normalized(x.name)===normalized(profileName))||cnvProfiles.find(x=>normalized(profileName)===normalized(x.name))||cnvProfiles.find((x,k)=>normalized((L==="en"?cnvNamesEn:cnvNamesEs)[k])===normalized(profileName));
+if(!profileData){return (pools[i]||[]).slice(0,5).map(x=>[x[0],x[1],x[2]]);}
 const result=[];
-const idx=profileData?Number(profileData.number)-1:-1;
+const idx=Number(profileData.number)-1;
 const categoryIdx=idx<0?-1:Math.floor(idx/5);
 const pool=(L==="fr"?cnvPhaseLabels:L==="es"?cnvPhaseEs:cnvPhaseEn)[i]||cnvPhaseEn[0];
 for(let j=0;j<5;j++){
- const focus=L==="fr"?(profileData?.interests[j]||"découverte du village"):L==="es"?(cnvThemesEs[categoryIdx]?.[j]||"descubrimiento del pueblo"):(cnvThemesEn[categoryIdx]?.[j]||"village discovery");
+ const focus=L==="fr"?(profileData.interests[j]):L==="es"?(cnvThemesEs[categoryIdx][j]):(cnvThemesEn[categoryIdx][j]);
  const subject=idx<0?"":L==="fr"?"":L==="es"?cnvNamesEs[idx]:cnvNamesEn[idx];
  const title=pool[j]+" — "+focus+(subject?" · "+subject:"");
  const description=L==="fr"?"Une expérience autour de "+focus+", adaptée à ce moment de la journée.":L==="es"?"Una experiencia centrada en "+focus+", adaptada a este momento del día.":"An experience focused on "+focus+", designed for this time of day.";
