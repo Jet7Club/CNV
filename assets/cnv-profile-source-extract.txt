@@ -1,19 +1,371 @@
- .hero h1{font-size:clamp(48px,16vw,74px)!important;line-height:.94!important}
+MATCH function chooseCategory AT 19219061\ner(card=>card.dataset.cat===cat);
+ profSel.innerHTML='<option value="">'+profileUiText(lang).profilePh+'</option>'+cards.map(card=>'<option value="'+card.querySelector('.path-num').textContent.trim()+'">'+card.querySelector('h3').textContent.trim()+'</option>').join('');
+ profSel.disabled=false;
 }
-</style><style id="profile-selector-flow">
-.profile-steps{display:flex;gap:10px;align-items:center;margin:28px 0 14px}
-.profile-step{padding:9px 14px;border-radius:999px;background:#fff;border:1px solid rgba(195,154,87,.22);color:#7b8a84;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.profile-step.active{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
-#pathsGrid .path-card{display:none}
-</style><style id="day-program-style">
-.day-program{margin-top:8px}
-.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
-.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
-.day-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
+
+function chooseCategory(cat){
+ selectedCard=null;
+ const profSel=document.getElementById('profileSelect');
+ if(!cat){ if(profSel){profSel.disabled=true;profSel.innerHTML='<option value="">'+profileUiText(currentLang).profilePh+'</option>';} return; }
+ populateProfiles(cat,currentLang);
+ const p=document.getElementById('profilePrompt'); if(p)p.textContent=currentLang==='fr'?'Choisissez maintenant votre profil.':currentLang==='en'?'Now choose your profile.':'Ahora elige tu perfil.';
+}
+
+function chooseProfile(num){
+ if(!num)return;
+ const card=[...document.querySelectorAll('.path-card')].find(c=>c.querySelector('.path-num')?.textContent.trim()===num);
+ if(card){
+   const p=document.getElementById('profilePrompt');
+   if(p)p.textContent=profileUiText(currentLang).chosen+' : '+card.querySelector('h3').textContent.trim();
+   selectProfile(card,true);
+ }
+}
+const BODY={
+fr:{
+feelingLead:"CNV se comprend avec des plans, mais se choisit surtout pour ce que l'on y ressent. Les espaces sont conçus pour faire coexister énergie sociale, calme, mouvement, créativité, plaisir et retour à l'essentiel.",
+slides:["Des rencontres spontanées, des repas partagés, des conversations qui se prolongent au coucher du soleil. La communauté existe, mais elle n'est jamais imposée.","Une vie nocturne élégante et libre : musique, événements, fêtes ponctuelles et espaces sociaux, positionnés pour préserver les zones calmes du village.","Le bien-être fait partie de la journée : spa, eau, yoga, mouvement, récupération, nutrition et silence s'intègrent naturellement au rythme du lieu.","Bouger dehors plutôt que rester enfermé : sports, chemins, activités de plein air, exploration, jeux et expériences collectives dans un environnement ouvert.","Un Hub Collaboratif pour travailler, réunir des équipes, rencontrer des investisseurs, apprendre, transmettre, produire et transformer une idée en projet.","Permaculture, jardins et production locale rétablissent un lien concret avec la terre. On ne vient pas seulement consommer un lieu : on comprend mieux comment il vit."],
+atmosLead:"Au-delà du masterplan, CNV doit donner envie de vivre un rythme. Voici quelques vues complémentaires qui montrent la diversité des espaces, du calme du spa à l'énergie sociale, des jardins productifs aux moments de rencontre et de travail.",
+villageLead:"Chaque zone a une fonction claire, mais aucune ne fonctionne isolément. Les espaces de vie, de travail, de détente, de nature et de rencontre sont reliés par des parcours doux afin que la journée se déroule sans rupture artificielle.",
+cards:[["8 micro-villages","Luxe, Nature, Glamping, Famille, Jeunes, Camp libre, Équipe et Seniors : plusieurs manières de vivre dans un même écosystème, avec des niveaux de confort, des ambiances et des rythmes différents."],["Se régénérer","Spa, mouvement, yoga, récupération, nutrition et expériences de longévité. Le bien-être n'est pas un programme ponctuel mais une dimension naturelle du quotidien."],["Créer & collaborer","Le Hub Collaboratif accueille entrepreneurs, créateurs, investisseurs et équipes. Réunions, ateliers, apprentissage, groupes de réflexion et événements deviennent une partie vivante du village."],["De la terre à la table","Permaculture, jardins, production locale, cuisines et tables communes développent une alimentation plus fraîche, plus traçable et directement reliée au territoire."]],
+artLead1:"CNV n'est pas seulement un lieu : c'est une manière de composer sa vie. Nous avons imaginé 50 personnalités types pour aider chaque visiteur à se projeter dans une expérience qui lui ressemble : plus contemplative, créative, sociale, familiale, entrepreneuriale, régénérative ou aventureuse.",
+lifeBody:["La journée peut commencer avec une marche, du yoga, un café face au paysage ou un petit-déjeuner issu de la production locale. Ceux qui travaillent rejoignent ensuite le Hub Collaboratif ou choisissent un endroit calme, intérieur ou extérieur. L'objectif n'est pas d'imposer un rythme collectif, mais de créer un environnement qui rend les bons choix plus simples.","Le temps se partage entre projets, rencontres, activités physiques, baignade, spa, ateliers, rendez-vous ou découverte du territoire. Les familles disposent de leurs espaces, les entrepreneurs des leurs, tandis que la majorité des zones reste naturellement ouverte aux rencontres et aux usages spontanés.","Un dîner peut se prolonger autour d'une grande table, d'un feu ou d'un événement. Certaines soirées sont calmes, d'autres plus musicales. La vie sociale est présente sans envahir le reste du village : la fête et le silence peuvent coexister parce qu'ils ont chacun leur place."],
+placesLead:"CNV a vocation à devenir un réseau international de villages ancrés dans leur territoire. Le concept reste commun, mais l'architecture, les matériaux, la végétation, la gastronomie et certaines expériences s'adaptent toujours à la culture et au climat local.",
+locations:[["Andalousie","Premier village envisagé : climat méditerranéen, nature, accessibilité européenne et forte identité de vie."],["Maroc","Un territoire entre Europe et Afrique, riche en paysages, artisanat, hospitalité et culture."],["Philippines","Une expression tropicale du concept, tournée vers l'eau, les îles, la nature et la communauté."],["Paraguay","De grands espaces et un potentiel de développement à long terme en Amérique du Sud."],["Amazonie","Une vision centrée sur la nature à une autre échelle, où la protection de l'écosystème devient structurante."]],
+joinLead:"On peut rejoindre CNV de plusieurs façons : vivre l'expérience, donner de son temps, soutenir le projet, ouvrir son réseau, construire avec nous ou participer à son développement. Choisissez simplement la relation qui vous ressemble.",
+joinSmall:["Entrer dans la communauté CNV, participer aux expériences, rencontres et futurs avantages membres.","Donner du temps, des compétences ou de l'énergie à une mission concrète du village.","Suivre le projet, participer à certains rendez-vous et soutenir son développement à votre rythme.","Soutenir CNV de manière privilégiée et contribuer à faire émerger des espaces, programmes ou initiatives.","Apporter une expertise, un service, une marque, une technologie ou construire une activité avec CNV.","Découvrir le modèle, les premiers sites, la stratégie de développement et les opportunités d'investissement."],
+modalDesc:"Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.",
+modalOptions:["Choisissez votre relation avec CNV","Devenir membre","Être volontaire","Devenir ami de CNV","Devenir Patron de CNV","Devenir partenaire","Devenir investisseur"]
+},
+en:{
+feelingLead:"CNV can be explained through plans, but it is ultimately chosen for how it feels. The spaces are designed to bring together social energy, calm, movement, creativity, pleasure and a return to what matters.",
+slides:["Spontaneous encounters, shared meals and conversations that continue into sunset. Community is present, but never imposed.","Elegant, relaxed nightlife: music, events, occasional parties and social spaces, positioned to protect the quieter areas of the village.","Wellbeing is part of everyday life: spa, water, yoga, movement, recovery, nutrition and silence are naturally woven into the rhythm of the place.","Move outdoors rather than stay inside: sport, trails, open-air activities, exploration, play and collective experiences in an open environment.","A Collaborative Hub to work, bring teams together, meet investors, learn, mentor, produce and turn an idea into a project.","Permaculture, gardens and local production restore a tangible relationship with the land. You do not simply consume a place: you understand how it lives."],
+atmosLead:"Beyond the masterplan, CNV should make you want to experience a rhythm of life. These additional views show the diversity of the spaces, from the calm of the spa to social energy, from productive gardens to places for meeting and working.",
+villageLead:"Each area has a clear purpose, but none works in isolation. Living, working, leisure, nature and social spaces are connected through gentle routes so that the day flows naturally without artificial breaks.",
+cards:[["8 micro-villages","Luxury, Natural, Glamping, Family, Young, Free Camp, Staff and Senior: several ways of living within one ecosystem, with different levels of comfort, atmosphere and pace."],["Regenerate","Spa, movement, yoga, recovery, nutrition and longevity experiences. Wellbeing is not a separate programme but a natural part of everyday life."],["Create & collaborate","The Collaborative Hub welcomes entrepreneurs, creators, investors and teams. Meetings, workshops, learning sessions, strategy circles and events become a living part of the village."],["From land to table","Permaculture, gardens, local production, kitchens and shared tables create fresher, more traceable food directly connected to the land."]],
+artLead1:"CNV is not simply a place: it is a way of shaping your life. We created 50 personality types to help every visitor imagine an experience that feels right for them: contemplative, creative, social, family-oriented, entrepreneurial, regenerative or adventurous.",
+lifeBody:["The day can begin with a walk, yoga, coffee overlooking the landscape or breakfast made with local produce. Those who are working can then head to the Collaborative Hub or choose a quiet indoor or outdoor space. The aim is not to impose a collective schedule, but to create an environment that makes good choices easier.","The afternoon can flow between projects, encounters, physical activities, swimming, spa time, workshops, appointments or exploring the surrounding area. Families have dedicated spaces, entrepreneurs have theirs, while most of the village remains naturally open to spontaneous encounters and uses.","Dinner may continue around a large table, a fire or an event. Some evenings are quiet, others more musical. Social life is present without taking over the village: celebration and silence can coexist because each has its own place."],
+placesLead:"CNV is designed to become an international network of villages deeply rooted in their local environment. The core concept remains consistent, while architecture, materials, vegetation, food and selected experiences always adapt to local culture and climate.",
+locations:[["Andalusia","The first village under consideration: Mediterranean climate, nature, strong European accessibility and a distinctive lifestyle identity."],["Morocco","A territory between Europe and Africa, rich in landscapes, craftsmanship, hospitality and culture."],["Philippines","A tropical expression of the concept, shaped by water, islands, nature and community."],["Paraguay","Wide open spaces and long-term development potential in South America."],["Amazonia","A nature-first vision at a different scale, where ecosystem protection becomes a structuring principle."]],
+joinLead:"There are several ways to join CNV: live the experience, give your time, support the project, open your network, build with us or take part in its development. Simply choose the relationship that feels right for you.",
+joinSmall:["Join the CNV community and take part in experiences, encounters and future member benefits.","Contribute time, skills or energy to a concrete mission within the village.","Follow the project, join selected gatherings and support its development at your own pace.","Support CNV in a privileged way and help bring spaces, programmes or initiatives to life.","Bring expertise, a service, a brand or technology, or build an activity with CNV.","Discover the model, the first sites, the development strategy and investment opportunities."],
+modalDesc:"Tell us what you are looking for. We will guide you toward the CNV pathway that suits you best.",
+modalOptions:["Choose how you want to connect with CNV","Become a member","Volunteer","Become a Friend of CNV","Become a Patron of CNV","Become a partner","Become an investor"]
+},
+es:{
+feelingLead:"CNV se puede explicar con planos, pero se elige sobre todo por lo que se siente. Los espacios están pensados para hacer convivir energía social, calma, movimiento, creatividad, placer y una vuelta a lo esencial.",
+slides:["Encuentros espontáneos, comidas compartidas y conversaciones que se alargan hasta el atardecer. La comunidad está presente, pero nunca se impone.","Una vida nocturna elegante y libre: música, eventos, celebraciones puntuales y espacios sociales, situados para proteger las zonas más tranquilas del pueblo.","El bienestar forma parte de la vida diaria: spa, agua, yoga, movimiento, recuperación, nutrición y silencio se integran de forma natural en el ritmo del lugar.","Moverse al aire libre en lugar de quedarse encerrado: deporte, senderos, actividades exteriores, exploración, juegos y experiencias colectivas en un entorno abierto.","Un Hub Colaborativo para trabajar, reunir equipos, conocer inversores, aprender, transmitir, producir y convertir una idea en un proyecto.","La permacultura, los jardines y la producción local restablecen una relación concreta con la tierra. No se trata solo de consumir un lugar: se entiende mejor cómo vive."],
+atmosLead:"Más allá del masterplan, CNV debe transmitir ganas de vivir un ritmo distinto. Estas imágenes complementarias muestran la diversidad de los espacios, desde la calma del spa hasta la energía social, desde los jardines productivos hasta los lugares de encuentro y trabajo.",
+villageLead:"Cada zona tiene una función clara, pero ninguna funciona de forma aislada. Los espacios para vivir, trabajar, descansar, disfrutar de la naturaleza y encontrarse están conectados por recorridos suaves para que el día fluya sin rupturas artificiales.",
+cards:[["8 micro-pueblos","Lujo, Naturaleza, Glamping, Familia, Jóvenes, Campamento libre, Equipo y Mayores: distintas maneras de vivir dentro de un mismo ecosistema, con diferentes niveles de confort, ambiente y ritmo."],["Regenerarse","Spa, movimiento, yoga, recuperación, nutrición y experiencias de longevidad. El bienestar no es un programa separado, sino una parte natural de la vida cotidiana."],["Crear & colaborar","El Hub Colaborativo reúne a emprendedores, creadores, inversores y equipos. Reuniones, talleres, aprendizaje, círculos estratégicos y eventos forman parte viva del pueblo."],["De la tierra a la mesa","Permacultura, jardines, producción local, cocinas y mesas compartidas permiten una alimentación más fresca, trazable y directamente conectada con el territorio."]],
+artLead1:"CNV no es solo un lugar: es una forma de componer la propia vida. Hemos imaginado 50 tipos de personalidad para ayudar a cada visitante a proyectarse en una experiencia que le corresponda: contemplativa, creativa, social, familiar, emprendedora, regenerativa o aventurera.",
+lifeBody:["El día puede comenzar con un paseo, yoga, un café frente al paisaje o un desayuno elaborado con productos locales. Quienes trabajan pueden ir después al Hub Colaborativo o elegir un espacio tranquilo, interior o exterior. El objetivo no es imponer un ritmo colectivo, sino crear un entorno que facilite las buenas decisiones.","La tarde puede repartirse entre proyectos, encuentros, actividad física, baño, spa, talleres, citas o descubrimiento del entorno. Las familias disponen de sus espacios, los emprendedores de los suyos, mientras que la mayor parte del pueblo permanece abierta a encuentros y usos espontáneos.","La cena puede prolongarse alrededor de una gran mesa, un fuego o un evento. Algunas noches son tranquilas y otras más musicales. La vida social está presente sin invadir el resto del pueblo: la celebración y el silencio pueden convivir porque cada uno tiene su lugar."],
+placesLead:"CNV aspira a convertirse en una red internacional de pueblos profundamente vinculados a su territorio. El concepto común se mantiene, mientras que la arquitectura, los materiales, la vegetación, la gastronomía y determinadas experiencias se adaptan sie\n--- PROFILE SOURCE ---\nMATCH chooseCategory( AT 19123494\nrofil qui vous correspond le mieux. Votre journée CNV sera ensuite personnalisée automatiquement.</p>
+<div class="profile-selector-box">
+<div class="profile-select-col">
+<label for="categorySelect" id="categoryLabel"><span>1</span> Choisir une catégorie</label>
+<select id="categorySelect" onchange="chooseCategory(this.value)">
+<option value="">Sélectionnez une catégorie</option>
+<option value="Visionnaire">Visionnaire</option>
+<option value="Créatif">Créatif</option>
+<option value="Bâtisseur">Bâtisseur</option>
+<option value="Connecteur">Connecteur</option>
+<option value="Régénération">Régénération</option>
+<option value="Explorateur">Explorateur</option>
+<option value="Famille">Famille</option>
+<option value="Nature">Nature</option>
+<option value="Leadership">Leadership</option>
+<option value="Lifestyle">Style de vie</option>
+</select>
+</div>
+<div class="profile-select-arrow">→</div>
+<div class="profile-select-col">
+<label for="profileSelect" id="profileLabel"><span>2</span> Choisir votre profil</label>
+<select disabled="" id="profileSelect" onchange="chooseProfile(this.value)">
+<option value="">Sélectionnez d’abord une catégorie</option>
+</select>
+</div>
+</div>
+<div class="profile-prompt" id="profilePrompt"></div>
+<div class="paths-grid" id="pathsGrid">
+<article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">01</span><span class="path-cat">Visionnaire</span></div>
+<h3>Fondateur visionnaire</h3>
+<p class="path-desc">Pense à dix ou vingt ans, recherche du sens, de l’impact et de l’échelle.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Pro</p>
+<p><strong>Parcours CNV :</strong> Marche au lever du soleil → travail profond → salon stratégique → dîner au coucher du soleil</p>
+</article>
+<article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">02</span><span class="path-cat">Visionnaire</span></div>
+<h3>Architecte de sens</h3>
+<p class="path-desc">Construit des projets alignés avec ses valeurs et un impact de long terme.</p>
+<p><strong>Univers conseillé :</strong> Natural + Pro</p>
+<p><strong>Parcours CNV :</strong> Matin de réflexion → co-création → mentorat → soirée calme</p>
+</article>
+<article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">03</span><span class="path-cat">Visionnaire</span></div>
+<h3>Créateur du futur</h3>
+<p class="path-desc">Recherche innovation, talents et grandes idées autour de lui.</p>
+<p><strong>Univers conseillé :</strong> Young + Pro</p>
+<p><strong>Parcours CNV :</strong> Brief matinal → ateliers → rencontres investisseurs → musique en direct</p>
+</article>
+<article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">04</span><span class="path-cat">Visionnaire</span></div>
+<h3>Connecteur global</h3>
+<p class="path-desc">Circule entre plusieurs univers et crée des ponts entre les personnes.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Social</p>
+<p><strong>Parcours CNV :</strong> Petit-déjeuner de connexions → rendez-vous ciblés → rencontre sociale → dîner</p>
+</article>
+<article class="path-card" data-cat="Visionnaire" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">05</span><span class="path-cat">Visionnaire</span></div>
+<h3>Bâtisseur d’héritage</h3>
+<p class="path-desc">Recherche beauté, profondeur et création de valeur intergénérationnelle.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Sanctuary</p>
+<p><strong>Parcours CNV :</strong> Temps dans la nature → échanges de haut niveau → table familiale → soirée contemplative</p>
+</article>
+<article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">06</span><span class="path-cat">Créatif</span></div>
+<h3>Artiste en résidence</h3>
+<p class="path-desc">A besoin d’inspiration, de beauté et de temps pour créer.</p>
+<p><strong>Univers conseillé :</strong> Natural + Social</p>
+<p><strong>Parcours CNV :</strong> Création le matin → marche nature → dîner partagé → soirée douce</p>
+</article>
+<article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">07</span><span class="path-cat">Créatif</span></div>
+<h3>Curateur de design</h3>
+<p class="path-desc">Vit à travers l’esthétique, les matières et les expériences.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Social</p>
+<p><strong>Parcours CNV :</strong> Petit-déjeuner lent → exploration design → pause bien-être → soirée intime</p>
+</article>
+<article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">08</span><span class="path-cat">Créatif</span></div>
+<h3>Conteur</h3>
+<p class="path-desc">Transforme les expériences en récits, contenus et souvenirs.</p>
+<p><strong>Univers conseillé :</strong> Young + Social</p>
+<p><strong>Parcours CNV :</strong> Captation → interviews → montage → événement communautaire</p>
+</article>
+<article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">09</span><span class="path-cat">Créatif</span></div>
+<h3>Passionné de musique</h3>
+<p class="path-desc">Recherche rythme, émotion et vie nocturne de qualité.</p>
+<p><strong>Univers conseillé :</strong> Young + Vie nocturne</p>
+<p><strong>Parcours CNV :</strong> Mouvement → session de travail → rencontre au coucher du soleil → soirée musicale</p>
+</article>
+<article class="path-card" data-cat="Créatif" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">10</span><span class="path-cat">Créatif</span></div>
+<h3>Explorateur du goût</h3>
+<p class="path-desc">Découvre les lieux par la gastronomie, les ambiances et les rencontres.</p>
+<p><strong>Univers conseillé :</strong> Glamping + Food</p>
+<p><strong>Parcours CNV :</strong> Visite des jardins → déjeuner dégustation → atelier → table du chef</p>
+</article>
+<article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">11</span><span class="path-cat">Bâtisseur</span></div>
+<h3>Entrepreneur opérateur</h3>
+<p class="path-desc">Aime l’action, la vitesse et transformer les idées en réalisations.</p>
+<p><strong>Univers conseillé :</strong> Pro + Young</p>
+<p><strong>Parcours CNV :</strong> Point matinal → production → rencontres professionnelles → sport</p>
+</article>
+<article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">12</span><span class="path-cat">Bâtisseur</span></div>
+<h3>Leader de start-up</h3>
+<p class="path-desc">A besoin d’un écosystème de bâtisseurs et d’un rythme concret.</p>
+<p><strong>Univers conseillé :</strong> Pro + Social</p>
+<p><strong>Parcours CNV :</strong> Concentration → atelier d’équipe → café investisseurs → conversation au coin du feu</p>
+</article>
+<article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">13</span><span class="path-cat">Bâtisseur</span></div>
+<h3>Entrepreneur à impact</h3>
+<p class="path-desc">Associe croissance économique et valeur sociale ou environnementale.</p>
+<p><strong>Univers conseillé :</strong> Pro + Perma</p>
+<p><strong>Parcours CNV :</strong> Marche terrain → atelier business → rendez-vous partenaires → long dîner</p>
+</article>
+<article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">14</span><span class="path-cat">Bâtisseur</span></div>
+<h3>Investisseur résident</h3>
+<p class="path-desc">Recherche opportunités d’investissement, calme et conversations de qualité.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Pro</p>
+<p><strong>Parcours CNV :</strong> Bien-être → rendez-vous sélectionnés → visite du village → dîner privé</p>
+</article>
+<article class="path-card" data-cat="Bâtisseur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">15</span><span class="path-cat">Bâtisseur</span></div>
+<h3>Héritier d’entreprise familiale</h3>
+<p class="path-desc">Fait le lien entre héritage, modernité et renouvellement.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Family</p>
+<p><strong>Parcours CNV :</strong> Petit-déjeuner familial → gouvernance → loisirs → soirée partagée</p>
+</article>
+<article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">16</span><span class="path-cat">Connecteur</span></div>
+<h3>Catalyseur de communauté</h3>
+<p class="path-desc">S’épanouit lorsque les personnes se rencontrent et que la confiance grandit.</p>
+<p><strong>Univers conseillé :</strong> Social + Hub</p>
+<p><strong>Parcours CNV :</strong> Cercles café → introductions → déjeuner partagé → musique</p>
+</article>
+<article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">17</span><span class="path-cat">Connecteur</span></div>
+<h3>Hôte de cercle stratégique</h3>
+<p class="path-desc">Aime réunir les bonnes personnes autour de conversations à forte valeur.</p>
+<p><strong>Univers conseillé :</strong> Pro + Luxury</p>
+<p><strong>Parcours CNV :</strong> Brief initial → tables rondes → pause spa → dîner au salon</p>
+</article>
+<article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">18</span><span class="path-cat">Connecteur</span></div>
+<h3>Pont culturel</h3>
+<p class="path-desc">Relie les cultures, les générations et les univers différents.</p>
+<p><strong>Univers conseillé :</strong> Social + Sanctuary</p>
+<p><strong>Parcours CNV :</strong> Marche &amp; discussion → atelier culturel → repas commun → récits</p>
+</article>
+<article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">19</span><span class="path-cat">Connecteur</span></div>
+<h3>Connecteur discret</h3>
+<p class="path-desc">Préfère la qualité des échanges à la quantité.</p>
+<p><strong>Univers conseillé :</strong> Luxury + Social</p>
+<p><strong>Parcours CNV :</strong> Petits-déjeuners 1:1 → rendez-vous discrets → apéritif au coucher du soleil</p>
+</article>
+<article class="path-card" data-cat="Connecteur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">20</span><span class="path-cat">Connecteur</span></div>
+<h3>Curateur d’événements</h3>
+<p class="path-desc">Imagine et organise des expériences significatives pour les autres.</p>
+<p><strong>Univers conseillé :</strong> Young + Social</p>
+<p><strong>Parcours CNV :</strong> Préparation → conception de l’expérience → accueil → célébration</p>
+</article>
+<article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">21</span><span class="path-cat">Régénération</span></div>
+<h3>Passionné de bien-être</h3>
+<p class="path-desc">Place récupération, mouvement et équilibre intérieur au premier plan.</p>
+<p><strong>Univers conseillé :</strong> Spa + Sanctuary</p>
+<p><strong>Parcours CNV :</strong> Yoga → hydrothérapie → déjeuner sain → sommeil précoce</p>
+</article>
+<article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">22</span><span class="path-cat">Régénération</span></div>
+<h3>Thérapeute / Mentor</h3>
+<p class="path-desc">A besoin de calme, de confiance et d’espaces propices à la transformation.</p>
+<p><strong>Univers conseillé :</strong> Spa + Natural</p>
+<p><strong>Parcours CNV :</strong> Méditation → séances → marche régénérante → dîner calme</p>
+</article>
+<article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">23</span><span class="path-cat">Régénération</span></div>
+<h3>Guide du souffle et du corps</h3>
+<p class="path-desc">Travaille avec le mouvement, le souffle et la présence.</p>
+<p><strong>Univers conseillé :</strong> Spa + Activities</p>
+<p><strong>Parcours CNV :</strong> Cours au lever → accompagnements → récupération piscine → thé communautaire</p>
+</article>
+<article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">24</span><span class="path-cat">Régénération</span></div>
+<h3>Explorateur longévité</h3>
+<p class="path-desc">Optimise santé, sommeil, alimentation et récupération.</p>
+<p><strong>Univers conseillé :</strong> Spa + Food</p>
+<p><strong>Parcours CNV :</strong> Mesures &amp; mouvement → déjeuner nutrition → circuit thermal → repos profond</p>
+</article>
+<article class="path-card" data-cat="Régénération" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">25</span><span class="path-cat">Régénération</span></div>
+<h3>Chercheur intérieur</h3>
+<p class="path-desc">Recherche silence, rituels et alignement personnel.</p>
+<p><strong>Univers conseillé :</strong> Sanctuary + Spa</p>
+<p><strong>Parcours CNV :</strong> Contemplation → journal → soin → soirée aux bougies</p>
+</article>
+<article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">26</span><span class="path-cat">Explorateur</span></div>
+<h3>Explorateur nature</h3>
+<p class="path-desc">A besoin de sentiers, de biodiversité et de liberté en plein air.</p>
+<p><strong>Univers conseillé :</strong> Natural + Activities</p>
+<p><strong>Parcours CNV :</strong> Randonnée tôt → déjeuner dehors → mobilité → observation des étoiles</p>
+</article>
+<article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">27</span><span class="path-cat">Explorateur</span></div>
+<h3>Esprit d’aventure</h3>
+<p class="path-desc">Aime la nouveauté, le mouvement et les défis en extérieur.</p>
+<p><strong>Univers conseillé :</strong> Free Camp + Activities</p>
+<p><strong>Parcours CNV :</strong> Entraînement → exploration → récupération eau froide → célébration</p>
+</article>
+<article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">28</span><span class="path-cat">Explorateur</span></div>
+<h3>Voyageur lent</h3>
+<p class="path-desc">Préfère l’immersion, la douceur et la profondeur locale.</p>
+<p><strong>Univers conseillé :</strong> Glamping + Perma</p>
+<p><strong>Parcours CNV :</strong> Marche village → rencontre artisans → long repas → calme sous la lune</p>
+</article>
+<article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">29</span><span class="path-cat">Explorateur</span></div>
+<h3>Âme nomade</h3>
+<p class="path-desc">Recherche flexibilité, ouverture et habitat léger.</p>
+<p><strong>Univers conseillé :</strong> Free Camp + Social</p>
+<p><strong>Parcours CNV :</strong> Travail mobile → rencontres spontanées → événement le soir</p>
+</article>
+<article class="path-card" data-cat="Explorateur" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">30</span><span class="path-cat">Explorateur</span></div>
+<h3>Pionnier écologique</h3>
+<p class="path-desc">Explore des manières régénératives d’habiter la terre.</p>
+<p><strong>Univers conseillé :</strong> Perma + Natural</p>
+<p><strong>Parcours CNV :</strong> Tour des jardins → laboratoire durable → dîner au champ → repos tôt</p>
+</article>
+<article class="path-card" data-cat="Famille" onclick="selectProfile(this)">
+<div class="path-top"><span class="path-num">31</span><span class="path-cat">Famille</span></div>
+<h3>Parent attentif</h3>
+<p class="path-desc">Observe les besoins de chacun, protège les temps de qualité et recherche un environnement apaisé où la famille peut se retrouver sans pression.</p>
+<p><strong>Univers conseillé :</strong> Family + Social + Natural</p>
+<p><strong>Parcours CNV :</strong> Petit-déjeuner ensemble → activité douce en famille → temps libre pour chacun → moment partagé au coucher du soleil → dîner convivial</p>
+</article>
+<article class="path-card" data-cat="Famille" onclick="sele\n--- PROFILE SOURCE ---\nMATCH chooseCategory( AT 19219070\ncard.dataset.cat===cat);
+ profSel.innerHTML='<option value="">'+profileUiText(lang).profilePh+'</option>'+cards.map(card=>'<option value="'+card.querySelector('.path-num').textContent.trim()+'">'+card.querySelector('h3').textContent.trim()+'</option>').join('');
+ profSel.disabled=false;
+}
+
+function chooseCategory(cat){
+ selectedCard=null;
+ const profSel=document.getElementById('profileSelect');
+ if(!cat){ if(profSel){profSel.disabled=true;profSel.innerHTML='<option value="">'+profileUiText(currentLang).profilePh+'</option>';} return; }
+ populateProfiles(cat,currentLang);
+ const p=document.getElementById('profilePrompt'); if(p)p.textContent=currentLang==='fr'?'Choisissez maintenant votre profil.':currentLang==='en'?'Now choose your profile.':'Ahora elige tu perfil.';
+}
+
+function chooseProfile(num){
+ if(!num)return;
+ const card=[...document.querySelectorAll('.path-card')].find(c=>c.querySelector('.path-num')?.textContent.trim()===num);
+ if(card){
+   const p=document.getElementById('profilePrompt');
+   if(p)p.textContent=profileUiText(currentLang).chosen+' : '+card.querySelector('h3').textContent.trim();
+   selectProfile(card,true);
+ }
+}
+const BODY={
+fr:{
+feelingLead:"CNV se comprend avec des plans, mais se choisit surtout pour ce que l'on y ressent. Les espaces sont conçus pour faire coexister énergie sociale, calme, mouvement, créativité, plaisir et retour à l'essentiel.",
+slides:["Des rencontres spontanées, des repas partagés, des conversations qui se prolongent au coucher du soleil. La communauté existe, mais elle n'est jamais imposée.","Une vie nocturne élégante et libre : musique, événements, fêtes ponctuelles et espaces sociaux, positionnés pour préserver les zones calmes du village.","Le bien-être fait partie de la journée : spa, eau, yoga, mouvement, récupération, nutrition et silence s'intègrent naturellement au rythme du lieu.","Bouger dehors plutôt que rester enfermé : sports, chemins, activités de plein air, exploration, jeux et expériences collectives dans un environnement ouvert.","Un Hub Collaboratif pour travailler, réunir des équipes, rencontrer des investisseurs, apprendre, transmettre, produire et transformer une idée en projet.","Permaculture, jardins et production locale rétablissent un lien concret avec la terre. On ne vient pas seulement consommer un lieu : on comprend mieux comment il vit."],
+atmosLead:"Au-delà du masterplan, CNV doit donner envie de vivre un rythme. Voici quelques vues complémentaires qui montrent la diversité des espaces, du calme du spa à l'énergie sociale, des jardins productifs aux moments de rencontre et de travail.",
+villageLead:"Chaque zone a une fonction claire, mais aucune ne fonctionne isolément. Les espaces de vie, de travail, de détente, de nature et de rencontre sont reliés par des parcours doux afin que la journée se déroule sans rupture artificielle.",
+cards:[["8 micro-villages","Luxe, Nature, Glamping, Famille, Jeunes, Camp libre, Équipe et Seniors : plusieurs manières de vivre dans un même écosystème, avec des niveaux de confort, des ambiances et des rythmes différents."],["Se régénérer","Spa, mouvement, yoga, récupération, nutrition et expériences de longévité. Le bien-être n'est pas un programme ponctuel mais une dimension naturelle du quotidien."],["Créer & collaborer","Le Hub Collaboratif accueille entrepreneurs, créateurs, investisseurs et équipes. Réunions, ateliers, apprentissage, groupes de réflexion et événements deviennent une partie vivante du village."],["De la terre à la table","Permaculture, jardins, production locale, cuisines et tables communes développent une alimentation plus fraîche, plus traçable et directement reliée au territoire."]],
+artLead1:"CNV n'est pas seulement un lieu : c'est une manière de composer sa vie. Nous avons imaginé 50 personnalités types pour aider chaque visiteur à se projeter dans une expérience qui lui ressemble : plus contemplative, créative, sociale, familiale, entrepreneuriale, régénérative ou aventureuse.",
+lifeBody:["La journée peut commencer avec une marche, du yoga, un café face au paysage ou un petit-déjeuner issu de la production locale. Ceux qui travaillent rejoignent ensuite le Hub Collaboratif ou choisissent un endroit calme, intérieur ou extérieur. L'objectif n'est pas d'imposer un rythme collectif, mais de créer un environnement qui rend les bons choix plus simples.","Le temps se partage entre projets, rencontres, activités physiques, baignade, spa, ateliers, rendez-vous ou découverte du territoire. Les familles disposent de leurs espaces, les entrepreneurs des leurs, tandis que la majorité des zones reste naturellement ouverte aux rencontres et aux usages spontanés.","Un dîner peut se prolonger autour d'une grande table, d'un feu ou d'un événement. Certaines soirées sont calmes, d'autres plus musicales. La vie sociale est présente sans envahir le reste du village : la fête et le silence peuvent coexister parce qu'ils ont chacun leur place."],
+placesLead:"CNV a vocation à devenir un réseau international de villages ancrés dans leur territoire. Le concept reste commun, mais l'architecture, les matériaux, la végétation, la gastronomie et certaines expériences s'adaptent toujours à la culture et au climat local.",
+locations:[["Andalousie","Premier village envisagé : climat méditerranéen, nature, accessibilité européenne et forte identité de vie."],["Maroc","Un territoire entre Europe et Afrique, riche en paysages, artisanat, hospitalité et culture."],["Philippines","Une expression tropicale du concept, tournée vers l'eau, les îles, la nature et la communauté."],["Paraguay","De grands espaces et un potentiel de développement à long terme en Amérique du Sud."],["Amazonie","Une vision centrée sur la nature à une autre échelle, où la protection de l'écosystème devient structurante."]],
+joinLead:"On peut rejoindre CNV de plusieurs façons : vivre l'expérience, donner de son temps, soutenir le projet, ouvrir son réseau, construire avec nous ou participer à son développement. Choisissez simplement la relation qui vous ressemble.",
+joinSmall:["Entrer dans la communauté CNV, participer aux expériences, rencontres et futurs avantages membres.","Donner du temps, des compétences ou de l'énergie à une mission concrète du village.","Suivre le projet, participer à certains rendez-vous et soutenir son développement à votre rythme.","Soutenir CNV de manière privilégiée et contribuer à faire émerger des espaces, programmes ou initiatives.","Apporter une expertise, un service, une marque, une technologie ou construire une activité avec CNV.","Découvrir le modèle, les premiers sites, la stratégie de développement et les opportunités d'investissement."],
+modalDesc:"Parlez-nous de ce que vous recherchez. Nous vous orienterons vers le parcours CNV le plus adapté.",
+modalOptions:["Choisissez votre relation avec CNV","Devenir membre","Être volontaire","Devenir ami de CNV","Devenir Patron de CNV","Devenir partenaire","Devenir investisseur"]
+},
+en:{
+feelingLead:"CNV can be explained through plans, but it is ultimately chosen for how it feels. The spaces are designed to bring together social energy, calm, movement, creativity, pleasure and a return to what matters.",
+slides:["Spontaneous encounters, shared meals and conversations that continue into sunset. Community is present, but never imposed.","Elegant, relaxed nightlife: music, events, occasional parties and social spaces, positioned to protect the quieter areas of the village.","Wellbeing is part of everyday life: spa, water, yoga, movement, recovery, nutrition and silence are naturally woven into the rhythm of the place.","Move outdoors rather than stay inside: sport, trails, open-air activities, exploration, play and collective experiences in an open environment.","A Collaborative Hub to work, bring teams together, meet investors, learn, mentor, produce and turn an idea into a project.","Permaculture, gardens and local production restore a tangible relationship with the land. You do not simply consume a place: you understand how it lives."],
+atmosLead:"Beyond the masterplan, CNV should make you want to experience a rhythm of life. These additional views show the diversity of the spaces, from the calm of the spa to social energy, from productive gardens to places for meeting and working.",
+villageLead:"Each area has a clear purpose, but none works in isolation. Living, working, leisure, nature and social spaces are connected through gentle routes so that the day flows naturally without artificial breaks.",
+cards:[["8 micro-villages","Luxury, Natural, Glamping, Family, Young, Free Camp, Staff and Senior: several ways of living within one ecosystem, with different levels of comfort, atmosphere and pace."],["Regenerate","Spa, movement, yoga, recovery, nutrition and longevity experiences. Wellbeing is not a separate programme but a natural part of everyday life."],["Create & collaborate","The Collaborative Hub welcomes entrepreneurs, creators, investors and teams. Meetings, workshops, learning sessions, strategy circles and events become a living part of the village."],["From land to table","Permaculture, gardens, local production, kitchens and shared tables create fresher, more traceable food directly connected to the land."]],
+artLead1:"CNV is not simply a place: it is a way of shaping your life. We created 50 personality types to help every visitor imagine an experience that feels right for them: contemplative, creative, social, family-oriented, entrepreneurial, regenerative or adventurous.",
+lifeBody:["The day can begin with a walk, yoga, coffee overlooking the landscape or breakfast made with local produce. Those who are working can then head to the Collaborative Hub or choose a quiet indoor or outdoor space. The aim is not to impose a collective schedule, but to create an environment that makes good choices easier.","The afternoon can flow between projects, encounters, physical activities, swimming, spa time, workshops, appointments or exploring the surrounding area. Families have dedicated spaces, entrepreneurs have theirs, while most of the village remains naturally open to spontaneous encounters and uses.","Dinner may continue around a large table, a fire or an event. Some evenings are quiet, others more musical. Social life is present without taking over the village: celebration and silence can coexist because each has its own place."],
+placesLead:"CNV is designed to become an international network of villages deeply rooted in their local environment. The core concept remains consistent, while architecture, materials, vegetation, food and selected experiences always adapt to local culture and climate.",
+locations:[["Andalusia","The first village under consideration: Mediterranean climate, nature, strong European accessibility and a distinctive lifestyle identity."],["Morocco","A territory between Europe and Africa, rich in landscapes, craftsmanship, hospitality and culture."],["Philippines","A tropical expression of the concept, shaped by water, islands, nature and community."],["Paraguay","Wide open spaces and long-term development potential in South America."],["Amazonia","A nature-first vision at a different scale, where ecosystem protection becomes a structuring principle."]],
+joinLead:"There are several ways to join CNV: live the experience, give your time, support the project, open your network, build with us or take part in its development. Simply choose the relationship that feels right for you.",
+joinSmall:["Join the CNV community and take part in experiences, encounters and future member benefits.","Contribute time, skills or energy to a concrete mission within the village.","Follow the project, join selected gatherings and support its development at your own pace.","Support CNV in a privileged way and help bring spaces, programmes or initiatives to life.","Bring expertise, a service, a brand or technology, or build an activity with CNV.","Discover the model, the first sites, the development strategy and investment opportunities."],
+modalDesc:"Tell us what you are looking for. We will guide you toward the CNV pathway that suits you best.",
+modalOptions:["Choose how you want to connect with CNV","Become a member","Volunteer","Become a Friend of CNV","Become a Patron of CNV","Become a partner","Become an investor"]
+},
+es:{
+feelingLead:"CNV se puede explicar con planos, pero se elige sobre todo por lo que se siente. Los espacios están pensados para hacer convivir energía social, calma, movimiento, creatividad, placer y una vuelta a lo esencial.",
+slides:["Encuentros espontáneos, comidas compartidas y conversaciones que se alargan hasta el atardecer. La comunidad está presente, pero nunca se impone.","Una vida nocturna elegante y libre: música, eventos, celebraciones puntuales y espacios sociales, situados para proteger las zonas más tranquilas del pueblo.","El bienestar forma parte de la vida diaria: spa, agua, yoga, movimiento, recuperación, nutrición y silencio se integran de forma natural en el ritmo del lugar.","Moverse al aire libre en lugar de quedarse encerrado: deporte, senderos, actividades exteriores, exploración, juegos y experiencias colectivas en un entorno abierto.","Un Hub Colaborativo para trabajar, reunir equipos, conocer inversores, aprender, transmitir, producir y convertir una idea en un proyecto.","La permacultura, los jardines y la producción local restablecen una relación concreta con la tierra. No se trata solo de consumir un lugar: se entiende mejor cómo vive."],
+atmosLead:"Más allá del masterplan, CNV debe transmitir ganas de vivir un ritmo distinto. Estas imágenes complementarias muestran la diversidad de los espacios, desde la calma del spa hasta la energía social, desde los jardines productivos hasta los lugares de encuentro y trabajo.",
+villageLead:"Cada zona tiene una función clara, pero ninguna funciona de forma aislada. Los espacios para vivir, trabajar, descansar, disfrutar de la naturaleza y encontrarse están conectados por recorridos suaves para que el día fluya sin rupturas artificiales.",
+cards:[["8 micro-pueblos","Lujo, Naturaleza, Glamping, Familia, Jóvenes, Campamento libre, Equipo y Mayores: distintas maneras de vivir dentro de un mismo ecosistema, con diferentes niveles de confort, ambiente y ritmo."],["Regenerarse","Spa, movimiento, yoga, recuperación, nutrición y experiencias de longevidad. El bienestar no es un programa separado, sino una parte natural de la vida cotidiana."],["Crear & colaborar","El Hub Colaborativo reúne a emprendedores, creadores, inversores y equipos. Reuniones, talleres, aprendizaje, círculos estratégicos y eventos forman parte viva del pueblo."],["De la tierra a la mesa","Permacultura, jardines, producción local, cocinas y mesas compartidas permiten una alimentación más fresca, trazable y directamente conectada con el territorio."]],
+artLead1:"CNV no es solo un lugar: es una forma de componer la propia vida. Hemos imaginado 50 tipos de personalidad para ayudar a cada visitante a proyectarse en una experiencia que le corresponda: contemplativa, creativa, social, familiar, emprendedora, regenerativa o aventurera.",
+lifeBody:["El día puede comenzar con un paseo, yoga, un café frente al paisaje o un desayuno elaborado con productos locales. Quienes trabajan pueden ir después al Hub Colaborativo o elegir un espacio tranquilo, interior o exterior. El objetivo no es imponer un ritmo colectivo, sino crear un entorno que facilite las buenas decisiones.","La tarde puede repartirse entre proyectos, encuentros, actividad física, baño, spa, talleres, citas o descubrimiento del entorno. Las familias disponen de sus espacios, los emprendedores de los suyos, mientras que la mayor parte del pueblo permanece abierta a encuentros y usos espontáneos.","La cena puede prolongarse alrededor de una gran mesa, un fuego o un evento. Algunas noches son tranquilas y otras más musicales. La vida social está presente sin invadir el resto del pueblo: la celebración y el silencio pueden convivir porque cada uno tiene su lugar."],
+placesLead:"CNV aspira a convertirse en una red internacional de pueblos profundamente vinculados a su territorio. El concepto común se mantiene, mientras que la arquitectura, los materiales, la vegetación, la gastronomía y determinadas experiencias se adaptan siempre a la\n--- PROFILE SOURCE ---\nMATCH profile-select-col AT 13488\n="profile-dropdown-style">
 .profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
 .profile-select-col{display:grid;gap:10px}
 .profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
@@ -22,923 +374,6 @@
 .profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
 .profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
 .profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;curs\n--- PROFILE SOURCE ---\n(48px,16vw,74px)!important;line-height:.94!important}
-}
-</style><style id="profile-selector-flow">
-.profile-steps{display:flex;gap:10px;align-items:center;margin:28px 0 14px}
-.profile-step{padding:9px 14px;border-radius:999px;background:#fff;border:1px solid rgba(195,154,87,.22);color:#7b8a84;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.profile-step.active{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
-#pathsGrid .path-card{display:none}
-</style><style id="day-program-style">
-.day-program{margin-top:8px}
-.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
-.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
-.day-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{\n--- PROFILE SOURCE ---\nrofile-selector-flow">
-.profile-steps{display:flex;gap:10px;align-items:center;margin:28px 0 14px}
-.profile-step{padding:9px 14px;border-radius:999px;background:#fff;border:1px solid rgba(195,154,87,.22);color:#7b8a84;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.profile-step.active{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
-#pathsGrid .path-card{display:none}
-</style><style id="day-program-style">
-.day-program{margin-top:8px}
-.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
-.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
-.day-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%\n--- PROFILE SOURCE ---\nd rgba(195,154,87,.22);color:#7b8a84;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.profile-step.active{background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
-#pathsGrid .path-card{display:none}
-</style><style id="day-program-style">
-.day-program{margin-top:8px}
-.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
-.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
-.day-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLig\n--- PROFILE SOURCE ---\nnd:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;border-color:transparent;font-weight:800}
-.profile-prompt{margin:22px 0 8px;padding:18px 20px;border-radius:18px;background:rgba(255,255,255,.72);border:1px dashed rgba(167,122,61,.35);color:#65716b}
-#pathsGrid .path-card{display:none}
-</style><style id="day-program-style">
-.day-program{margin-top:8px}
-.day-program ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.day-program li{position:relative;padding-left:22px;line-height:1.6;color:#57635e}
-.day-program li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);box-shadow:0 0 0 5px rgba(184,135,66,.12)}
-.day-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px\n--- PROFILE SOURCE ---\nay-program strong{color:#173a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opac\n--- PROFILE SOURCE ---\n73a2f;font-weight:800}
-.story article{overflow:hidden}
-</style><style id="profile-dropdown-style">
-.profile-selector-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;te\n--- PROFILE SOURCE ---\nrgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  ov\n--- PROFILE SOURCE ---\n(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
-.profile-select-col{display:grid;gap:10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  paddi\n--- PROFILE SOURCE ---\n10px}
-.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
-.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:4px;
-  scrollbar-width:thin;
-}
-
-.cnv-stage{margin:0}
-.cnv-stage-frame{
-  position:re\n--- PROFILE SOURCE ---\nborder-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
-.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:4px;
-  scrollbar-width:thin;
-}
-
-.cnv-stage{margin:0}
-.cnv-stage-frame{
-  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
-  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
-}
-.cnv-stage-frame img{
-  width:100%;height:100%;object-fit:cover\n--- PROFILE SOURCE ---\n3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:4px;
-  scrollbar-width:thin;
-}
-
-.cnv-stage{margin:0}
-.cnv-stage-frame{
-  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
-  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
-}
-.cnv-stage-frame img{
-  width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease
-}
-.cnv-stage-frame:hover img{transform:scale(1.02)}
-.cnv-stage-caption{
-  display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:14px 4px 0
-}
-.c\n--- PROFILE SOURCE ---\n}
-.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:4px;
-  scrollbar-width:thin;
-}
-
-.cnv-stage{margin:0}
-.cnv-stage-frame{
-  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
-  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
-}
-.cnv-stage-frame img{
-  width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease
-}
-.cnv-stage-frame:hover img{transform:scale(1.02)}
-.cnv-stage-caption{
-  display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:14px 4px 0
-}
-.cnv-stage-title{font-weight:800;font-size:1.05rem;color:var(--ink,#2b261f)}
-.cnv-stage-sub{font-si\n--- PROFILE SOURCE ---\n0 0 0 3px rgba(184,135,66,.12)}
-.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
-.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
-#pathsGrid{display:none!important}
-.profile-prompt{max-width:980px}
-@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
-</style><style id="header-join-gold-fix">
-#headerJoin{
-  background:linear-gradient(135deg,#b88742,#e0c384)!important;
-  color:#11231c!important;
-  border:0!important;
-  font-weight:900!important;
-  box-shadow:0 8px 22px rgba(184,135,66,.24);
-}
-#headerJoin:hover{
-  filter:brightness(1.04);
-  transform:translateY(-1px);
-}
-</style>
-<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
-#atmospheres .image-mosaic figure{cursor:zoom-in}
-#atmospheres .image-mosaic figure img{transition:transform .25s ease}
-@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
-#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
-#cnvAllLightbox.open{display:flex}
-#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
-#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
-#cnvAllClose{top:18px;right:18px}
-#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
-#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
-@media(max-width:600px){
- #cnvAllLightbox{padding:8px}
- #cnvAllLightbox img{max-width:96vw;max-height:86vh}
- #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
- #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
-}
-</style>
-
-
-
-
-<style id="CNV_IMAGE_SELECTOR_STYLE">
-.cnv-image-selector{
-  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
-}
-.cnv-image-selector button{
-  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
-  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
-  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
-}
-.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
-.cnv-image-selector button.active{
-  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
-}
-.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
-
-.cnv-atmos-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 230px;
-  gap:22px;
-  align-items:start
-}
-.cnv-atmos-main{min-width:0}
-.cnv-atmos-side{
-  min-width:0;
-  position:sticky;
-  top:92px;
-  max-height:min(calc(100vh - 120px),900px);
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:4px;
-  scrollbar-width:thin;
-}
-
-.cnv-stage{margin:0}
-.cnv-stage-frame{
-  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
-  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
-}
-.cnv-stage-frame img{
-  width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease
-}
-.cnv-stage-frame:hover img{transform:scale(1.02)}
-.cnv-stage-caption{
-  display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:14px 4px 0
-}
-.cnv-stage-title{font-weight:800;font-size:1.05rem;color:var(--ink,#2b261f)}
-.cnv-stage-sub{font-size:.92rem;opacity:.68;white-space:nowrap}
-
-/* 1 image pleine largeu\n--- PROFILE SOURCE ---\nrrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
 #pathsGrid{display:none!important}
 .profile-prompt{max-width:980px}
 @media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
@@ -1031,4 +466,777 @@
   grid-template-columns:1fr;
   gap:10px;
 }
-.c
+.cnv-thumb-grid .cnv-gallery-item{
+  display:block;
+  width:100%;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border:2px solid transparent;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,.05);
+}
+.cnv-thumb-grid .cnv-gallery-item img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  transition:transform .25s ease;
+}
+.cnv-thumb-grid .cnv-gallery-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item:hover img{transform:scale(1.03)}
+.cnv-thumb-grid .cnv-gallery-item.active{
+  border-color:#b08a4f;
+  box-shadow:0 0 0 3px rgba(176,138,79,.13),0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item figcaption{
+  padding:8px 10px 10px;
+  font-size:.8rem;
+  font-weight:750;
+  line-height:1.15;
+}
+.cnv-thumb-grid .cnv-gallery-item.cnv-hidden{display:none!important}
+
+@media(max-width:1100px){
+  .cnv-atmos-layout{grid-template-columns:1fr}
+  .cnv-atmos-side{
+    position:static;
+    max-height:none;
+    overflow:visible;
+    padding-right:0
+  }
+  .cnv-gallery-count{text-align:left}
+  .cnv-image-selector{justify-content:flex-start}
+  .cnv-thumb-grid{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch
+  }
+  .cnv-thumb-grid .cnv-gallery-item{
+    flex:0 0 170px;
+  }
+  .cnv-thumb-grid .cnv-gallery-item img{
+    aspect-ratio:16/10;
+  }
+}
+
+@media(max-width:700px){
+  .cnv-image-selector{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch;
+    justify-content:flex-start
+  }
+  .cnv-image-selector button{flex:0 0 auto;padding:9px 14px}
+  .cnv-stage-frame{border-radius:18px;aspect-ratio:4/3}
+  .cnv-stage-caption{flex-direction:column;gap:6px}
+}
+</style>
+
+
+
+
+
+<style id="CNV_ZONE_IMAGE_STYLE">
+#village .zone-image-wrap{
+  width:100%;
+  margin:0 0 18px;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(201,168,76,.34);
+  background:#111;
+  box-shadow:0 12px 34px rgba(0,0,0,.22);
+}
+#village .zone-image-wrap img{
+  display:block;
+  width:100%;
+  height:210px;
+  object-fit:cover;
+}
+#village .zone-image-wrap[hidden]{display:none!important}
+@media(max-width:760px){
+  #village .zone-image-wrap img{height:190px}
+}
+</style>
+
+
+<style id="cnv-mobile-nav-fix-20261008">
+#cnvMenuBtn{display:none;width:42px;height:42px;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(5,27,22,.68);color:#fff;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#cnvMenuBtn span,#cnvMenuBtn span:before,#cnvMenuBtn span:after{display:block;width:20px;height:2px;background:#fff;border-radius:2px;content:"";position:relative}
+#cnvMenuBtn span:before{position:absolute;top:-6px;left:0}#cnvMenuBtn span:after{position:absolute;top:6px;left:0}
+#cnvMobileMenu{display:none;position:fixed;z-index:90;top:82px;left:0;right:0;background:rgba(5,27,22,.98);backdrop-filter:blur(18px);padding:18px 22px 24px;border-top:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px rgba(0,0,0,.28)}
+#cnvMobileMenu.open{display:block}#cnvMobileMenu a{display:block;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-size:13px;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.10)}#cnvMobileMenu a:hover{color:#e0c58f}
+@media(max-width:980px){#cnvMenuBtn{display:flex!important}.head-actions{gap:8px}.top>nav{display:none!important}}
+</style>
+
+
+<style id="cnv-image-loading-stability-20261008">
+img{max-width:100%;height:auto}
+</style>
+<style id="cnv-join-extra-fields-style">
+#cnvContactForm{
+  max-height:72vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:12px!important;
+  scrollbar-gutter:stable;
+  scrollbar-width:auto;
+  scrollbar-color:#c7a85b #efe7d7;
+}
+#cnvContactForm::-webkit-scrollbar{width:12px}
+#cnvContactForm::-webkit-scrollbar-track{background:#efe7d7;border-radius:10px}
+#cnvContactForm::-webkit-scrollbar-thumb{background:#c7a85b;border-radius:10px;border:2px solid #efe7d7}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{padding:10px 12px!important}
+#cnvContactForm textarea{min-height:78px!important}
+#cnvJoinExtraFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:10px 0 12px}
+#cnvJoinExtraFields label{display:flex;flex-direction:column;gap:5px;min-width:0}
+#cnvJoinExtraFields .cnv-intro-field{grid-column:1/-1}
+#cnvJoinExtraFields input,#cnvJoinExtraFields textarea{width:100%;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit}
+#cnvJoinExtraFields textarea{resize:vertical}
+#cnvContactForm button[type="submit"],#cnvContactForm input[type="submit"]{position:sticky;bottom:0;z-index:4}
+@media(max-width:700px){
+  #cnvContactForm{max-height:76vh!important;padding-right:8px!important}
+  #cnvJoinExtraFields{grid-template-columns:1fr!important}
+  #cnvJoinExtraFields label{grid-column:1/-1!important}
+}
+</style>
+
+
+<style id="cnv-join-layout-style">
+#cnvContactForm .cnv-compact-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 0 14px!important;
+  grid-column:1/-1!important;
+  flex:0 0 100%!important;
+  box-sizing:border-box!important;
+}
+#cnvContactForm .cnv-compact-row>*{min-width:0!important;width:100%!important;margin:0!important;box-sizing:border-box!important}
+#cnvContactForm .cnv-compact-row input,#cnvContactForm .cnv-compact-row label{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{max-width:100%;box-sizing:border-box}
+#cnv-row-contact,#cnv-row-social{grid-column:1/-1!important;width:100%!important}
+@media(max-width:700px){#cnvContactForm .cnv-compact-row{grid-template-columns:1fr!important}}
+</style>
+
+
+<style id="cnv-join-interests-style">
+#cnvJoinInterests{grid-column:1/-1!important;width:100%!important;margin:12px 0 14px!important;padding:0!important;box-sizing:border-box!important}
+#cnvJoinInterests h3{margin:0 0 10px!important;font-size:15px!important;line-height:1.2!important;font-weight:800!important}
+#cnvJoinInterests .cnv-interest-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important}
+#cnvJoinInterests .cnv-interest-group{margin:0!important;padding:10px 12px!important;border:1px solid #d9b76255!important;border-radius:12px!important;min-width:0!important}
+#cnvJoinInterests .cnv-interest-group legend{padding:0 5px!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important}
+#cnvJoinInterests .cnv-interest-item{display:flex!important;align-items:flex-start!important;gap:8px!important;margin:6px 0!important;cursor:pointer!important;line-height:1.2!important;font-size:12px!important}
+#cnvJoinInterests .cnv-interest-item input{width:16px!important;height:16px!important;min-width:16px!important;margin:0!important;accent-color:#c7a85b!important}
+#cnvJoinInterests .cnv-interest-item span{display:block!important;min-width:0!important}
+@media(max-width:700px){#cnvJoinInterests .cnv-interest-grid{grid-template-columns:1fr!important}}
+</style>
+
+
+<link rel="stylesheet" href="assets/cnv-personalized-day.css">
+<script defer src="assets/cnv-personalized-day.js"></script>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="#home"><img alt="CNV" src="assets/LOGO%20CNV.png"/ decoding="async"><span>Chill Natural Villages<small>Votre Hub Collaboratif</small></span></a>
+<nav><a href="#vision" id="navVision">Vision</a><a href="#experience" id="navExperience">Expérience</a><a href="#village" id="navVillage">Village</a><a href="#artoflife" id="navArt">Art de vivre</a>
+<a href="#members" id="membersNavLink" style="display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center!important;white-space:nowrap!important;color:#d9b762!important;font-weight:700!important;position:relative!important;z-index:9999!important;">Members</a>
+
+<a href="#places" id="navPlaces">Destinations</a></nav>
+<div class="head-actions"><span class="langs"><button class="on" onclick="setLang('fr',this)">FR</button><button onclick="setLang('en',this)">EN</button><button onclick="setLang('es',this)">ES</button></span><button class="btn gold" id="headerJoin" onclick="openModal()">Rejoindre CNV</button></div>
+</header>
+<section class="hero" id="home">
+<img alt="Chill Natural Villages Spain" class="hero-bg" src="data:image/jpeg;base64,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\n--- PROFILE SOURCE ---\nMATCH profile-select-col AT 13531\nr-box{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:end;max-width:980px;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
+.profile-select-col{display:grid;gap:10px}
+.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
+.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
+.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
+.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
+.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
+.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
+#pathsGrid{display:none!important}
+.profile-prompt{max-width:980px}
+@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
+</style><style id="header-join-gold-fix">
+#headerJoin{
+  background:linear-gradient(135deg,#b88742,#e0c384)!important;
+  color:#11231c!important;
+  border:0!important;
+  font-weight:900!important;
+  box-shadow:0 8px 22px rgba(184,135,66,.24);
+}
+#headerJoin:hover{
+  filter:brightness(1.04);
+  transform:translateY(-1px);
+}
+</style>
+<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
+#atmospheres .image-mosaic figure{cursor:zoom-in}
+#atmospheres .image-mosaic figure img{transition:transform .25s ease}
+@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
+#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
+#cnvAllLightbox.open{display:flex}
+#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
+#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
+#cnvAllClose{top:18px;right:18px}
+#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
+#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
+@media(max-width:600px){
+ #cnvAllLightbox{padding:8px}
+ #cnvAllLightbox img{max-width:96vw;max-height:86vh}
+ #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
+ #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
+}
+</style>
+
+
+
+
+<style id="CNV_IMAGE_SELECTOR_STYLE">
+.cnv-image-selector{
+  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
+}
+.cnv-image-selector button{
+  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
+  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
+  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
+}
+.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
+.cnv-image-selector button.active{
+  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
+}
+.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
+
+.cnv-atmos-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 230px;
+  gap:22px;
+  align-items:start
+}
+.cnv-atmos-main{min-width:0}
+.cnv-atmos-side{
+  min-width:0;
+  position:sticky;
+  top:92px;
+  max-height:min(calc(100vh - 120px),900px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-right:4px;
+  scrollbar-width:thin;
+}
+
+.cnv-stage{margin:0}
+.cnv-stage-frame{
+  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
+  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
+}
+.cnv-stage-frame img{
+  width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease
+}
+.cnv-stage-frame:hover img{transform:scale(1.02)}
+.cnv-stage-caption{
+  display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:14px 4px 0
+}
+.cnv-stage-title{font-weight:800;font-size:1.05rem;color:var(--ink,#2b261f)}
+.cnv-stage-sub{font-size:.92rem;opacity:.68;white-space:nowrap}
+
+/* 1 image pleine largeur par ligne dans la colonne droite */
+.cnv-thumb-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.cnv-thumb-grid .cnv-gallery-item{
+  display:block;
+  width:100%;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border:2px solid transparent;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,.05);
+}
+.cnv-thumb-grid .cnv-gallery-item img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  transition:transform .25s ease;
+}
+.cnv-thumb-grid .cnv-gallery-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item:hover img{transform:scale(1.03)}
+.cnv-thumb-grid .cnv-gallery-item.active{
+  border-color:#b08a4f;
+  box-shadow:0 0 0 3px rgba(176,138,79,.13),0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item figcaption{
+  padding:8px 10px 10px;
+  font-size:.8rem;
+  font-weight:750;
+  line-height:1.15;
+}
+.cnv-thumb-grid .cnv-gallery-item.cnv-hidden{display:none!important}
+
+@media(max-width:1100px){
+  .cnv-atmos-layout{grid-template-columns:1fr}
+  .cnv-atmos-side{
+    position:static;
+    max-height:none;
+    overflow:visible;
+    padding-right:0
+  }
+  .cnv-gallery-count{text-align:left}
+  .cnv-image-selector{justify-content:flex-start}
+  .cnv-thumb-grid{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch
+  }
+  .cnv-thumb-grid .cnv-gallery-item{
+    flex:0 0 170px;
+  }
+  .cnv-thumb-grid .cnv-gallery-item img{
+    aspect-ratio:16/10;
+  }
+}
+
+@media(max-width:700px){
+  .cnv-image-selector{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch;
+    justify-content:flex-start
+  }
+  .cnv-image-selector button{flex:0 0 auto;padding:9px 14px}
+  .cnv-stage-frame{border-radius:18px;aspect-ratio:4/3}
+  .cnv-stage-caption{flex-direction:column;gap:6px}
+}
+</style>
+
+
+
+
+
+<style id="CNV_ZONE_IMAGE_STYLE">
+#village .zone-image-wrap{
+  width:100%;
+  margin:0 0 18px;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(201,168,76,.34);
+  background:#111;
+  box-shadow:0 12px 34px rgba(0,0,0,.22);
+}
+#village .zone-image-wrap img{
+  display:block;
+  width:100%;
+  height:210px;
+  object-fit:cover;
+}
+#village .zone-image-wrap[hidden]{display:none!important}
+@media(max-width:760px){
+  #village .zone-image-wrap img{height:190px}
+}
+</style>
+
+
+<style id="cnv-mobile-nav-fix-20261008">
+#cnvMenuBtn{display:none;width:42px;height:42px;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(5,27,22,.68);color:#fff;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#cnvMenuBtn span,#cnvMenuBtn span:before,#cnvMenuBtn span:after{display:block;width:20px;height:2px;background:#fff;border-radius:2px;content:"";position:relative}
+#cnvMenuBtn span:before{position:absolute;top:-6px;left:0}#cnvMenuBtn span:after{position:absolute;top:6px;left:0}
+#cnvMobileMenu{display:none;position:fixed;z-index:90;top:82px;left:0;right:0;background:rgba(5,27,22,.98);backdrop-filter:blur(18px);padding:18px 22px 24px;border-top:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px rgba(0,0,0,.28)}
+#cnvMobileMenu.open{display:block}#cnvMobileMenu a{display:block;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-size:13px;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.10)}#cnvMobileMenu a:hover{color:#e0c58f}
+@media(max-width:980px){#cnvMenuBtn{display:flex!important}.head-actions{gap:8px}.top>nav{display:none!important}}
+</style>
+
+
+<style id="cnv-image-loading-stability-20261008">
+img{max-width:100%;height:auto}
+</style>
+<style id="cnv-join-extra-fields-style">
+#cnvContactForm{
+  max-height:72vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:12px!important;
+  scrollbar-gutter:stable;
+  scrollbar-width:auto;
+  scrollbar-color:#c7a85b #efe7d7;
+}
+#cnvContactForm::-webkit-scrollbar{width:12px}
+#cnvContactForm::-webkit-scrollbar-track{background:#efe7d7;border-radius:10px}
+#cnvContactForm::-webkit-scrollbar-thumb{background:#c7a85b;border-radius:10px;border:2px solid #efe7d7}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{padding:10px 12px!important}
+#cnvContactForm textarea{min-height:78px!important}
+#cnvJoinExtraFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:10px 0 12px}
+#cnvJoinExtraFields label{display:flex;flex-direction:column;gap:5px;min-width:0}
+#cnvJoinExtraFields .cnv-intro-field{grid-column:1/-1}
+#cnvJoinExtraFields input,#cnvJoinExtraFields textarea{width:100%;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit}
+#cnvJoinExtraFields textarea{resize:vertical}
+#cnvContactForm button[type="submit"],#cnvContactForm input[type="submit"]{position:sticky;bottom:0;z-index:4}
+@media(max-width:700px){
+  #cnvContactForm{max-height:76vh!important;padding-right:8px!important}
+  #cnvJoinExtraFields{grid-template-columns:1fr!important}
+  #cnvJoinExtraFields label{grid-column:1/-1!important}
+}
+</style>
+
+
+<style id="cnv-join-layout-style">
+#cnvContactForm .cnv-compact-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 0 14px!important;
+  grid-column:1/-1!important;
+  flex:0 0 100%!important;
+  box-sizing:border-box!important;
+}
+#cnvContactForm .cnv-compact-row>*{min-width:0!important;width:100%!important;margin:0!important;box-sizing:border-box!important}
+#cnvContactForm .cnv-compact-row input,#cnvContactForm .cnv-compact-row label{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{max-width:100%;box-sizing:border-box}
+#cnv-row-contact,#cnv-row-social{grid-column:1/-1!important;width:100%!important}
+@media(max-width:700px){#cnvContactForm .cnv-compact-row{grid-template-columns:1fr!important}}
+</style>
+
+
+<style id="cnv-join-interests-style">
+#cnvJoinInterests{grid-column:1/-1!important;width:100%!important;margin:12px 0 14px!important;padding:0!important;box-sizing:border-box!important}
+#cnvJoinInterests h3{margin:0 0 10px!important;font-size:15px!important;line-height:1.2!important;font-weight:800!important}
+#cnvJoinInterests .cnv-interest-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important}
+#cnvJoinInterests .cnv-interest-group{margin:0!important;padding:10px 12px!important;border:1px solid #d9b76255!important;border-radius:12px!important;min-width:0!important}
+#cnvJoinInterests .cnv-interest-group legend{padding:0 5px!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important}
+#cnvJoinInterests .cnv-interest-item{display:flex!important;align-items:flex-start!important;gap:8px!important;margin:6px 0!important;cursor:pointer!important;line-height:1.2!important;font-size:12px!important}
+#cnvJoinInterests .cnv-interest-item input{width:16px!important;height:16px!important;min-width:16px!important;margin:0!important;accent-color:#c7a85b!important}
+#cnvJoinInterests .cnv-interest-item span{display:block!important;min-width:0!important}
+@media(max-width:700px){#cnvJoinInterests .cnv-interest-grid{grid-template-columns:1fr!important}}
+</style>
+
+
+<link rel="stylesheet" href="assets/cnv-personalized-day.css">
+<script defer src="assets/cnv-personalized-day.js"></script>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="#home"><img alt="CNV" src="assets/LOGO%20CNV.png"/ decoding="async"><span>Chill Natural Villages<small>Votre Hub Collaboratif</small></span></a>
+<nav><a href="#vision" id="navVision">Vision</a><a href="#experience" id="navExperience">Expérience</a><a href="#village" id="navVillage">Village</a><a href="#artoflife" id="navArt">Art de vivre</a>
+<a href="#members" id="membersNavLink" style="display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center!important;white-space:nowrap!important;color:#d9b762!important;font-weight:700!important;position:relative!important;z-index:9999!important;">Members</a>
+
+<a href="#places" id="navPlaces">Destinations</a></nav>
+<div class="head-actions"><span class="langs"><button class="on" onclick="setLang('fr',this)">FR</button><button onclick="setLang('en',this)">EN</button><button onclick="setLang('es',this)">ES</button></span><button class="btn gold" id="headerJoin" onclick="openModal()">Rejoindre CNV</button></div>
+</header>
+<section class="hero" id="home">
+<img alt="Chill Natural Villages Spain" class="hero-bg" src="data:image/jpeg;base64,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\n--- PROFILE SOURCE ---\nMATCH profile-select-col AT 13624\nx;margin:32px 0 18px;padding:26px;border-radius:26px;background:rgba(255,255,255,.82);border:1px solid rgba(195,154,87,.2);box-shadow:0 14px 38px rgba(0,0,0,.05)}
+.profile-select-col{display:grid;gap:10px}
+.profile-select-col label{font-size:13px;font-weight:800;color:#173a2f;letter-spacing:.02em}
+.profile-select-col label span{display:inline-grid;place-items:center;width:25px;height:25px;margin-right:7px;border-radius:50%;background:linear-gradient(135deg,#b88742,#e0c384);color:#10231c;font-size:12px}
+.profile-select-col select{width:100%;padding:15px 44px 15px 16px;border-radius:16px;border:1px solid rgba(167,122,61,.3);background:#fff;color:#263b33;font:600 15px Inter,Arial,sans-serif;cursor:pointer;outline:none}
+.profile-select-col select:focus{border-color:#b88742;box-shadow:0 0 0 3px rgba(184,135,66,.12)}
+.profile-select-col select:disabled{opacity:.5;cursor:not-allowed}
+.profile-select-arrow{font:28px Georgia,serif;color:#b88742;padding-bottom:10px}
+#pathsGrid{display:none!important}
+.profile-prompt{max-width:980px}
+@media(max-width:720px){.profile-selector-box{grid-template-columns:1fr}.profile-select-arrow{transform:rotate(90deg);justify-self:center;padding:0}}
+</style><style id="header-join-gold-fix">
+#headerJoin{
+  background:linear-gradient(135deg,#b88742,#e0c384)!important;
+  color:#11231c!important;
+  border:0!important;
+  font-weight:900!important;
+  box-shadow:0 8px 22px rgba(184,135,66,.24);
+}
+#headerJoin:hover{
+  filter:brightness(1.04);
+  transform:translateY(-1px);
+}
+</style>
+<style id="CNV_ALL_IMAGES_LIGHTBOX_FINAL">
+#atmospheres .image-mosaic figure{cursor:zoom-in}
+#atmospheres .image-mosaic figure img{transition:transform .25s ease}
+@media(hover:hover){#atmospheres .image-mosaic figure:hover img{transform:scale(1.04)}}
+#cnvAllLightbox{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.93);padding:20px}
+#cnvAllLightbox.open{display:flex}
+#cnvAllLightbox img{max-width:94vw;max-height:90vh;width:auto;height:auto;object-fit:contain;border-radius:12px}
+#cnvAllLightbox button{position:absolute;z-index:2;border:0;border-radius:50%;width:52px;height:52px;background:rgba(0,0,0,.48);color:#fff;font:34px/1 Arial;cursor:pointer}
+#cnvAllClose{top:18px;right:18px}
+#cnvAllPrev{left:18px;top:50%;transform:translateY(-50%)}
+#cnvAllNext{right:18px;top:50%;transform:translateY(-50%)}
+@media(max-width:600px){
+ #cnvAllLightbox{padding:8px}
+ #cnvAllLightbox img{max-width:96vw;max-height:86vh}
+ #cnvAllLightbox button{width:44px;height:44px;font-size:28px}
+ #cnvAllPrev{left:8px} #cnvAllNext{right:8px} #cnvAllClose{top:8px;right:8px}
+}
+</style>
+
+
+
+
+<style id="CNV_IMAGE_SELECTOR_STYLE">
+.cnv-image-selector{
+  display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 10px;align-items:center;justify-content:flex-end
+}
+.cnv-image-selector button{
+  appearance:none;border:1px solid rgba(174,135,73,.35);background:rgba(255,255,255,.76);
+  color:var(--ink,#2b261f);border-radius:999px;padding:10px 16px;font:inherit;font-weight:700;
+  cursor:pointer;transition:.2s ease;box-shadow:0 6px 18px rgba(0,0,0,.05)
+}
+.cnv-image-selector button:hover{transform:translateY(-1px);border-color:#b08a4f}
+.cnv-image-selector button.active{
+  background:#b08a4f;color:#fff;border-color:#b08a4f;box-shadow:0 8px 24px rgba(176,138,79,.28)
+}
+.cnv-gallery-count{font-size:.92rem;opacity:.72;margin:0 0 14px;text-align:right}
+
+.cnv-atmos-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 230px;
+  gap:22px;
+  align-items:start
+}
+.cnv-atmos-main{min-width:0}
+.cnv-atmos-side{
+  min-width:0;
+  position:sticky;
+  top:92px;
+  max-height:min(calc(100vh - 120px),900px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-right:4px;
+  scrollbar-width:thin;
+}
+
+.cnv-stage{margin:0}
+.cnv-stage-frame{
+  position:relative;overflow:hidden;border-radius:24px;cursor:zoom-in;background:rgba(0,0,0,.05);
+  box-shadow:0 18px 44px rgba(0,0,0,.12);aspect-ratio:16/9
+}
+.cnv-stage-frame img{
+  width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease
+}
+.cnv-stage-frame:hover img{transform:scale(1.02)}
+.cnv-stage-caption{
+  display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:14px 4px 0
+}
+.cnv-stage-title{font-weight:800;font-size:1.05rem;color:var(--ink,#2b261f)}
+.cnv-stage-sub{font-size:.92rem;opacity:.68;white-space:nowrap}
+
+/* 1 image pleine largeur par ligne dans la colonne droite */
+.cnv-thumb-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.cnv-thumb-grid .cnv-gallery-item{
+  display:block;
+  width:100%;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border:2px solid transparent;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 14px rgba(0,0,0,.05);
+}
+.cnv-thumb-grid .cnv-gallery-item img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  transition:transform .25s ease;
+}
+.cnv-thumb-grid .cnv-gallery-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item:hover img{transform:scale(1.03)}
+.cnv-thumb-grid .cnv-gallery-item.active{
+  border-color:#b08a4f;
+  box-shadow:0 0 0 3px rgba(176,138,79,.13),0 10px 22px rgba(0,0,0,.09)
+}
+.cnv-thumb-grid .cnv-gallery-item figcaption{
+  padding:8px 10px 10px;
+  font-size:.8rem;
+  font-weight:750;
+  line-height:1.15;
+}
+.cnv-thumb-grid .cnv-gallery-item.cnv-hidden{display:none!important}
+
+@media(max-width:1100px){
+  .cnv-atmos-layout{grid-template-columns:1fr}
+  .cnv-atmos-side{
+    position:static;
+    max-height:none;
+    overflow:visible;
+    padding-right:0
+  }
+  .cnv-gallery-count{text-align:left}
+  .cnv-image-selector{justify-content:flex-start}
+  .cnv-thumb-grid{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch
+  }
+  .cnv-thumb-grid .cnv-gallery-item{
+    flex:0 0 170px;
+  }
+  .cnv-thumb-grid .cnv-gallery-item img{
+    aspect-ratio:16/10;
+  }
+}
+
+@media(max-width:700px){
+  .cnv-image-selector{
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding-bottom:4px;
+    -webkit-overflow-scrolling:touch;
+    justify-content:flex-start
+  }
+  .cnv-image-selector button{flex:0 0 auto;padding:9px 14px}
+  .cnv-stage-frame{border-radius:18px;aspect-ratio:4/3}
+  .cnv-stage-caption{flex-direction:column;gap:6px}
+}
+</style>
+
+
+
+
+
+<style id="CNV_ZONE_IMAGE_STYLE">
+#village .zone-image-wrap{
+  width:100%;
+  margin:0 0 18px;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(201,168,76,.34);
+  background:#111;
+  box-shadow:0 12px 34px rgba(0,0,0,.22);
+}
+#village .zone-image-wrap img{
+  display:block;
+  width:100%;
+  height:210px;
+  object-fit:cover;
+}
+#village .zone-image-wrap[hidden]{display:none!important}
+@media(max-width:760px){
+  #village .zone-image-wrap img{height:190px}
+}
+</style>
+
+
+<style id="cnv-mobile-nav-fix-20261008">
+#cnvMenuBtn{display:none;width:42px;height:42px;border:1px solid rgba(255,255,255,.35);border-radius:12px;background:rgba(5,27,22,.68);color:#fff;align-items:center;justify-content:center;cursor:pointer;padding:0}
+#cnvMenuBtn span,#cnvMenuBtn span:before,#cnvMenuBtn span:after{display:block;width:20px;height:2px;background:#fff;border-radius:2px;content:"";position:relative}
+#cnvMenuBtn span:before{position:absolute;top:-6px;left:0}#cnvMenuBtn span:after{position:absolute;top:6px;left:0}
+#cnvMobileMenu{display:none;position:fixed;z-index:90;top:82px;left:0;right:0;background:rgba(5,27,22,.98);backdrop-filter:blur(18px);padding:18px 22px 24px;border-top:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px rgba(0,0,0,.28)}
+#cnvMobileMenu.open{display:block}#cnvMobileMenu a{display:block;color:#fff;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-size:13px;padding:13px 4px;border-bottom:1px solid rgba(255,255,255,.10)}#cnvMobileMenu a:hover{color:#e0c58f}
+@media(max-width:980px){#cnvMenuBtn{display:flex!important}.head-actions{gap:8px}.top>nav{display:none!important}}
+</style>
+
+
+<style id="cnv-image-loading-stability-20261008">
+img{max-width:100%;height:auto}
+</style>
+<style id="cnv-join-extra-fields-style">
+#cnvContactForm{
+  max-height:72vh!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:12px!important;
+  scrollbar-gutter:stable;
+  scrollbar-width:auto;
+  scrollbar-color:#c7a85b #efe7d7;
+}
+#cnvContactForm::-webkit-scrollbar{width:12px}
+#cnvContactForm::-webkit-scrollbar-track{background:#efe7d7;border-radius:10px}
+#cnvContactForm::-webkit-scrollbar-thumb{background:#c7a85b;border-radius:10px;border:2px solid #efe7d7}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{padding:10px 12px!important}
+#cnvContactForm textarea{min-height:78px!important}
+#cnvJoinExtraFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin:10px 0 12px}
+#cnvJoinExtraFields label{display:flex;flex-direction:column;gap:5px;min-width:0}
+#cnvJoinExtraFields .cnv-intro-field{grid-column:1/-1}
+#cnvJoinExtraFields input,#cnvJoinExtraFields textarea{width:100%;border-radius:12px;border:1px solid #d9b76255;background:#ffffff08;color:inherit}
+#cnvJoinExtraFields textarea{resize:vertical}
+#cnvContactForm button[type="submit"],#cnvContactForm input[type="submit"]{position:sticky;bottom:0;z-index:4}
+@media(max-width:700px){
+  #cnvContactForm{max-height:76vh!important;padding-right:8px!important}
+  #cnvJoinExtraFields{grid-template-columns:1fr!important}
+  #cnvJoinExtraFields label{grid-column:1/-1!important}
+}
+</style>
+
+
+<style id="cnv-join-layout-style">
+#cnvContactForm .cnv-compact-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:start!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0 0 14px!important;
+  grid-column:1/-1!important;
+  flex:0 0 100%!important;
+  box-sizing:border-box!important;
+}
+#cnvContactForm .cnv-compact-row>*{min-width:0!important;width:100%!important;margin:0!important;box-sizing:border-box!important}
+#cnvContactForm .cnv-compact-row input,#cnvContactForm .cnv-compact-row label{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+#cnvContactForm input,#cnvContactForm select,#cnvContactForm textarea{max-width:100%;box-sizing:border-box}
+#cnv-row-contact,#cnv-row-social{grid-column:1/-1!important;width:100%!important}
+@media(max-width:700px){#cnvContactForm .cnv-compact-row{grid-template-columns:1fr!important}}
+</style>
+
+
+<style id="cnv-join-interests-style">
+#cnvJoinInterests{grid-column:1/-1!important;width:100%!important;margin:12px 0 14px!important;padding:0!important;box-sizing:border-box!important}
+#cnvJoinInterests h3{margin:0 0 10px!important;font-size:15px!important;line-height:1.2!important;font-weight:800!important}
+#cnvJoinInterests .cnv-interest-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important}
+#cnvJoinInterests .cnv-interest-group{margin:0!important;padding:10px 12px!important;border:1px solid #d9b76255!important;border-radius:12px!important;min-width:0!important}
+#cnvJoinInterests .cnv-interest-group legend{padding:0 5px!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important}
+#cnvJoinInterests .cnv-interest-item{display:flex!important;align-items:flex-start!important;gap:8px!important;margin:6px 0!important;cursor:pointer!important;line-height:1.2!important;font-size:12px!important}
+#cnvJoinInterests .cnv-interest-item input{width:16px!important;height:16px!important;min-width:16px!important;margin:0!important;accent-color:#c7a85b!important}
+#cnvJoinInterests .cnv-interest-item span{display:block!important;min-width:0!important}
+@media(max-width:700px){#cnvJoinInterests .cnv-interest-grid{grid-template-columns:1fr!important}}
+</style>
+
+
+<link rel="stylesheet" href="assets/cnv-personalized-day.css">
+<script defer src="assets/cnv-personalized-day.js"></script>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="#home"><img alt="CNV" src="assets/LOGO%20CNV.png"/ decoding="async"><span>Chill Natural Villages<small>Votre Hub Collaboratif</small></span></a>
+<nav><a href="#vision" id="navVision">Vision</a><a href="#experience" id="navExperience">Expérience</a><a href="#village" id="navVillage">Village</a><a href="#artoflife" id="navArt">Art de vivre</a>
+<a href="#members" id="membersNavLink" style="display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center!important;white-space:nowrap!important;color:#d9b762!important;font-weight:700!important;position:relative!important;z-index:9999!important;">Members</a>
+
+<a href="#places" id="navPlaces">Destinations</a></nav>
+<div class="head-actions"><span class="langs"><button class="on" onclick="setLang('fr',this)">FR</button><button onclick="setLang('en',this)">EN</button><button onclick="setLang('es',this)">ES</button></span><button class="btn gold" id="headerJoin" onclick="openModal()">Rejoindre CNV</button></div>
+</header>
+<section class="hero" id="home">
+<img alt="Chill Natural Villages Spain" class="hero-bg" src="data:image/jpeg;base64,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
