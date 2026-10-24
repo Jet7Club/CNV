@@ -1,6 +1,12 @@
 name: Integrate CNV logo and charter
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'assets/logo-cnv-2026.png'
+      - 'assets/reglement-interieur-fr.pdf'
+      - 'assets/community-charter-en.pdf'
+      - 'assets/reglamento-interno-es.pdf'
 permissions:
   contents: write
 jobs:
@@ -10,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - name: Integrate when all four supplied assets are present
+      - name: Integrate only when all assets exist
         run: python .github/scripts/integrate_cnv_logo_charter.py
       - name: Commit website update
         run: |
