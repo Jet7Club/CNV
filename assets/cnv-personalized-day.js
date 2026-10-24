@@ -34,6 +34,17 @@ function render(){const root=document.getElementById("cnv-day-experience");if(!r
 const timeline=document.createElement("div");timeline.className="cnv-day-timeline";
 base.forEach((entry,i)=>{let data=entry.slice();if([3,6,9].includes(i)){const v=p[[3,6,9].indexOf(i)+2];data=[p[1],...v];}if(variation%2){if(i===2)data=["trees","A mindful nature walk","Discover hidden paths and beautiful green spaces.","Nature trails"];if(i===5)data=["heart","A peaceful reset","Try gentle movement, a spa ritual or simply unwind.","Spa & Wellness"];}
 const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
-function init(){if(document.getElementById("cnv-day-experience"))return;const nodes=[...document.querySelectorAll("h1,h2,h3,h4,p,strong")];const day=nodes.find(n=>/a day immersed in nature|une journ.e.*nature|un d.a.*naturaleza/i.test(n.textContent.trim())&&n.textContent.length<180);const pathway=nodes.find(n=>/50 pathways for different personality types/i.test(n.textContent.trim())&&n.textContent.length<150);if(!day&&!pathway)return;const target=day||pathway;const root=document.createElement("section");root.id="cnv-day-experience";root.className="cnv-day-experience";if(day){const section=day.closest("section");if(section&&section.contains(day)){section.appendChild(root);}else{day.parentNode.insertBefore(root,day.nextSibling);}day.style.display="none";}else{pathway.parentNode.appendChild(root);}render();document.addEventListener("change",()=>{last="";render()},true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{last="";render()},120)},true);new MutationObserver(()=>{if((tr[lang()]||tr.en).title!==root.querySelector("h3")?.textContent){last="";render()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
+function init(){
+if(document.getElementById("cnv-day-experience"))return;
+const art=document.getElementById("artoflife"),life=document.getElementById("life");
+if(!art)return;
+const root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";
+const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.appendChild(root);
+if(life)life.style.display="none";
+render();
+document.addEventListener("change",()=>{last="";render()},true);
+document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{last="";render()},120)},true);
+new MutationObserver(()=>{if((tr[lang()]||tr.en).title!==root.querySelector("h3")?.textContent){last="";render()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
