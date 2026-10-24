@@ -77,7 +77,19 @@ const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(
 if(life)life.style.display="none";
 render();
 document.addEventListener("change",()=>{last="";render()},true);
-document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{last="";render()},120)},true);
+document.addEventListener("click",e=>{
+if(e.target.closest("#cnv-day-experience"))return;
+const action=e.target.closest("button,a,[role=button],option,[role=option]");
+const label=(action?.textContent||action?.getAttribute("aria-label")||"").trim().toLowerCase();
+const choose=/choisir votre profil|choose your profile|select your profile|elige tu perfil|elegir perfil|seleccionar perfil|voir mon programme|see my programme|ver mi programa/.test(label);
+setTimeout(()=>{
+last="";render();
+if(choose){
+const panel=document.getElementById("cnv-day-experience");
+if(panel){panel.hidden=false;panel.style.display="";panel.scrollIntoView({behavior:"smooth",block:"start"});}
+}
+},180);
+},true);
 new MutationObserver(()=>{if((tr[lang()]||tr.en).title!==root.querySelector("h3")?.textContent){last="";render()}}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
