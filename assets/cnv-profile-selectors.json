@@ -1,0 +1,21 @@
+[
+  {
+    "attrs": {
+      "id": "categorySelect",
+      "onchange": "chooseCategory(this.value)"
+    },
+    "options": [
+      "Sélectionnez une catégorie",
+      "Visionnaire",
+      "Créatif",
+      "Bâtisseur",
+      "Connecteur",
+      "Régénération",
+      "Explorateur",
+      "Famille",
+      "Nature",
+      "Leadership",
+      "Style de vie"
+    ]
+  }
+]
