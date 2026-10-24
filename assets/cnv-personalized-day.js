@@ -192,19 +192,66 @@ nature:[["Observación de aves","Descubre las aves al amanecer sin molestarlas."
 wellness:[["Respiración consciente","Comienza el día en calma.","Jardín de bienestar"],["Yoga suave","Recupera energía con movimientos tranquilos.","Terraza de yoga"],["Jardín de plantas aromáticas","Descubre plantas y sus usos.","Jardín de bienestar"],["Relajación guiada","Disfruta de una pausa reparadora.","Spa y bienestar"],["Meditación sonora","Participa en una sesión de sonidos relajantes.","Pabellón de bienestar"],["Meditación nocturna","Termina el día con serenidad.","Jardín zen"]],
 social:[["Café entre vecinos","Conoce a otros miembros durante la mañana.","Salón del jardín"],["Paseo en grupo","Explora la aldea con nuevos amigos.","Senderos"],["Taller de cocina colectiva","Prepara recetas de temporada en equipo.","Taller gastronómico"],["Juegos comunitarios","Disfruta de un reto amistoso.","Zona de actividades"],["Experiencia cultural compartida","Participa en una actividad creativa en grupo.","Espacio cultural"],["Música y baile con amigos","Disfruta de una noche festiva.","Vida nocturna"]]
 }};
-const schedule={business:[null,null,1,2,null,3,4,null,null,5,null],adventure:[0,null,1,2,null,null,3,null,null,5,null],creative:[0,null,1,2,null,null,3,null,null,5,null],nature:[0,null,1,2,null,null,3,null,null,5,null],wellness:[0,null,1,2,null,3,4,null,null,5,null],social:[null,null,1,2,null,null,3,null,null,5,null]};
-const selected=schedule[theme][i];
-const featured=selected===null?[]:[themed[L][theme][selected]];
 const slot=(pools[i]||[]);
-const extraTitles={
-en:[["Sunrise breathing","Gentle wake-up walk","Morning reflection"],["Seasonal fruit breakfast","Breakfast with a view","Fresh juice and artisan bread"],["Guided birdwatching","Nature photography","Forest discovery"],["Permaculture practice","Natural sculpture","Team discovery"],["Chef's seasonal lunch","Garden picnic","Mediterranean lunch"],["Hammock reading","Breathwork reset","Thermal circuit"],["Seed-saving workshop","Outdoor photo studio","Cycling discovery"],["Golden-hour photography","Sunset herbal tea","Terrace conversations"],["Garden-to-table dinner","Chef's shared table","World cuisine evening"],["Open-air cinema","Storytelling circle","Acoustic concert"],["Constellation watching","Moonlit stroll","Bedtime herbal tea"]],
-fr:[["Respiration au lever du soleil","Promenade douce au réveil","Réflexion matinale"],["Fruits de saison au petit-déjeuner","Petit-déjeuner panoramique","Jus frais et pain artisanal"],["Observation des oiseaux","Photographie de nature","Découverte de la forêt"],["Pratique de la permaculture","Sculpture naturelle","Découverte en équipe"],["Déjeuner de saison du chef","Pique-nique au jardin","Déjeuner méditerranéen"],["Lecture dans un hamac","Respiration guidée","Parcours thermal"],["Atelier des semences","Studio photo en plein air","Découverte à vélo"],["Photographie à l'heure dorée","Tisane au coucher du soleil","Conversations en terrasse"],["Dîner du potager","Grande table du chef","Soirée cuisines du monde"],["Cinéma en plein air","Cercle de récits","Concert acoustique"],["Observation des constellations","Balade au clair de lune","Tisane avant de dormir"]],
-es:[["Respiración al amanecer","Paseo suave al despertar","Reflexión matinal"],["Fruta fresca de temporada","Desayuno panorámico","Zumo y pan artesano"],["Observación de aves","Fotografía natural","Descubrimiento del bosque"],["Práctica de permacultura","Escultura natural","Descubrimiento en equipo"],["Almuerzo de temporada del chef","Pícnic en el jardín","Almuerzo mediterráneo"],["Lectura en hamaca","Respiración guiada","Circuito termal"],["Taller de semillas","Estudio fotográfico al aire libre","Descubrimiento en bicicleta"],["Fotografía al atardecer","Infusión al atardecer","Conversaciones en la terraza"],["Cena del huerto","Mesa compartida del chef","Noche de cocina internacional"],["Cine al aire libre","Círculo de historias","Concierto acústico"],["Observar constelaciones","Paseo a la luz de la luna","Infusión antes de dormir"]]
+const seeds={
+en:[
+["Quiet sunrise ritual","Gentle mobility practice","Birdsong listening","Morning reflection","Slow garden walk"],
+["Local harvest breakfast","Garden breakfast table","Fresh fruit and yogurt","Terrace coffee ritual","Artisan bread tasting"],
+["Guided nature exploration","Hands-on discovery walk","Outdoor observation challenge","Village learning tour","Small-group field experience"],
+["Practical skills workshop","Guided creative challenge","Collaborative learning lab","Expert demonstration","Hands-on discovery session"],
+["Seasonal chef's lunch","Garden picnic lunch","Shared lunch table","Local produce tasting","Mediterranean lunch"],
+["Guided relaxation","Quiet hammock retreat","Wellness recovery ritual","Breathing and stretching","Reading in the shade"],
+["Creative project workshop","Guided outdoor experience","Collaborative discovery","Specialist masterclass","Practical exploration lab"],
+["Golden-hour nature walk","Sunset panorama","Herbal tea terrace","Evening photography","Garden social hour"],
+["Garden-to-table dinner","Chef's seasonal menu","Shared community dinner","International food evening","Terrace dining"],
+["Live acoustic session","Outdoor film night","Evening cultural salon","Storytelling gathering","Creative night workshop"],
+["Guided stargazing","Moonlit garden walk","Quiet reflection","Herbal tea wind-down","Rest under the stars"]
+],
+fr:[
+["Rituel calme au lever du soleil","Mobilité douce matinale","Écoute du chant des oiseaux","Réflexion du matin","Promenade lente au jardin"],
+["Petit-déjeuner des récoltes locales","Table du petit-déjeuner au jardin","Fruits frais et yaourt","Café en terrasse","Dégustation de pains artisanaux"],
+["Exploration nature accompagnée","Balade découverte pratique","Défi d'observation en plein air","Visite pédagogique du village","Expérience de terrain en petit groupe"],
+["Atelier de savoir-faire","Défi créatif accompagné","Laboratoire d'apprentissage collectif","Démonstration avec un spécialiste","Séance pratique de découverte"],
+["Déjeuner du chef de saison","Pique-nique au jardin","Grande table du déjeuner","Dégustation de produits locaux","Déjeuner méditerranéen"],
+["Relaxation guidée","Pause hamac au calme","Rituel de récupération bien-être","Respiration et étirements","Lecture à l'ombre"],
+["Atelier de création","Expérience guidée en extérieur","Découverte collaborative","Masterclass thématique","Laboratoire pratique"],
+["Balade à l'heure dorée","Panorama au coucher du soleil","Tisane en terrasse","Photographie du soir","Rencontre au jardin"],
+["Dîner du potager à l'assiette","Menu de saison du chef","Dîner communautaire","Soirée gastronomique internationale","Dîner en terrasse"],
+["Concert acoustique","Cinéma en plein air","Salon culturel du soir","Cercle de récits","Atelier créatif nocturne"],
+["Observation guidée des étoiles","Promenade au clair de lune","Réflexion dans le calme","Tisane avant le repos","Repos sous les étoiles"]
+],
+es:[
+["Ritual tranquilo al amanecer","Movilidad suave matinal","Escuchar los pájaros","Reflexión de la mañana","Paseo lento por el jardín"],
+["Desayuno de productos locales","Desayuno en el jardín","Fruta fresca y yogur","Café en la terraza","Degustación de pan artesano"],
+["Exploración natural guiada","Paseo de descubrimiento","Desafío de observación al aire libre","Visita educativa de la aldea","Experiencia en grupo pequeño"],
+["Taller de habilidades","Desafío creativo guiado","Laboratorio colaborativo","Demostración de un especialista","Sesión práctica de descubrimiento"],
+["Almuerzo del chef de temporada","Pícnic en el jardín","Mesa compartida","Degustación de productos locales","Almuerzo mediterráneo"],
+["Relajación guiada","Descanso en hamaca","Ritual de bienestar","Respiración y estiramientos","Lectura a la sombra"],
+["Taller de creación","Experiencia guiada al aire libre","Descubrimiento colaborativo","Clase magistral temática","Laboratorio práctico"],
+["Paseo a la hora dorada","Panorama al atardecer","Infusión en la terraza","Fotografía al atardecer","Encuentro en el jardín"],
+["Cena del huerto a la mesa","Menú de temporada del chef","Cena comunitaria","Noche gastronómica internacional","Cena en la terraza"],
+["Concierto acústico","Cine al aire libre","Salón cultural nocturno","Círculo de historias","Taller creativo nocturno"],
+["Observación guiada de estrellas","Paseo a la luz de la luna","Reflexión tranquila","Infusión antes de descansar","Descanso bajo las estrellas"]
+]};
+const themeSlots={
+business:["Quiet planning before breakfast","Breakfast with founders","Startup idea exchange","Strategy workshop","Lunch with entrepreneurs","Focused recovery break","Mentoring and collaboration","Founder sunset conversations","Business club dinner","International networking","Quiet project reflection"],
+adventure:["Trail-ready warm-up","Breakfast for explorers","Guided cycling adventure","Archery and outdoor skills","Trailside picnic lunch","Recovery and stretching","Tree-top challenge","Sunset trail viewpoint","Explorers' dinner","Adventure stories","Night-sky discovery"],
+creative:["Morning sketchbook","Breakfast among artists","Photography walk","Open-air painting","Creative lunch table","Art-inspired rest","Collaborative art studio","Golden-hour sketching","Artists' dinner","Live performance","Moonlight inspiration"],
+nature:["Sunrise birdwatching","Organic garden breakfast","Biodiversity trail","Food-forest exploration","Farm-to-table lunch","Rest among the trees","Seed-saving workshop","Sunset wildlife observation","Seasonal garden dinner","Conservation conversation","Quiet sky observation"],
+wellness:["Mindful sunrise breathing","Nourishing breakfast","Gentle yoga outdoors","Herbal garden exploration","Balanced seasonal lunch","Spa and relaxation","Sound meditation","Sunset tai chi","Mindful dinner","Restorative evening ritual","Sleep preparation"],
+social:["Quiet morning connection","Shared garden breakfast","Group village discovery","Collaborative cooking","Community lunch","Relaxed social break","Friendly group games","Sunset conversations","Big shared dinner","Music and dancing","Gentle goodnight gathering"]
 };
-const options=[...featured,...slot,...extraTitles[L][i].map((title,j)=>[title,(slot[j%slot.length]||current)[1],(slot[j%slot.length]||current)[2]])];
-const unique=[],seen=new Set();
-for(const e of options){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);if(unique.length===5)break;}
-return unique;
+const topic=themeSlots[theme][i];
+const hash=stableIndex(p+"|"+L+"|"+i);
+const ordered=seeds[L][i].map((title,j)=>seeds[L][i][(j+hash%5)%5]);
+const context={
+en:{business:"with founders and entrepreneurial peers",adventure:"for active explorers",creative:"with fellow makers and artists",nature:"focused on biodiversity and ecological discovery",wellness:"for mindful balance and renewal",social:"with friendly community members"},
+fr:{business:"avec des entrepreneurs et fondateurs",adventure:"pour les amateurs d'aventure",creative:"avec des artistes et créateurs",nature:"autour de la biodiversité",wellness:"pour le bien-être et l'équilibre",social:"avec les membres de la communauté"},
+es:{business:"con emprendedores y fundadores",adventure:"para amantes de la aventura",creative:"con artistas y creadores",nature:"centrado en la biodiversidad",wellness:"para el bienestar y el equilibrio",social:"con miembros de la comunidad"}
+};
+const description=L==="fr"?"Une expérience "+context.fr[theme]+".":L==="es"?"Una experiencia "+context.es[theme]+".":"An experience "+context.en[theme]+".";
+const options=ordered.map((title,j)=>[title+" · "+topic,description,(slot[j%slot.length]||current)[2]]);
+return options;
 }
 
 let variation=0,last="";
