@@ -192,15 +192,13 @@ nature:[["Observación de aves","Descubre las aves al amanecer sin molestarlas."
 wellness:[["Respiración consciente","Comienza el día en calma.","Jardín de bienestar"],["Yoga suave","Recupera energía con movimientos tranquilos.","Terraza de yoga"],["Jardín de plantas aromáticas","Descubre plantas y sus usos.","Jardín de bienestar"],["Relajación guiada","Disfruta de una pausa reparadora.","Spa y bienestar"],["Meditación sonora","Participa en una sesión de sonidos relajantes.","Pabellón de bienestar"],["Meditación nocturna","Termina el día con serenidad.","Jardín zen"]],
 social:[["Café entre vecinos","Conoce a otros miembros durante la mañana.","Salón del jardín"],["Paseo en grupo","Explora la aldea con nuevos amigos.","Senderos"],["Taller de cocina colectiva","Prepara recetas de temporada en equipo.","Taller gastronómico"],["Juegos comunitarios","Disfruta de un reto amistoso.","Zona de actividades"],["Experiencia cultural compartida","Participa en una actividad creativa en grupo.","Espacio cultural"],["Música y baile con amigos","Disfruta de una noche festiva.","Vida nocturna"]]
 }};
-const schedule={0:[0],1:[],2:[1],3:[1,2],4:[],5:[3],6:[2,3,4],7:[],8:[],9:[4,5],10:[]};
-const thematic=(schedule[i]||[]).map(n=>themed[L][theme][n]);
-const defaults=pools[i]||[];
-const seen=new Set(),unique=[];
-for(const entry of [...thematic,...defaults]){
-if(!entry||entry.length!==3||seen.has(entry[0]))continue;
-seen.add(entry[0]);unique.push(entry);
-}
-return unique.length?unique:[current];
+const schedule={business:[null,null,1,2,null,3,4,null,null,5,null],adventure:[0,null,1,2,null,null,3,null,null,5,null],creative:[0,null,1,2,null,null,3,null,null,5,null],nature:[0,null,1,2,null,null,3,null,null,5,null],wellness:[0,null,1,2,null,3,4,null,null,5,null],social:[null,null,1,2,null,null,3,null,null,5,null]};
+const selected=schedule[theme][i];
+const featured=selected===null?[]:[themed[L][theme][selected]];
+const choices=[...featured,...(pools[i]||[])];
+const unique=[],seen=new Set();
+for(const e of choices){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);}
+return unique;
 }
 
 let variation=0,last="";
