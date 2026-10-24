@@ -257,15 +257,24 @@ const profileData=cnvProfiles.find(x=>/^\d{1,2}$/.test(String(profileName).trim(
 if(!profileData){return (pools[i]||[]).slice(0,5).map(x=>[x[0],x[1],x[2]]);}
 const result=[];
 const idx=Number(profileData.number)-1;
-const categoryIdx=idx<0?-1:Math.floor(idx/5);
-const pool=(L==="fr"?cnvPhaseLabels:L==="es"?cnvPhaseEs:cnvPhaseEn)[i]||cnvPhaseEn[0];
+const pool=pools[i]||[];
+const music={
+fr:{2:["Balade d'écoute des sons naturels","Écoutez le vent, les oiseaux et les rythmes du paysage.","Sentiers nature"],3:["Atelier de création musicale","Composez ou improvisez avec d'autres musiciens.","Studio musique"],6:["Jam session acoustique","Partagez une improvisation avec les artistes du village.","Studio musique"],7:["Rencontre avec les musiciens","Échangez sur les inspirations avant le concert.","Terrasse culturelle"],9:["Concert intimiste","Découvrez des artistes en live dans une ambiance chaleureuse.","Scène culturelle"]},
+en:{2:["Natural sound walk","Listen to birds, wind and the rhythms of the landscape.","Nature Trails"],3:["Music creation workshop","Compose or improvise with other musicians.","Music Studio"],6:["Acoustic jam session","Improvise together with village artists.","Music Studio"],7:["Meet the musicians","Share inspirations before the evening performance.","Cultural Terrace"],9:["Intimate live concert","Enjoy live performers in a welcoming setting.","Cultural Stage"]},
+es:{2:["Paseo de escucha natural","Escucha los pájaros, el viento y los ritmos del paisaje.","Senderos naturales"],3:["Taller de creación musical","Compón o improvisa con otros músicos.","Estudio musical"],6:["Sesión acústica improvisada","Improvisa junto a los artistas del pueblo.","Estudio musical"],7:["Encuentro con músicos","Comparte inspiraciones antes del concierto.","Terraza cultural"],9:["Concierto íntimo en vivo","Disfruta de artistas en directo en un ambiente acogedor.","Escenario cultural"]}};
+const musicProfile=idx===8;
+const specialSlots=[2,3,6,7,9];
 for(let j=0;j<5;j++){
- const focus=L==="fr"?(profileData.interests[j]):L==="es"?(cnvThemesEs[categoryIdx][j]):(cnvThemesEn[categoryIdx][j]);
- const subject=idx<0?"":L==="fr"?"":L==="es"?cnvNamesEs[idx]:cnvNamesEn[idx];
- const title=pool[j]+" — "+focus+(subject?" · "+subject:"");
- const description=L==="fr"?"Une expérience autour de "+focus+", adaptée à ce moment de la journée.":L==="es"?"Una experiencia centrada en "+focus+", adaptada a este momento del día.":"An experience focused on "+focus+", designed for this time of day.";
- const location=(pools[i]||[])[j%Math.max(1,(pools[i]||[]).length)]?.[2]||current[2];
- result.push([title,description,location]);
+ const baseChoice=pool[j%pool.length]||current;
+ let choice=[...baseChoice];
+ if(musicProfile&&music[L][i]&&j===0)choice=music[L][i].slice();
+ else if(specialSlots.includes(i)&&j===0){
+   const focus=L==="fr"?profileData.interests[(i+idx)%5]:L==="es"?cnvThemesEs[Math.floor(idx/5)][(i+idx)%5]:cnvThemesEn[Math.floor(idx/5)][(i+idx)%5];
+   const labels={fr:["Découverte personnalisée : ","Atelier autour de ","Rencontre autour de "],en:["Personal discovery: ","Workshop on ","Conversation about "],es:["Descubrimiento personal: ","Taller sobre ","Encuentro sobre "]};
+   const description={fr:"Une activité concrète proposée dans un petit groupe CNV.",en:"A hands-on activity shared with a small CNV group.",es:"Una actividad práctica en un pequeño grupo de CNV."};
+   choice=[labels[L][i%3]+focus,description[L],baseChoice[2]];
+ }
+ result.push(choice);
 }
 
 return result;
