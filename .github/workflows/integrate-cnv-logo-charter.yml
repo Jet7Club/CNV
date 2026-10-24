@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'assets/logo-cnv-2026.png'
+      - 'assets/logo-cnv-2026.jpg'
       - 'assets/reglement-interieur-fr.pdf'
       - 'assets/community-charter-en.pdf'
       - 'assets/reglamento-interno-es.pdf'
