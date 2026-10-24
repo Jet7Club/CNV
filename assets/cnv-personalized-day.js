@@ -195,9 +195,15 @@ social:[["Café entre vecinos","Conoce a otros miembros durante la mañana.","Sa
 const schedule={business:[null,null,1,2,null,3,4,null,null,5,null],adventure:[0,null,1,2,null,null,3,null,null,5,null],creative:[0,null,1,2,null,null,3,null,null,5,null],nature:[0,null,1,2,null,null,3,null,null,5,null],wellness:[0,null,1,2,null,3,4,null,null,5,null],social:[null,null,1,2,null,null,3,null,null,5,null]};
 const selected=schedule[theme][i];
 const featured=selected===null?[]:[themed[L][theme][selected]];
-const choices=[...featured,...(pools[i]||[])];
+const slot=(pools[i]||[]);
+const extraTitles={
+en:[["Sunrise breathing","Gentle wake-up walk","Morning reflection"],["Seasonal fruit breakfast","Breakfast with a view","Fresh juice and artisan bread"],["Guided birdwatching","Nature photography","Forest discovery"],["Permaculture practice","Natural sculpture","Team discovery"],["Chef's seasonal lunch","Garden picnic","Mediterranean lunch"],["Hammock reading","Breathwork reset","Thermal circuit"],["Seed-saving workshop","Outdoor photo studio","Cycling discovery"],["Golden-hour photography","Sunset herbal tea","Terrace conversations"],["Garden-to-table dinner","Chef's shared table","World cuisine evening"],["Open-air cinema","Storytelling circle","Acoustic concert"],["Constellation watching","Moonlit stroll","Bedtime herbal tea"]],
+fr:[["Respiration au lever du soleil","Promenade douce au réveil","Réflexion matinale"],["Fruits de saison au petit-déjeuner","Petit-déjeuner panoramique","Jus frais et pain artisanal"],["Observation des oiseaux","Photographie de nature","Découverte de la forêt"],["Pratique de la permaculture","Sculpture naturelle","Découverte en équipe"],["Déjeuner de saison du chef","Pique-nique au jardin","Déjeuner méditerranéen"],["Lecture dans un hamac","Respiration guidée","Parcours thermal"],["Atelier des semences","Studio photo en plein air","Découverte à vélo"],["Photographie à l'heure dorée","Tisane au coucher du soleil","Conversations en terrasse"],["Dîner du potager","Grande table du chef","Soirée cuisines du monde"],["Cinéma en plein air","Cercle de récits","Concert acoustique"],["Observation des constellations","Balade au clair de lune","Tisane avant de dormir"]],
+es:[["Respiración al amanecer","Paseo suave al despertar","Reflexión matinal"],["Fruta fresca de temporada","Desayuno panorámico","Zumo y pan artesano"],["Observación de aves","Fotografía natural","Descubrimiento del bosque"],["Práctica de permacultura","Escultura natural","Descubrimiento en equipo"],["Almuerzo de temporada del chef","Pícnic en el jardín","Almuerzo mediterráneo"],["Lectura en hamaca","Respiración guiada","Circuito termal"],["Taller de semillas","Estudio fotográfico al aire libre","Descubrimiento en bicicleta"],["Fotografía al atardecer","Infusión al atardecer","Conversaciones en la terraza"],["Cena del huerto","Mesa compartida del chef","Noche de cocina internacional"],["Cine al aire libre","Círculo de historias","Concierto acústico"],["Observar constelaciones","Paseo a la luz de la luna","Infusión antes de dormir"]]
+};
+const options=[...featured,...slot,...extraTitles[L][i].map((title,j)=>[title,(slot[j%slot.length]||current)[1],(slot[j%slot.length]||current)[2]])];
 const unique=[],seen=new Set();
-for(const e of choices){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);}
+for(const e of options){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);if(unique.length===5)break;}
 return unique;
 }
 
