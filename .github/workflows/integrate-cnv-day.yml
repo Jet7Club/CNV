@@ -44,9 +44,13 @@ jobs:
           import re
           source=Path('index.html').read_text(encoding='utf-8')
           candidates=[]
-          for m in re.finditer('chooseCategory|profile|profil|perfil',source,re.I):
-              candidates.append(source[max(0,m.start()-100):m.start()+3500])
-              if len(candidates)>=15: break
+          for needle in ['function chooseCategory','chooseCategory(', 'const profileData', 'const profiles', 'profileOptions', 'profileMap', 'categoryProfiles', 'profile-select-col']:
+              pos=0
+              for _ in range(3):
+                  i=source.find(needle,pos)
+                  if i<0: break
+                  candidates.append('MATCH '+needle+' AT '+str(i)+'\\n'+source[max(0,i-300):i+16000])
+                  pos=i+len(needle)
           Path('assets/cnv-profile-source-extract.txt').write_text('\\n--- PROFILE SOURCE ---\\n'.join(candidates),encoding='utf-8')
           print('Extracted source regions',len(candidates))
           PY
