@@ -53,12 +53,36 @@ jobs:
                   pos=i+len(needle)
           Path('assets/cnv-profile-source-extract.txt').write_text('\\n--- PROFILE SOURCE ---\\n'.join(candidates),encoding='utf-8')
           print('Extracted source regions',len(candidates))
+          class Cards(HTMLParser):
+              def __init__(self): super().__init__(); self.depth=0; self.card=None; self.field=None; self.cards=[]
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if self.card is not None: self.depth+=1
+                  elif tag in ('article','div') and 'path-card' in d.get('class','').split():
+                      self.card={'category':d.get('data-cat',''),'name':'','number':'','text':''};self.depth=1
+                  if self.card is not None and tag=='h3':self.field='name'
+                  if self.card is not None and 'path-num' in d.get('class','').split():self.field='number'
+              def handle_data(self,data):
+                  if self.card is not None:
+                      self.card['text']+=data+' '
+                      if self.field:self.card[self.field]+=data
+              def handle_endtag(self,tag):
+                  if self.card is not None:
+                      if tag in ('h3','span'):self.field=None
+                      self.depth-=1
+                      if self.depth<=0:
+                          self.card['text']=' '.join(self.card['text'].split())[:1200]
+                          self.cards.append(self.card);self.card=None;self.field=None
+          cards=Cards();cards.feed(source)
+          Path('assets/cnv-actual-profiles.json').write_text(json.dumps(cards.cards,ensure_ascii=False,indent=2),encoding='utf-8')
+          print('Extracted profile cards',len(cards.cards))
+
           PY
       - name: Commit and publish
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html assets/cnv-profile-selectors.json assets/cnv-profile-source-extract.txt
+          git add index.html assets/cnv-profile-selectors.json assets/cnv-profile-source-extract.txt assets/cnv-actual-profiles.json
           if ! git diff --cached --quiet; then
             git commit -m "Publish personalized CNV day on website"
             git push
