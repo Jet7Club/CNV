@@ -41,12 +41,20 @@ jobs:
           parser=Selects(); parser.feed(Path('index.html').read_text(encoding='utf-8'))
           Path('assets/cnv-profile-selectors.json').write_text(json.dumps(parser.groups,ensure_ascii=False,indent=2),encoding='utf-8')
           print('Extracted',len(parser.groups),'profile-like selectors')
+          import re
+          source=Path('index.html').read_text(encoding='utf-8')
+          candidates=[]
+          for m in re.finditer(r'function\\s+chooseCategory\\s*\\(|(?:profile|profil|perfil)(?:s|List|Options|Data)?\\s*[:=]',source,re.I):
+              candidates.append(source[max(0,m.start()-100):m.start()+3500])
+              if len(candidates)>=15: break
+          Path('assets/cnv-profile-source-extract.txt').write_text('\\n--- PROFILE SOURCE ---\\n'.join(candidates),encoding='utf-8')
+          print('Extracted source regions',len(candidates))
           PY
       - name: Commit and publish
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html assets/cnv-profile-selectors.json
+          git add index.html assets/cnv-profile-selectors.json assets/cnv-profile-source-extract.txt
           if ! git diff --cached --quiet; then
             git commit -m "Publish personalized CNV day on website"
             git push
