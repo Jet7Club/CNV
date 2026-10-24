@@ -3,7 +3,9 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'assets/logo-cnv-2026.jpg'
+      - '.github/scripts/integrate_cnv_logo_charter.py'
+      - '.github/workflows/integrate-cnv-logo-charter.yml'
+      - 'assets/LOGO CNV.png'
       - 'assets/reglement-interieur-fr.pdf'
       - 'assets/community-charter-en.pdf'
       - 'assets/reglamento-interno-es.pdf'
