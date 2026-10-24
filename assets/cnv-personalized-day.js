@@ -241,17 +241,20 @@ nature:["Sunrise birdwatching","Organic garden breakfast","Biodiversity trail","
 wellness:["Mindful sunrise breathing","Nourishing breakfast","Gentle yoga outdoors","Herbal garden exploration","Balanced seasonal lunch","Spa and relaxation","Sound meditation","Sunset tai chi","Mindful dinner","Restorative evening ritual","Sleep preparation"],
 social:["Quiet morning connection","Shared garden breakfast","Group village discovery","Collaborative cooking","Community lunch","Relaxed social break","Friendly group games","Sunset conversations","Big shared dinner","Music and dancing","Gentle goodnight gathering"]
 };
-const topic=themeSlots[theme][i];
 const hash=stableIndex(p+"|"+L+"|"+i);
-const ordered=seeds[L][i].map((title,j)=>seeds[L][i][(j+hash%5)%5]);
-const context={
-en:{business:"with founders and entrepreneurial peers",adventure:"for active explorers",creative:"with fellow makers and artists",nature:"focused on biodiversity and ecological discovery",wellness:"for mindful balance and renewal",social:"with friendly community members"},
-fr:{business:"avec des entrepreneurs et fondateurs",adventure:"pour les amateurs d'aventure",creative:"avec des artistes et créateurs",nature:"autour de la biodiversité",wellness:"pour le bien-être et l'équilibre",social:"avec les membres de la communauté"},
-es:{business:"con emprendedores y fundadores",adventure:"para amantes de la aventura",creative:"con artistas y creadores",nature:"centrado en la biodiversidad",wellness:"para el bienestar y el equilibrio",social:"con miembros de la comunidad"}
+const descriptions={
+en:{business:"Connect ideas and people in an entrepreneurial setting.",adventure:"Explore an active outdoor experience.",creative:"Make something original with fellow artists.",nature:"Discover biodiversity and regenerative landscapes.",wellness:"Reconnect with your body and find balance.",social:"Enjoy meaningful moments with other members."},
+fr:{business:"Développez vos idées avec des entrepreneurs.",adventure:"Vivez une découverte active en plein air.",creative:"Exprimez votre créativité avec des artistes.",nature:"Découvrez la biodiversité et les paysages vivants.",wellness:"Retrouvez équilibre et sérénité.",social:"Partagez un moment convivial avec les membres."},
+es:{business:"Desarrolla ideas con otros emprendedores.",adventure:"Disfruta de una experiencia activa al aire libre.",creative:"Expresa tu creatividad con otros artistas.",nature:"Descubre la biodiversidad y los paisajes.",wellness:"Recupera equilibrio y serenidad.",social:"Comparte buenos momentos con otros miembros."}
 };
-const description=L==="fr"?"Une expérience "+context.fr[theme]+".":L==="es"?"Una experiencia "+context.es[theme]+".":"An experience "+context.en[theme]+".";
-const options=ordered.map((title,j)=>[title+" · "+topic,description,(slot[j%slot.length]||current)[2]]);
-return options;
+const catalog=seeds[L][i];
+const result=[];
+for(let j=0;j<5;j++){
+const index=(j+hash%5)%5;
+const location=(pools[i]||[])[j%Math.max(1,(pools[i]||[]).length)]?.[2]||current[2];
+result.push([catalog[index],descriptions[L][theme],location]);
+}
+return result;
 }
 
 let variation=0,last="";
