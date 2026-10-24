@@ -151,7 +151,10 @@ choices.forEach((choice,n)=>{const option=document.createElement("option");optio
 picker.addEventListener("change",()=>{const chosen=choices[Number(picker.value)]||choices[0];h.textContent=chosen[0];desc.textContent=chosen[1];place.textContent="⌖ "+chosen[2];});
 const choiceWrap=document.createElement("div");choiceWrap.className="cnv-day-choice-wrap";
 const choiceText=document.createElement("span");choiceText.textContent=choiceLabel+": ";
-choiceWrap.append(choiceText,picker);content.appendChild(choiceWrap);
+const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";
+next.textContent=langCode==="fr"?"↻ Autre proposition":langCode==="es"?"↻ Otra propuesta":"↻ Another suggestion";
+next.addEventListener("click",()=>{const current=Number(picker.value);const nextIndex=(current+1)%choices.length;picker.value=String(nextIndex);picker.dispatchEvent(new Event("change",{bubbles:false}));});
+choiceWrap.append(choiceText,picker,next);content.appendChild(choiceWrap);
 item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
 function init(){
 if(document.getElementById("cnv-day-experience"))return;
