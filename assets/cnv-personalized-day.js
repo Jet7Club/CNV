@@ -123,10 +123,36 @@ return [pool[theme][offset],pool[theme][(offset+1)%3],pool[theme][(offset+2)%3]]
 }
 
 let variation=0,last="";
-function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=tr[lang()]||tr.en;const key=profile();const fingerprint=key+"|"+selectedProfile()+"|"+lang()+"|"+variation;if(last===fingerprint)return;last=fingerprint;const p=profiles[key];root.innerHTML="";const heading=document.createElement("h3");heading.textContent=l.title;root.appendChild(heading);const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=l.sub;root.appendChild(intro);const bar=document.createElement("div");bar.className="cnv-day-bar";const pill=document.createElement("span");pill.className="cnv-day-pill";pill.textContent="✧ "+(selectedProfile()||translations[lang()]?.profiles[key]||p[0]);bar.appendChild(pill);const btn=document.createElement("button");btn.type="button";btn.textContent="↻ "+l.again;btn.addEventListener("click",()=>{variation++;last="";render()});bar.appendChild(btn);root.appendChild(bar);
+function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=tr[lang()]||tr.en;const key=profile();const fingerprint=key+"|"+selectedProfile()+"|"+lang()+"|"+variation;if(last===fingerprint)return;last=fingerprint;const p=profiles[key];root.innerHTML="";const heading=document.createElement("h3");heading.textContent=l.title;root.appendChild(heading);const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=l.sub;root.appendChild(intro);const bar=document.createElement("div");bar.className="cnv-day-bar";const pill=document.createElement("span");pill.className="cnv-day-pill";pill.textContent="✧ "+(selectedProfile()||translations[lang()]?.profiles[key]||p[0]);bar.appendChild(pill);root.appendChild(bar);
 const timeline=document.createElement("div");timeline.className="cnv-day-timeline";const unique=themedExperiences(selectedProfile(),key,lang(),variation);
 base.forEach((entry,i)=>{let data=entry.slice();if([3,6,9].includes(i)){const v=p[[3,6,9].indexOf(i)+2];data=[p[1],...v];}if(variation%2){if(i===2)data=["trees","A mindful nature walk","Discover hidden paths and beautiful green spaces.","Nature trails"];if(i===5)data=["heart","A peaceful reset","Try gentle movement, a spa ritual or simply unwind.","Spa & Wellness"];}
-const locale=translations[lang()];if(locale){const v=locale.entries[i];data=[data[0],...v];if([3,6,9].includes(i))data=[data[0],...locale.special[key][[3,6,9].indexOf(i)]];if(variation%2&&i===2)data=["trees",...locale.alternate[0]];if(variation%2&&i===5)data=["heart",...locale.alternate[1]];}if([3,6,9].includes(i))data=[data[0],...unique[[3,6,9].indexOf(i)]];const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
+const locale=translations[lang()];if(locale){const v=locale.entries[i];data=[data[0],...v];if([3,6,9].includes(i))data=[data[0],...locale.special[key][[3,6,9].indexOf(i)]];if(variation%2&&i===2)data=["trees",...locale.alternate[0]];if(variation%2&&i===5)data=["heart",...locale.alternate[1]];}if([3,6,9].includes(i))data=[data[0],...unique[[3,6,9].indexOf(i)]];const item=document.createElement("article");item.className="cnv-day-item";const clock=document.createElement("span");clock.className="cnv-day-time";clock.textContent=times[i];const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=icons[data[0]]||"✧";const content=document.createElement("div");const h=document.createElement("h4");h.textContent=data[1];const desc=document.createElement("p");desc.textContent=data[2];const place=document.createElement("small");place.textContent="⌖ "+data[3];content.append(h,desc,place);
+const picker=document.createElement("select");picker.className="cnv-day-choice";
+const langCode=lang();const profileName=selectedProfile();const category=key;
+const themed=themedExperiences(profileName,category,langCode,0);
+const local=translations[langCode];
+const choices=[data.slice(1)];
+if([3,6,9].includes(i)){
+for(const candidate of themed){if(!choices.some(v=>v[0]===candidate[0]))choices.push(candidate);}
+}else{
+const extra=(itineraryThemes[langCode]||itineraryThemes.en);
+const themeIndex=/nature|natural|forest|ecolog|jardin/i.test(clean(profileName))?1:/art|creat|music/i.test(clean(profileName))?2:/sport|advent|explor/i.test(clean(profileName))?4:/wellness|yoga|spa|senior/i.test(clean(profileName))?3:/social|family|famille|community/i.test(clean(profileName))?5:0;
+const theme=extra[themeIndex];
+const alt=local?.alternate||[];
+const additions=(i===0||i===1||i===4||i===8||i===10)?[
+(i===0?local?.entries[2]:i===1?local?.entries[4]:i===4?local?.entries[8]:i===8?local?.entries[4]:local?.entries[7]),
+theme[(i+1)%3]
+]:[theme[i%3],theme[(i+1)%3],...(i===2||i===5?alt.slice(0,1):[])];
+for(const candidate of additions){if(candidate&&!choices.some(v=>v[0]===candidate[0]))choices.push(candidate);}
+}
+const choiceLabel=langCode==="fr"?"Autre activité à ce créneau":langCode==="es"?"Otra actividad en este horario":"Alternative activity for this time";
+picker.setAttribute("aria-label",choiceLabel+" "+times[i]);picker.title=choiceLabel;
+choices.forEach((choice,n)=>{const option=document.createElement("option");option.value=String(n);option.textContent=choice[0];picker.appendChild(option);});
+picker.addEventListener("change",()=>{const chosen=choices[Number(picker.value)]||choices[0];h.textContent=chosen[0];desc.textContent=chosen[1];place.textContent="⌖ "+chosen[2];});
+const choiceWrap=document.createElement("div");choiceWrap.className="cnv-day-choice-wrap";
+const choiceText=document.createElement("span");choiceText.textContent=choiceLabel+": ";
+choiceWrap.append(choiceText,picker);content.appendChild(choiceWrap);
+item.append(clock,symbol,content);timeline.appendChild(item);});root.appendChild(timeline);const foot=document.createElement("p");foot.className="cnv-day-foot";foot.textContent="✧ "+l.note;root.appendChild(foot);}
 function init(){
 if(document.getElementById("cnv-day-experience"))return;
 const art=document.getElementById("artoflife"),life=document.getElementById("life");
