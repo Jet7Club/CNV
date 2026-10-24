@@ -1,0 +1,302 @@
+[
+  {
+    "category": "Visionnaire",
+    "name": "Fondateur visionnaire",
+    "number": "01",
+    "text": "01 Visionnaire Fondateur visionnaire Pense à dix ou vingt ans, recherche du sens, de l’impact et de l’échelle. Univers conseillé : Luxury + Pro Parcours CNV : Marche au lever du soleil → travail profond → salon stratégique → dîner au coucher du soleil"
+  },
+  {
+    "category": "Visionnaire",
+    "name": "Architecte de sens",
+    "number": "02",
+    "text": "02 Visionnaire Architecte de sens Construit des projets alignés avec ses valeurs et un impact de long terme. Univers conseillé : Natural + Pro Parcours CNV : Matin de réflexion → co-création → mentorat → soirée calme"
+  },
+  {
+    "category": "Visionnaire",
+    "name": "Créateur du futur",
+    "number": "03",
+    "text": "03 Visionnaire Créateur du futur Recherche innovation, talents et grandes idées autour de lui. Univers conseillé : Young + Pro Parcours CNV : Brief matinal → ateliers → rencontres investisseurs → musique en direct"
+  },
+  {
+    "category": "Visionnaire",
+    "name": "Connecteur global",
+    "number": "04",
+    "text": "04 Visionnaire Connecteur global Circule entre plusieurs univers et crée des ponts entre les personnes. Univers conseillé : Luxury + Social Parcours CNV : Petit-déjeuner de connexions → rendez-vous ciblés → rencontre sociale → dîner"
+  },
+  {
+    "category": "Visionnaire",
+    "name": "Bâtisseur d’héritage",
+    "number": "05",
+    "text": "05 Visionnaire Bâtisseur d’héritage Recherche beauté, profondeur et création de valeur intergénérationnelle. Univers conseillé : Luxury + Sanctuary Parcours CNV : Temps dans la nature → échanges de haut niveau → table familiale → soirée contemplative"
+  },
+  {
+    "category": "Créatif",
+    "name": "Artiste en résidence",
+    "number": "06",
+    "text": "06 Créatif Artiste en résidence A besoin d’inspiration, de beauté et de temps pour créer. Univers conseillé : Natural + Social Parcours CNV : Création le matin → marche nature → dîner partagé → soirée douce"
+  },
+  {
+    "category": "Créatif",
+    "name": "Curateur de design",
+    "number": "07",
+    "text": "07 Créatif Curateur de design Vit à travers l’esthétique, les matières et les expériences. Univers conseillé : Luxury + Social Parcours CNV : Petit-déjeuner lent → exploration design → pause bien-être → soirée intime"
+  },
+  {
+    "category": "Créatif",
+    "name": "Conteur",
+    "number": "08",
+    "text": "08 Créatif Conteur Transforme les expériences en récits, contenus et souvenirs. Univers conseillé : Young + Social Parcours CNV : Captation → interviews → montage → événement communautaire"
+  },
+  {
+    "category": "Créatif",
+    "name": "Passionné de musique",
+    "number": "09",
+    "text": "09 Créatif Passionné de musique Recherche rythme, émotion et vie nocturne de qualité. Univers conseillé : Young + Vie nocturne Parcours CNV : Mouvement → session de travail → rencontre au coucher du soleil → soirée musicale"
+  },
+  {
+    "category": "Créatif",
+    "name": "Explorateur du goût",
+    "number": "10",
+    "text": "10 Créatif Explorateur du goût Découvre les lieux par la gastronomie, les ambiances et les rencontres. Univers conseillé : Glamping + Food Parcours CNV : Visite des jardins → déjeuner dégustation → atelier → table du chef"
+  },
+  {
+    "category": "Bâtisseur",
+    "name": "Entrepreneur opérateur",
+    "number": "11",
+    "text": "11 Bâtisseur Entrepreneur opérateur Aime l’action, la vitesse et transformer les idées en réalisations. Univers conseillé : Pro + Young Parcours CNV : Point matinal → production → rencontres professionnelles → sport"
+  },
+  {
+    "category": "Bâtisseur",
+    "name": "Leader de start-up",
+    "number": "12",
+    "text": "12 Bâtisseur Leader de start-up A besoin d’un écosystème de bâtisseurs et d’un rythme concret. Univers conseillé : Pro + Social Parcours CNV : Concentration → atelier d’équipe → café investisseurs → conversation au coin du feu"
+  },
+  {
+    "category": "Bâtisseur",
+    "name": "Entrepreneur à impact",
+    "number": "13",
+    "text": "13 Bâtisseur Entrepreneur à impact Associe croissance économique et valeur sociale ou environnementale. Univers conseillé : Pro + Perma Parcours CNV : Marche terrain → atelier business → rendez-vous partenaires → long dîner"
+  },
+  {
+    "category": "Bâtisseur",
+    "name": "Investisseur résident",
+    "number": "14",
+    "text": "14 Bâtisseur Investisseur résident Recherche opportunités d’investissement, calme et conversations de qualité. Univers conseillé : Luxury + Pro Parcours CNV : Bien-être → rendez-vous sélectionnés → visite du village → dîner privé"
+  },
+  {
+    "category": "Bâtisseur",
+    "name": "Héritier d’entreprise familiale",
+    "number": "15",
+    "text": "15 Bâtisseur Héritier d’entreprise familiale Fait le lien entre héritage, modernité et renouvellement. Univers conseillé : Luxury + Family Parcours CNV : Petit-déjeuner familial → gouvernance → loisirs → soirée partagée"
+  },
+  {
+    "category": "Connecteur",
+    "name": "Catalyseur de communauté",
+    "number": "16",
+    "text": "16 Connecteur Catalyseur de communauté S’épanouit lorsque les personnes se rencontrent et que la confiance grandit. Univers conseillé : Social + Hub Parcours CNV : Cercles café → introductions → déjeuner partagé → musique"
+  },
+  {
+    "category": "Connecteur",
+    "name": "Hôte de cercle stratégique",
+    "number": "17",
+    "text": "17 Connecteur Hôte de cercle stratégique Aime réunir les bonnes personnes autour de conversations à forte valeur. Univers conseillé : Pro + Luxury Parcours CNV : Brief initial → tables rondes → pause spa → dîner au salon"
+  },
+  {
+    "category": "Connecteur",
+    "name": "Pont culturel",
+    "number": "18",
+    "text": "18 Connecteur Pont culturel Relie les cultures, les générations et les univers différents. Univers conseillé : Social + Sanctuary Parcours CNV : Marche & discussion → atelier culturel → repas commun → récits"
+  },
+  {
+    "category": "Connecteur",
+    "name": "Connecteur discret",
+    "number": "19",
+    "text": "19 Connecteur Connecteur discret Préfère la qualité des échanges à la quantité. Univers conseillé : Luxury + Social Parcours CNV : Petits-déjeuners 1:1 → rendez-vous discrets → apéritif au coucher du soleil"
+  },
+  {
+    "category": "Connecteur",
+    "name": "Curateur d’événements",
+    "number": "20",
+    "text": "20 Connecteur Curateur d’événements Imagine et organise des expériences significatives pour les autres. Univers conseillé : Young + Social Parcours CNV : Préparation → conception de l’expérience → accueil → célébration"
+  },
+  {
+    "category": "Régénération",
+    "name": "Passionné de bien-être",
+    "number": "21",
+    "text": "21 Régénération Passionné de bien-être Place récupération, mouvement et équilibre intérieur au premier plan. Univers conseillé : Spa + Sanctuary Parcours CNV : Yoga → hydrothérapie → déjeuner sain → sommeil précoce"
+  },
+  {
+    "category": "Régénération",
+    "name": "Thérapeute / Mentor",
+    "number": "22",
+    "text": "22 Régénération Thérapeute / Mentor A besoin de calme, de confiance et d’espaces propices à la transformation. Univers conseillé : Spa + Natural Parcours CNV : Méditation → séances → marche régénérante → dîner calme"
+  },
+  {
+    "category": "Régénération",
+    "name": "Guide du souffle et du corps",
+    "number": "23",
+    "text": "23 Régénération Guide du souffle et du corps Travaille avec le mouvement, le souffle et la présence. Univers conseillé : Spa + Activities Parcours CNV : Cours au lever → accompagnements → récupération piscine → thé communautaire"
+  },
+  {
+    "category": "Régénération",
+    "name": "Explorateur longévité",
+    "number": "24",
+    "text": "24 Régénération Explorateur longévité Optimise santé, sommeil, alimentation et récupération. Univers conseillé : Spa + Food Parcours CNV : Mesures & mouvement → déjeuner nutrition → circuit thermal → repos profond"
+  },
+  {
+    "category": "Régénération",
+    "name": "Chercheur intérieur",
+    "number": "25",
+    "text": "25 Régénération Chercheur intérieur Recherche silence, rituels et alignement personnel. Univers conseillé : Sanctuary + Spa Parcours CNV : Contemplation → journal → soin → soirée aux bougies"
+  },
+  {
+    "category": "Explorateur",
+    "name": "Explorateur nature",
+    "number": "26",
+    "text": "26 Explorateur Explorateur nature A besoin de sentiers, de biodiversité et de liberté en plein air. Univers conseillé : Natural + Activities Parcours CNV : Randonnée tôt → déjeuner dehors → mobilité → observation des étoiles"
+  },
+  {
+    "category": "Explorateur",
+    "name": "Esprit d’aventure",
+    "number": "27",
+    "text": "27 Explorateur Esprit d’aventure Aime la nouveauté, le mouvement et les défis en extérieur. Univers conseillé : Free Camp + Activities Parcours CNV : Entraînement → exploration → récupération eau froide → célébration"
+  },
+  {
+    "category": "Explorateur",
+    "name": "Voyageur lent",
+    "number": "28",
+    "text": "28 Explorateur Voyageur lent Préfère l’immersion, la douceur et la profondeur locale. Univers conseillé : Glamping + Perma Parcours CNV : Marche village → rencontre artisans → long repas → calme sous la lune"
+  },
+  {
+    "category": "Explorateur",
+    "name": "Âme nomade",
+    "number": "29",
+    "text": "29 Explorateur Âme nomade Recherche flexibilité, ouverture et habitat léger. Univers conseillé : Free Camp + Social Parcours CNV : Travail mobile → rencontres spontanées → événement le soir"
+  },
+  {
+    "category": "Explorateur",
+    "name": "Pionnier écologique",
+    "number": "30",
+    "text": "30 Explorateur Pionnier écologique Explore des manières régénératives d’habiter la terre. Univers conseillé : Perma + Natural Parcours CNV : Tour des jardins → laboratoire durable → dîner au champ → repos tôt"
+  },
+  {
+    "category": "Famille",
+    "name": "Parent attentif",
+    "number": "31",
+    "text": "31 Famille Parent attentif Observe les besoins de chacun, protège les temps de qualité et recherche un environnement apaisé où la famille peut se retrouver sans pression. Univers conseillé : Family + Social + Natural Parcours CNV : Petit-déjeuner ensemble → activité douce en famille → temps libre pour chacun → moment partagé au coucher du soleil → dîner convivial"
+  },
+  {
+    "category": "Famille",
+    "name": "Parent conscient",
+    "number": "32",
+    "text": "32 Famille Parent conscient Choisit avec attention l’éducation, l’alimentation, le rythme de vie et la relation à la nature afin d’offrir un cadre sain, cohérent et porteur de sens. Univers conseillé : Family + Perma + Natural Parcours CNV : Réveil tranquille → découverte nature → déjeuner sain → atelier ou apprentissage libre → cercle familial en fin de journée"
+  },
+  {
+    "category": "Famille",
+    "name": "Parent exemplaire",
+    "number": "33",
+    "text": "33 Famille Parent exemplaire Veut transmettre par son propre mode de vie : respect, curiosité, santé, responsabilité et ouverture aux autres. L’exemple compte autant que les paroles. Univers conseillé : Family + Luxury + Community Parcours CNV : Marche ou sport en famille → projet ou activité partagée → déjeuner inspirant → rencontre intergénérationnelle → dîner autour d’une grande table"
+  },
+  {
+    "category": "Famille",
+    "name": "Parent explorateur",
+    "number": "34",
+    "text": "34 Famille Parent explorateur Aime faire découvrir le monde à ses enfants par la nature, le sport, les ateliers, les rencontres et les expériences nouvelles, tout en laissant une vraie place à la spontanéité. Univers conseillé : Family + Activities + Natural Parcours CNV : Petit-déjeuner dehors → exploration nature → activité ou atelier découverte → baignade → soirée sous les étoiles"
+  },
+  {
+    "category": "Famille",
+    "name": "Parent complice",
+    "number": "35",
+    "text": "35 Famille Parent complice Recherche une relation de confiance, notamment avec les adolescents : suffisamment de liberté pour grandir, mais aussi de vrais moments choisis à partager en famille. Univers conseillé : Family + Young + Social Parcours CNV : Brunch ensemble → activités séparées selon les envies → retrouvailles au coucher du soleil → dîner familial → soirée libre pour chacun"
+  },
+  {
+    "category": "Nature",
+    "name": "Passionné de permaculture",
+    "number": "36",
+    "text": "36 Nature Passionné de permaculture Se sent ancré par les jardins, les cycles naturels et la nourriture. Univers conseillé : Perma + Natural Parcours CNV : Jardin → déjeuner de saison → atelier → récolte au coucher du soleil"
+  },
+  {
+    "category": "Nature",
+    "name": "Épicurien responsable",
+    "number": "37",
+    "text": "37 Nature Épicurien responsable Recherche plaisir, qualité et origine dans l’alimentation. Univers conseillé : Food + Luxury Parcours CNV : Marché → dégustation → repos → dîner du chef"
+  },
+  {
+    "category": "Nature",
+    "name": "Minimaliste",
+    "number": "38",
+    "text": "38 Nature Minimaliste Veut moins de distractions et davantage de clarté. Univers conseillé : Natural + Sanctuary Parcours CNV : Silence → travail concentré → repas simple → soirée tôt"
+  },
+  {
+    "category": "Nature",
+    "name": "Rééquilibreur de vie",
+    "number": "39",
+    "text": "39 Nature Rééquilibreur de vie A besoin de sortir du rythme urbain et de retrouver de l’espace. Univers conseillé : Spa + Natural Parcours CNV : Récupération → travail profond → massage → dîner lent"
+  },
+  {
+    "category": "Nature",
+    "name": "Réinventeur de seconde vie",
+    "number": "40",
+    "text": "40 Nature Réinventeur de seconde vie Entre dans une nouvelle étape de vie avec intention. Univers conseillé : Senior + Spa Parcours CNV : Mouvement doux → nouvel apprentissage → thé social → soirée paisible"
+  },
+  {
+    "category": "Leadership",
+    "name": "Dirigeant en retraite stratégique",
+    "number": "41",
+    "text": "41 Leadership Dirigeant en retraite stratégique Recherche calme et hauteur de vue pour prendre des décisions importantes. Univers conseillé : Luxury + Pro Parcours CNV : Petit-déjeuner privé → réunions de haut niveau → spa → dîner stratégique"
+  },
+  {
+    "category": "Leadership",
+    "name": "Décideur stratégique",
+    "number": "42",
+    "text": "42 Leadership Décideur stratégique Valorise clarté, discrétion et service de très haut niveau. Univers conseillé : Luxury + Sanctuary Parcours CNV : Travail concentré → marche silencieuse → rencontres choisies"
+  },
+  {
+    "category": "Leadership",
+    "name": "Bâtisseur d’équipe",
+    "number": "43",
+    "text": "43 Leadership Bâtisseur d’équipe Rassemble les groupes autour d’une énergie et d’objectifs communs. Univers conseillé : Pro + Activities Parcours CNV : Atelier → défi extérieur → débrief → soirée conviviale"
+  },
+  {
+    "category": "Leadership",
+    "name": "Orateur",
+    "number": "44",
+    "text": "44 Leadership Orateur Se nourrit des idées, des échanges et de la présence publique. Univers conseillé : Pro + Social Parcours CNV : Préparation → intervention → rencontres → conversations au salon"
+  },
+  {
+    "category": "Leadership",
+    "name": "Mentor",
+    "number": "45",
+    "text": "45 Leadership Mentor Souhaite transmettre son expérience dans un cadre chaleureux. Univers conseillé : Senior + Pro Parcours CNV : Réflexion → mentorat → marche calme → dîner salon"
+  },
+  {
+    "category": "Lifestyle",
+    "name": "Esprit libre en mouvement",
+    "number": "46",
+    "text": "46 Lifestyle Esprit libre en mouvement Aime le mouvement, les rencontres et une vie flexible. Univers conseillé : Young + Social Parcours CNV : Entraînement → travail partagé → événement → soirée festive"
+  },
+  {
+    "category": "Lifestyle",
+    "name": "Amateur de retraite premium",
+    "number": "47",
+    "text": "47 Lifestyle Amateur de retraite premium Recherche confort, beauté et fluidité. Univers conseillé : Luxury + Spa Parcours CNV : Petit-déjeuner tardif → soin → lecture → apéritif au coucher du soleil"
+  },
+  {
+    "category": "Lifestyle",
+    "name": "Évasion romantique en glamping",
+    "number": "48",
+    "text": "48 Lifestyle Évasion romantique en glamping Veut une nature mémorable avec douceur et charme. Univers conseillé : Glamping + Spa Parcours CNV : Matin lent → exploration → bien-être en duo → dîner aux bougies"
+  },
+  {
+    "category": "Lifestyle",
+    "name": "Sérénité senior",
+    "number": "49",
+    "text": "49 Lifestyle Sérénité senior Valorise paix, santé, dignité et beaux environnements. Univers conseillé : Senior + Sanctuary Parcours CNV : Mouvement doux → thé social → soirée régénérante"
+  },
+  {
+    "category": "Lifestyle",
+    "name": "Campeur esprit libre",
+    "number": "50",
+    "text": "50 Lifestyle Campeur esprit libre Recherche simplicité, ouverture et aventure. Univers conseillé : Free Camp + Activities Parcours CNV : Matin dehors → journée nomade → feu communautaire"
+  }
+]
