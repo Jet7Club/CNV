@@ -122,26 +122,64 @@ const offset=(hash+dayVariant)%3;
 return [pool[theme][offset],pool[theme][(offset+1)%3],pool[theme][(offset+2)%3]];
 }
 
-const cnvSlotPools={};
-for(const locale of ["fr","en","es"]){
-const translated=translations[locale];
-const fallback=locale==="en"?base.map(e=>e.slice(1)):translated.entries;
-const pool=(itineraryThemes[locale]||itineraryThemes.en);
-cnvSlotPools[locale]=fallback.map((entry,i)=>{
-const generic=Array.isArray(entry)?entry:[];
-const theme=(i===0||i===1||i===4||i===8||i===10)?pool[5]:i===5?pool[3]:i===2||i===7?pool[1]:pool[2];
-return [generic,...theme].filter(v=>Array.isArray(v)&&v.length===3);
-});
-}
+const cnvSlotPools={
+en:[
+[["Sunrise stretching","Gently wake up with mindful movement.","Wellness Garden"],["Morning meditation","Start the day with fresh air and quiet reflection.","Quiet Garden"]],
+[["Shared organic breakfast","Meet fellow members over local produce.","Dining & Gastronomy"],["Garden breakfast","Enjoy a relaxed breakfast outdoors.","Garden Terrace"]],
+[["Forest trail walk","Discover local wildlife on shaded trails.","Nature Trails"],["Guided permaculture tour","Explore edible gardens and regenerative growing.","Permaculture"]],
+[["Outdoor adventure","Explore a guided activity suited to your interests.","Activities & Experiences"],["Creative workshop","Try photography or painting with other members.","Creative Studio"]],
+[["Farm-to-table lunch","Enjoy fresh seasonal dishes.","Dining & Gastronomy"],["Community lunch","Share a relaxed meal and conversations.","Community Dining"]],
+[["Spa and relaxation","Unwind in a quiet wellness space.","Spa & Wellness"],["Gentle yoga","Restore your energy through movement.","Yoga Terrace"]],
+[["Afternoon workshop","Explore an activity that inspires you.","Activities & Experiences"],["Collaborative exchange","Join a small-group experience.","Community Hub"]],
+[["Sunset nature walk","Watch the gardens glow in the evening light.","Garden Trails"],["Garden mocktails","Meet friends for a refreshing alcohol-free drink.","Garden Lounge"]],
+[["Seasonal dinner","Taste locally inspired dishes.","Dining & Gastronomy"],["Shared table dinner","Enjoy good food and new connections.","Community Dining"]],
+[["Live music","Enjoy an intimate evening performance.","Cultural Stage"],["Evening conversations","Exchange ideas with fellow members.","Community Lounge"]],
+[["Stargazing","Watch the stars in a peaceful setting.","Quiet Nature Area"],["Restful evening","Wind down with a book and a calm atmosphere.","Your micro-village"]]
+],
+fr:[
+[["Étirements au lever du soleil","Réveillez votre corps en douceur.","Jardin bien-être"],["Méditation matinale","Commencez la journée dans le calme.","Jardin paisible"]],
+[["Petit-déjeuner partagé","Rencontrez les membres autour de produits locaux.","Restauration & Gastronomie"],["Petit-déjeuner au jardin","Savourez votre matinée en plein air.","Terrasse du jardin"]],
+[["Balade en forêt","Découvrez les sentiers et la biodiversité.","Sentiers nature"],["Visite de la permaculture","Explorez les jardins nourriciers et les cultures écologiques.","Permaculture"]],
+[["Aventure de plein air","Participez à une activité adaptée à vos envies.","Activités & Expériences"],["Atelier créatif","Essayez la photographie ou la peinture.","Atelier créatif"]],
+[["Déjeuner des producteurs","Savourez des plats frais et de saison.","Restauration & Gastronomie"],["Déjeuner convivial","Partagez un repas et des conversations.","Restaurant communautaire"]],
+[["Pause spa","Détendez-vous dans un espace bien-être.","Spa & Bien-être"],["Yoga doux","Retrouvez votre énergie avec des mouvements simples.","Terrasse yoga"]],
+[["Atelier de l'après-midi","Découvrez une expérience qui vous inspire.","Activités & Expériences"],["Échange collaboratif","Participez à une expérience en petit groupe.","Espace communautaire"]],
+[["Balade au coucher du soleil","Profitez de la lumière dorée des jardins.","Sentiers des jardins"],["Cocktail sans alcool","Retrouvez vos amis autour d'une boisson fraîche.","Lounge jardin"]],
+[["Dîner de saison","Découvrez une cuisine locale et créative.","Restauration & Gastronomie"],["Grande tablée","Partagez un dîner et de nouvelles rencontres.","Restaurant communautaire"]],
+[["Musique live","Découvrez un concert intimiste.","Scène culturelle"],["Conversations du soir","Échangez avec les autres membres.","Salon communautaire"]],
+[["Observation des étoiles","Admirez le ciel nocturne dans le calme.","Espace nature"],["Soirée reposante","Terminez la journée avec un livre.","Votre micro-village"]]
+],
+es:[
+[["Estiramientos al amanecer","Despierta suavemente con movimientos conscientes.","Jardín de bienestar"],["Meditación matinal","Empieza el día con calma.","Jardín tranquilo"]],
+[["Desayuno compartido","Conoce a otros miembros mientras disfrutas productos locales.","Gastronomía"],["Desayuno en el jardín","Disfruta de una mañana al aire libre.","Terraza del jardín"]],
+[["Paseo por el bosque","Descubre senderos y biodiversidad.","Senderos naturales"],["Visita a la permacultura","Explora huertos y cultivos ecológicos.","Permacultura"]],
+[["Aventura al aire libre","Participa en una actividad adaptada a tus intereses.","Actividades y experiencias"],["Taller creativo","Prueba fotografía o pintura.","Taller creativo"]],
+[["Almuerzo de temporada","Disfruta de platos frescos y locales.","Gastronomía"],["Almuerzo comunitario","Comparte una comida y nuevas conversaciones.","Comedor comunitario"]],
+[["Pausa de spa","Relájate en un espacio de bienestar.","Spa y bienestar"],["Yoga suave","Recupera tu energía con movimientos tranquilos.","Terraza de yoga"]],
+[["Taller de tarde","Descubre una experiencia inspiradora.","Actividades y experiencias"],["Intercambio colaborativo","Participa en una experiencia en grupo.","Espacio comunitario"]],
+[["Paseo al atardecer","Disfruta de la luz dorada en los jardines.","Senderos del jardín"],["Cócteles sin alcohol","Comparte una bebida refrescante con amigos.","Salón del jardín"]],
+[["Cena de temporada","Descubre una cocina local y creativa.","Gastronomía"],["Cena compartida","Conoce gente nueva alrededor de una mesa.","Comedor comunitario"]],
+[["Música en vivo","Disfruta de un concierto íntimo.","Escenario cultural"],["Conversaciones nocturnas","Intercambia ideas con otros miembros.","Salón comunitario"]],
+[["Observar las estrellas","Contempla el cielo nocturno en paz.","Zona natural"],["Noche de descanso","Termina el día leyendo tranquilamente.","Tu microaldea"]]
+]};
 function cnvChoicesForSlot(i,profileName,key,locale,current){
-const slots=cnvSlotPools[locale]||cnvSlotPools.en;
-const special=themedExperiences(profileName,key,locale,0);
-const options=[...(slots[i]||[])];
-if(i===3||i===6||i===9)options.unshift(...special);
-const seen=new Set();const unique=[];
-for(const entry of [current,...options]){if(!entry||!entry[0]||seen.has(entry[0]))continue;seen.add(entry[0]);unique.push(entry);}
-const rotation=stableIndex(clean(profileName)+"|"+i)%Math.max(1,unique.length);
-return [unique[0],...unique.slice(1+rotation),...unique.slice(1,1+rotation)];
+const pool=itineraryThemes[locale]||itineraryThemes.en;
+const text=clean(profileName);
+const theme=/nature|forest|ecolog|jardin|garden|natural/.test(text)?1:/art|creat|music|design|photo/.test(text)?2:/sport|advent|explor|active|aventur/.test(text)?4:/wellness|yoga|spa|senior|meditat/.test(text)?3:/social|family|famille|community|connect/.test(text)?5:0;
+const morning=[0,1,2],day=[0,1,2,3,4,5],evening=[0,1,2,3,4,5];
+const allowedThemes=(i===2||i===3||i===6)?day:i===9?evening:[];
+const themeEntries=allowedThemes.includes(theme)?pool[theme]:[];
+const filtered=themeEntries.filter(e=>{
+const title=clean(e[0]);
+if(i<7&&/star|night|stargaz|etoil|estrell|cielo|sunset|atardecer|evening|soir|noche|dinner|diner|cena/.test(title))return false;
+if(i===9&&/breakfast|morning|sunrise|desayuno|petit.dejeuner|matinal|amanecer|lunch|almuerzo|dejeuner/.test(title))return false;
+if(i===2||i===3||i===6)return !/dinner|diner|cena|breakfast|desayuno|petit.dejeuner|lunch|almuerzo|dejeuner/.test(title);
+return i===9;
+});
+const options=[current,...filtered,...(cnvSlotPools[locale]||cnvSlotPools.en)[i]];
+const unique=[],seen=new Set();
+for(const e of options){if(!e||e.length!==3||seen.has(e[0]))continue;seen.add(e[0]);unique.push(e);}
+return unique;
 }
 
 let variation=0,last="";
