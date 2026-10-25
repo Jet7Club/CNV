@@ -1,0 +1,36 @@
+name: Remove external map link from homepage
+on:
+  push:
+    paths: ['.github/workflows/remove-external-map-link.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep map embedded and remove external link
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          print('EMBED CONTAINER',s.count('id="cnv-map-embed"'))
+          print('MAP SCRIPT',s.count('assets/cnv-zone-map.js'))
+          if s.count('id="cnv-map-embed"')!=1: raise RuntimeError('Missing unique embedded map container')
+          if s.count('assets/cnv-zone-map.js')!=1: raise RuntimeError('Missing unique map script')
+          pattern=r'<div id="cnv-map-direct-link"[^>]*>.*?</div>'
+          s,n=re.subn(pattern,'',s,flags=re.S)
+          print('EXTERNAL LINK REMOVED',n)
+          if n:p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove external zone map link; keep 26-zone map embedded in index"
+          git push
