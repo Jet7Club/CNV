@@ -24,6 +24,11 @@ jobs:
                   print('VILLAGE ID',repr(s[m.start()-100:m.end()+100]))
               for m in list(re.finditer(r'cnv-zone-map.js',s))[:4]:
                   print('SCRIPT CONTEXT',repr(s[m.start()-100:m.end()+100]))
+          for term in ['A complete ecosystem designed at human scale.','Cada zona tiene una función clara','Un écosystème complet, pensé à l','Chaque zone a une fonction claire']:
+              for m in list(re.finditer(re.escape(term),src,re.I))[:3]:
+                  print('LANGUAGE CONTEXT',repr(term),repr(src[max(0,m.start()-220):m.start()+650]))
+          for term in ['data-i18n','translations','setLanguage','i18n','const dict']:
+              print('TRANSLATION MECHANISM',term,src.count(term))
           inspect('SOURCE',src)
           start=src.find('<section class="section" id="village">')
           print('VILLAGE MAP STRUCTURE',[(m.start(),src[start+m.start():start+m.start()+170]) for m in re.finditer(r'<div class="(?:master|map|panel)"|id="cnv-map-embed"|cnv-map-direct-link',src[start:start+300000])][:15])
