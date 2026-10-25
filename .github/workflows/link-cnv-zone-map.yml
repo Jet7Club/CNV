@@ -1,0 +1,36 @@
+name: Add CNV map entry to Village section
+on:
+  push:
+    paths:
+      - '.github/workflows/link-cnv-zone-map.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Insert visible map link
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          marker='<section class="section" id="village">'
+          link='<div id="cnv-map-direct-link" style="padding:16px 12px;text-align:center;background:#0b392d;border-radius:16px;margin:18px auto 28px;max-width:850px"><a href="zones.html" style="color:#f4d38b;font-weight:700;font-size:clamp(18px,2vw,26px);text-decoration:none;display:block;padding:12px">🌿 Carte interactive des 26 zones CNV · Explorer les zones →</a></div>'
+          if marker not in s: raise RuntimeError('Village section marker missing')
+          if 'id="cnv-map-direct-link"' not in s:
+              s=s.replace(marker,marker+'\n'+link,1)
+              p.write_text(s,encoding='utf-8')
+              print('Inserted visible map entry into Village section')
+          else: print('Map link already installed')
+          PY
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Show direct 26-zone map link in Village section"
+          git push
