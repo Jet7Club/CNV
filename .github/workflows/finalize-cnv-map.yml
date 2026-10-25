@@ -1,0 +1,48 @@
+name: Finalize CNV map placement and title
+on:
+  push:
+    paths: ['.github/workflows/finalize-cnv-map.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify map follows Village introduction and shorten titles
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html');s=p.read_text(encoding='utf-8')
+          a=s.index('<section class="section" id="village">')
+          b=s.index('</section>',a)
+          part=s[a:b]
+          embed=re.search(r'<div id="cnv-map-embed"[^>]*></div>',part)
+          lead=re.search(r'<p class="lead">.*?</p>',part,re.S)
+          if not embed or not lead:raise RuntimeError('Missing map or Village introduction')
+          if embed.start()<lead.end():
+              block=embed.group()
+              part=part[:embed.start()]+part[embed.end():]
+              lead=re.search(r'<p class="lead">.*?</p>',part,re.S)
+              part=part[:lead.end()]+'\n'+block+part[lead.end():]
+              s=s[:a]+part+s[b:];p.write_text(s,encoding='utf-8')
+          print('MAP AFTER VILLAGE INTRO',part.index('id="cnv-map-embed"')>lead.end())
+          q=Path('assets/cnv-zone-map.js');j=q.read_text(encoding='utf-8')
+          for before,after in [('title:"Carte interactive des 26 zones"','title:"Carte interactive"'),('title:"Interactive map of 26 zones"','title:"Interactive map"'),('title:"Mapa interactivo de 26 zonas"','title:"Mapa interactivo"')]:
+              if before not in j and after not in j:raise RuntimeError('Title missing: '+before)
+              j=j.replace(before,after)
+          q.write_text(j,encoding='utf-8')
+          PY
+      - name: Validate JS
+        run: node --check assets/cnv-zone-map.js
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html assets/cnv-zone-map.js; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/cnv-zone-map.js
+          git commit -m "Finalize map after Village text and translate shorter map title"
+          git pull --rebase origin main
+          git push
