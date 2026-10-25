@@ -34,6 +34,8 @@ jobs:
                   print('I18N DETAIL',repr(term),repr(src[max(0,m.start()-200):m.start()+340]))
           p=src.find('function setLang(l,b)')
           print('SETLANG CODE',repr(src[p:p+6500]))
+          p=src.find("safe('village',")
+          print('VILLAGE TRANSLATOR',repr(src[p:p+2800]))
           inspect('SOURCE',src)
           start=src.find('<section class="section" id="village">')
           print('VILLAGE MAP STRUCTURE',[(m.start(),src[start+m.start():start+m.start()+170]) for m in re.finditer(r'<div class="(?:master|map|panel)"|id="cnv-map-embed"|cnv-map-direct-link',src[start:start+300000])][:15])
