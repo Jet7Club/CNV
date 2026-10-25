@@ -1,0 +1,36 @@
+name: Diagnose CNV zone map
+on:
+  push:
+    paths: ['.github/workflows/diagnose-cnv-zone-map.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect source and public site
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import urllib.request,re
+          src=Path('index.html').read_text(encoding='utf-8')
+          def inspect(label,s):
+              print('INSPECT',label,'length',len(s))
+              for term in ['assets/cnv-zone-map.js','id="village"',"id='village'",'id="cnv-zone-map-v2"','id="village-section"','id="villageMap"','<main','</body>']:
+                  print(repr(term),'COUNT',s.count(term),'POSITION',s.find(term))
+              for m in list(re.finditer(r'id=["\\\'][^"\\\']*village[^"\\\']*["\\\']',s,re.I))[:12]:
+                  print('VILLAGE ID',repr(s[m.start()-100:m.end()+100]))
+              for m in list(re.finditer(r'cnv-zone-map.js',s))[:4]:
+                  print('SCRIPT CONTEXT',repr(s[m.start()-100:m.end()+100]))
+          inspect('SOURCE',src)
+          req=urllib.request.Request('https://www.cnvillages.com/?map_diag=20261025',headers={'Cache-Control':'no-cache','User-Agent':'Mozilla/5.0'})
+          with urllib.request.urlopen(req,timeout=40) as r:
+              print('LIVE STATUS',r.status)
+              inspect('LIVE',r.read().decode('utf-8','replace'))
+          req=urllib.request.Request('https://www.cnvillages.com/assets/cnv-zone-map.js?map_diag=20261025',headers={'Cache-Control':'no-cache','User-Agent':'Mozilla/5.0'})
+          with urllib.request.urlopen(req,timeout=40) as r:
+              body=r.read().decode('utf-8','replace')
+              print('JS STATUS',r.status,'LENGTH',len(body),'VALID MARKER', 'cnv-zone-map-v2' in body)
+          PY
