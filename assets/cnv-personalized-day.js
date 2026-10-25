@@ -42,28 +42,33 @@ return Array.from({length:5},(_,j)=>thematic[(offset+j)%5]);
 function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=lang(),n=0;root.replaceChildren();const h=document.createElement("h3");h.className="cnv-day-main-title";h.textContent=HEAD[l][0];root.append(h);root.append(buildForm(l));const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=HEAD[l][1];root.append(intro);const line=document.createElement("div");line.className="cnv-day-timeline";T.forEach((t,i)=>{const opts=choices(n,l,i);let k=0;const article=document.createElement("article");article.className="cnv-day-item";const time=document.createElement("span");time.className="cnv-day-time";time.textContent=t;const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=["☀","☕","♧","♧","♨","♡","♧","◒","♨","♧","☾"][i];const content=document.createElement("div"),title=document.createElement("h4"),desc=document.createElement("p"),place=document.createElement("small");function show(){title.textContent=opts[k][0];desc.textContent=opts[k][1];place.textContent="⌖ "+opts[k][2];}show();const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";next.textContent=HEAD[l][2];next.addEventListener("click",()=>{k=(k+1)%opts.length;show();});content.append(title,desc,place,next);article.append(time,symbol,content);line.append(article);});root.append(line);}
 function removeLegacyProfilePicker(){
 const root=document.getElementById("cnv-day-experience");
-const art=document.getElementById("artoflife");
-if(!art)return;
-const patterns=/choisissez votre profil en 2 étapes|choisir une catégorie|choisir votre profil|choose your profile in 2 steps|choose a category|select your profile|elige tu perfil en 2 pasos|elige una categoría|elige tu perfil/i;
-for(const el of art.querySelectorAll("h1,h2,h3,h4,h5,p,legend")){
-if(root&&root.contains(el))continue;
-if(!patterns.test((el.textContent||"").trim()))continue;
-let target=el;
-for(let i=0;i<6&&target.parentElement;i++){
-const p=target.parentElement;
-if(p===art||p===document.body||(root&&p.contains(root)))break;
-if(p.querySelector("#profileSelect")||p.querySelector(".path-card")||p.querySelectorAll("select").length||p.querySelectorAll(".path-card").length){target=p;break;}
-target=p;
-}
-if(target!==art&&(!root||!target.contains(root))){target.style.setProperty("display","none","important");target.setAttribute("aria-hidden","true");}
-}
-const select=document.getElementById("profileSelect");
-if(select&&!root?.contains(select)){
-const container=select.closest(".profile-selector,.profile-selection,.profile-chooser,.profile-picker,section");
-if(container&&container!==art&&!container.contains(root)){container.style.setProperty("display","none","important");container.setAttribute("aria-hidden","true");}
-else select.style.setProperty("display","none","important");
+const patterns=/50 pathways for different personality types|50 parcours pour différents profils|50 caminos para diferentes personalidades|choose a category|choisissez votre profil en 2 étapes|choisir une catégorie|elige una categoría/i;
+const candidates=Array.from(document.querySelectorAll("h1,h2,h3,h4,h5,legend,label"));
+for(const el of candidates){
+if(root?.contains(el)||!patterns.test((el.textContent||"").trim()))continue;
+let block=el.closest("section,article,.container,.section,.profile-section,.paths-section");
+if(block&&(block===root||block.contains(root)))block=null;
+if(!block){
+block=el;
+for(let i=0;i<7&&block.parentElement;i++){
+const p=block.parentElement;
+if(p===document.body||p.contains(root))break;
+if(p.querySelector("select")||p.querySelector(".path-card")||p.querySelector(".path-grid")){block=p;break;}
+block=p;
 }
 }
-function init(){if(!document.getElementById("cnv-quick-style")){const st=document.createElement("style");st.id="cnv-quick-style";st.textContent=QUICK_CSS;document.head.append(st);}let root=document.getElementById("cnv-day-experience");if(!root){const art=document.getElementById("artoflife");if(!art)return;root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.append(root);}const life=document.getElementById("life");if(life)life.style.display="none";removeLegacyProfilePicker();render();document.addEventListener("change",()=>setTimeout(()=>{removeLegacyProfilePicker();render();},50),true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{removeLegacyProfilePicker();render();},180)},true);new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
+if(block&&block!==document.body&&!block.contains(root)){
+block.style.setProperty("display","none","important");
+block.setAttribute("aria-hidden","true");
+}
+}
+for(const el of document.querySelectorAll("#profileSelect,.path-card")){
+if(root?.contains(el))continue;
+const block=el.closest("section,article,.profile-section,.paths-section");
+if(block&&!block.contains(root)){block.style.setProperty("display","none","important");block.setAttribute("aria-hidden","true");}
+else el.style.setProperty("display","none","important");
+}
+}
+function init(){if(!document.getElementById("cnv-quick-style")){const st=document.createElement("style");st.id="cnv-quick-style";st.textContent=QUICK_CSS;document.head.append(st);}let root=document.getElementById("cnv-day-experience");if(!root){const art=document.getElementById("artoflife");if(!art)return;root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.append(root);}const life=document.getElementById("life");if(life)life.style.display="none";removeLegacyProfilePicker();render();document.addEventListener("change",()=>setTimeout(()=>{removeLegacyProfilePicker();render();},50),true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{removeLegacyProfilePicker();render();},180)},true);new MutationObserver(()=>{removeLegacyProfilePicker();render();}).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
