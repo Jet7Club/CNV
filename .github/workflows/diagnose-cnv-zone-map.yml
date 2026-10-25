@@ -32,6 +32,8 @@ jobs:
           for term in ['villageLead:', 'function applyLang', 'function setLang', 'const i18n=', 'let currentLang', 'function applyLanguage']:
               for m in list(re.finditer(re.escape(term),src))[:4]:
                   print('I18N DETAIL',repr(term),repr(src[max(0,m.start()-200):m.start()+340]))
+          p=src.find('function setLang(l,b)')
+          print('SETLANG CODE',repr(src[p:p+6500]))
           inspect('SOURCE',src)
           start=src.find('<section class="section" id="village">')
           print('VILLAGE MAP STRUCTURE',[(m.start(),src[start+m.start():start+m.start()+170]) for m in re.finditer(r'<div class="(?:master|map|panel)"|id="cnv-map-embed"|cnv-map-direct-link',src[start:start+300000])][:15])
