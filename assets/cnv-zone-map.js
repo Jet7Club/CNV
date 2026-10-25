@@ -37,7 +37,7 @@ function el(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=
 function removeStaffVillage(){const scopes=[document.getElementById("village"),document.getElementById("housing"),document.querySelector('[id*="micro-village"]')].filter(Boolean);for(const scope of scopes){for(const node of scope.querySelectorAll("h2,h3,h4,h5,.card-title,.village-title")){if(!/^staff(?:\s+village)?$|^village\s+(?:du\s+)?personnel$|^staff\s+micro.village$/i.test((node.textContent||"").trim()))continue;const card=node.closest("article,.card,.village-card,.housing-card,li");if(card&&!card.contains(document.getElementById("cnv-zone-map-v2")))card.remove();else node.remove();}}}
 function mount(){
 if(document.getElementById("cnv-zone-map-v2"))return;
-const target=document.getElementById("village")||document.querySelector('[id*="village"]')||document.querySelector('a[href="#village"]')?.closest("section")||document.querySelector("main");if(!target)return;
+const target=document.getElementById("cnv-map-embed")||document.getElementById("village")||document.querySelector('[id*="village"]')||document.querySelector('a[href="#village"]')?.closest("section")||document.querySelector("main");if(!target)return;
 const style=el("style");style.textContent=`
 #cnv-zone-map-v2{background:#082e25;color:#f7f5ed;padding:clamp(18px,3vw,36px);border-radius:28px;margin:30px auto;max-width:1250px;font-family:inherit}
 #cnv-zone-map-v2 .cz-title{font:normal clamp(27px,3vw,42px) Georgia,serif;color:#eac982;margin:0 0 8px}
