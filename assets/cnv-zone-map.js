@@ -65,6 +65,7 @@ for(let i=0;i<26;i++){const pin=el("button","cz-pin",String(i+1));pin.type="butt
 function localize(){const t=translations[lang()];heading.textContent=t.title;sub.textContent=t.subtitle;note.textContent=t.note;select(current);}
 detail.append(eyebrow,name,desc,controls);layout.append(map,detail);root.append(heading,sub,layout,note);
 target.prepend(root);localize();removeStaffVillage();
+if(location.hash==="#village"){requestAnimationFrame(()=>root.scrollIntoView({block:"start",behavior:"instant"}));}
 new MutationObserver(localize).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();window.addEventListener("load",mount,{once:true});
