@@ -1,0 +1,42 @@
+name: Fix CNV map placement in homepage
+on:
+  push:
+    paths: ['.github/workflows/fix-cnv-map-placement.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Place embedded map after Village introduction
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          embed='<div id="cnv-map-embed" style="width:100%;margin:22px auto;max-width:1350px"></div>'
+          if s.count(embed)!=1:raise RuntimeError('Expected one map container')
+          s=s.replace(embed,'',1)
+          start=s.index('<section class="section" id="village">')
+          end=s.index('</section>',start)
+          section=s[start:end]
+          match=re.search(r'<p class="lead">.*?</p>',section,flags=re.S)
+          if not match:raise RuntimeError('Village lead not found')
+          pos=start+match.end()
+          s=s[:pos]+'\n'+embed+s[pos:]
+          assert s.count(embed)==1
+          assert s.index(embed)>s.index('<section class="section" id="village">')
+          p.write_text(s,encoding='utf-8')
+          print('MAP EMBED AFTER INTRODUCTION',s[pos-170:pos+len(embed)+80])
+          PY
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Position 26-zone map after Village title and introduction"
+          git push
