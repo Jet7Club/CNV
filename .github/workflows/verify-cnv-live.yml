@@ -4,6 +4,9 @@ on:
     paths:
       - '.github/workflows/verify-cnv-live.yml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ['Deploy static content to Pages']
+    types: [completed]
 permissions:
   contents: read
 jobs:
