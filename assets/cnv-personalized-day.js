@@ -17,8 +17,8 @@ function buildForm(l){const wrap=document.createElement("section");wrap.classNam
 const QUICK_CSS=`.cnv-day-main-title{text-align:center;font-size:clamp(1.8rem,3vw,2.6rem);margin:1.5rem 0 1rem;color:#204c35}.cnv-quick-form>h3{display:none!important}.cnv-quick-form{margin:1.4rem auto 2rem;padding:clamp(18px,3vw,34px);background:linear-gradient(145deg,#f5f9f1,#fff);border:1px solid #dce8d8;border-radius:24px;box-shadow:0 12px 40px #1b4a2412}.cnv-quick-form h3{margin:0 0 8px;color:#204c35}.cnv-quick-form p{margin:0 0 22px}.cnv-quick-form fieldset{border:0;padding:0;margin:0 0 24px;min-width:0}.cnv-quick-form legend{font-weight:750;color:#254c38;margin-bottom:12px;font-size:1.05rem}.cnv-quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px}.cnv-quick-option{min-height:55px;text-align:left;padding:13px 15px;border-radius:13px;border:1px solid #cbdccb;background:white;color:#264333;font:inherit;cursor:pointer;transition:transform .12s,background .12s,border-color .12s}.cnv-quick-option:hover{transform:translateY(-2px);border-color:#7ca788}.cnv-quick-option[aria-pressed=true]{background:#d8ead7;border:2px solid #398353;font-weight:700;box-shadow:0 0 0 2px #39835316}@media(max-width:580px){.cnv-quick-grid{grid-template-columns:1fr 1fr}.cnv-quick-option{font-size:.9rem;padding:10px;min-height:64px}}`;
 const normalize=x=>String(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 function lang(){const l=(document.documentElement.lang||"en").slice(0,2);return HEAD[l]?l:"en";}
-function chosen(){const select=document.getElementById("profileSelect");if(select&&select.value){const n=Number(select.value);if(n>=1&&n<=50)return n-1;const label=normalize(select.selectedOptions?.[0]?.textContent);for(const k of ["fr","en","es"]){const i=N[k].findIndex(x=>normalize(x)===label);if(i>=0)return i;}}const card=document.querySelector(".path-card.selected,.path-card.active,.path-card[aria-selected='true']");if(card){const n=Number(card.querySelector(".path-num")?.textContent);if(n>=1&&n<=50)return n-1;}return 0;}
-function group(n){if(n===8)return "music";if([9,36].includes(n))return "food";if([5,6,7,19].includes(n))return "creative";if(n>=30&&n<=34)return "family";if([12,25,29,35].includes(n))return "nature";if([26,27,28,33,45,49].includes(n))return "adventure";if([20,21,22,23,24,37,38,39,46,47,48].includes(n))return "wellness";if([3,15,17,18,42].includes(n))return "social";return "business";}
+function chosen(){return 0;}
+function group(){return "nature";}
 function choices(n,l,slot){
 const standard=P[l][slot]||P.en[slot];
 const base=standard.concat(E[l][slot].map((title,j)=>[title,standard[j%standard.length][1],standard[j%standard.length][2]]));
@@ -36,40 +36,32 @@ const focus=[2,3,6,7,9],at=focus.indexOf(slot);
 if(at<0)return base.slice(0,5);
 const thematic=S[l]?.[g]||[];
 if(thematic.length!==5)return base.slice(0,5);
-const offset=(n+at)%5;
+const offset=(selections.company.reduce((a,b)=>a+b,0)+selections.reason.reduce((a,b)=>a+b,0)+selections.goals.reduce((a,b)=>a+b,0)+selections.participation.reduce((a,b)=>a+b,0)+at)%5;
 return Array.from({length:5},(_,j)=>thematic[(offset+j)%5]);
 }
-function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=lang(),n=chosen();root.replaceChildren();const h=document.createElement("h3");h.className="cnv-day-main-title";h.textContent=HEAD[l][0];root.append(h);root.append(buildForm(l));const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=HEAD[l][1];root.append(intro);const badge=document.createElement("div");badge.className="cnv-day-bar";badge.textContent="✧ "+N[l][n];root.append(badge);const line=document.createElement("div");line.className="cnv-day-timeline";T.forEach((t,i)=>{const opts=choices(n,l,i);let k=0;const article=document.createElement("article");article.className="cnv-day-item";const time=document.createElement("span");time.className="cnv-day-time";time.textContent=t;const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=["☀","☕","♧","♧","♨","♡","♧","◒","♨","♧","☾"][i];const content=document.createElement("div"),title=document.createElement("h4"),desc=document.createElement("p"),place=document.createElement("small");function show(){title.textContent=opts[k][0];desc.textContent=opts[k][1];place.textContent="⌖ "+opts[k][2];}show();const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";next.textContent=HEAD[l][2];next.addEventListener("click",()=>{k=(k+1)%opts.length;show();});content.append(title,desc,place,next);article.append(time,symbol,content);line.append(article);});root.append(line);}
+function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=lang(),n=0;root.replaceChildren();const h=document.createElement("h3");h.className="cnv-day-main-title";h.textContent=HEAD[l][0];root.append(h);root.append(buildForm(l));const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=HEAD[l][1];root.append(intro);const line=document.createElement("div");line.className="cnv-day-timeline";T.forEach((t,i)=>{const opts=choices(n,l,i);let k=0;const article=document.createElement("article");article.className="cnv-day-item";const time=document.createElement("span");time.className="cnv-day-time";time.textContent=t;const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=["☀","☕","♧","♧","♨","♡","♧","◒","♨","♧","☾"][i];const content=document.createElement("div"),title=document.createElement("h4"),desc=document.createElement("p"),place=document.createElement("small");function show(){title.textContent=opts[k][0];desc.textContent=opts[k][1];place.textContent="⌖ "+opts[k][2];}show();const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";next.textContent=HEAD[l][2];next.addEventListener("click",()=>{k=(k+1)%opts.length;show();});content.append(title,desc,place,next);article.append(time,symbol,content);line.append(article);});root.append(line);}
 function removeLegacyProfilePicker(){
 const root=document.getElementById("cnv-day-experience");
+const art=document.getElementById("artoflife");
+if(!art)return;
+const patterns=/choisissez votre profil en 2 étapes|choisir une catégorie|choisir votre profil|choose your profile in 2 steps|choose a category|select your profile|elige tu perfil en 2 pasos|elige una categoría|elige tu perfil/i;
+for(const el of art.querySelectorAll("h1,h2,h3,h4,h5,p,legend")){
+if(root&&root.contains(el))continue;
+if(!patterns.test((el.textContent||"").trim()))continue;
+let target=el;
+for(let i=0;i<6&&target.parentElement;i++){
+const p=target.parentElement;
+if(p===art||p===document.body||(root&&p.contains(root)))break;
+if(p.querySelector("#profileSelect")||p.querySelector(".path-card")||p.querySelectorAll("select").length||p.querySelectorAll(".path-card").length){target=p;break;}
+target=p;
+}
+if(target!==art&&(!root||!target.contains(root))){target.style.setProperty("display","none","important");target.setAttribute("aria-hidden","true");}
+}
 const select=document.getElementById("profileSelect");
-if(select){
-let node=select;
-for(let depth=0;depth<6&&node.parentElement;depth++){
-const parent=node.parentElement;
-if(parent===document.body||parent.id==="artoflife"||parent.contains(root))break;
-const text=(parent.textContent||"").toLowerCase();
-if(/choisissez votre profil en 2 étapes|choose your profile in 2 steps|elige tu perfil en 2 pasos/.test(text)){
-parent.style.setProperty("display","none","important");
-parent.setAttribute("aria-hidden","true");
-return;
-}
-node=parent;
-}
-const field=select.closest("section,.profile-selector,.profile-selection,.profile-chooser,.profile-picker");
-if(field&&field.id!=="artoflife"&&!field.contains(root)){field.style.setProperty("display","none","important");field.setAttribute("aria-hidden","true");}
-}
-const headings=document.querySelectorAll("#artoflife h1,#artoflife h2,#artoflife h3,#artoflife h4,#artoflife p");
-for(const h of headings){
-if(!/choisissez votre profil en 2 étapes|choose your profile in 2 steps|elige tu perfil en 2 pasos/i.test(h.textContent||""))continue;
-let el=h;
-for(let d=0;d<5&&el.parentElement;d++){
-const parent=el.parentElement;
-if(parent.id==="artoflife"||parent.contains(root))break;
-if(parent.querySelector("select")||parent.querySelectorAll("button").length>=3){el=parent;break;}
-el=parent;
-}
-if(el!==root&&el.id!=="artoflife"&&!el.contains(root)){el.style.setProperty("display","none","important");el.setAttribute("aria-hidden","true");}
+if(select&&!root?.contains(select)){
+const container=select.closest(".profile-selector,.profile-selection,.profile-chooser,.profile-picker,section");
+if(container&&container!==art&&!container.contains(root)){container.style.setProperty("display","none","important");container.setAttribute("aria-hidden","true");}
+else select.style.setProperty("display","none","important");
 }
 }
 function init(){if(!document.getElementById("cnv-quick-style")){const st=document.createElement("style");st.id="cnv-quick-style";st.textContent=QUICK_CSS;document.head.append(st);}let root=document.getElementById("cnv-day-experience");if(!root){const art=document.getElementById("artoflife");if(!art)return;root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.append(root);}const life=document.getElementById("life");if(life)life.style.display="none";removeLegacyProfilePicker();render();document.addEventListener("change",()=>setTimeout(()=>{removeLegacyProfilePicker();render();},50),true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{removeLegacyProfilePicker();render();},180)},true);new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
