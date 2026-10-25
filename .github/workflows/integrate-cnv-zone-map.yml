@@ -1,0 +1,39 @@
+name: Integrate CNV 26-zone map
+on:
+  push:
+    paths:
+      - '.github/workflows/integrate-cnv-zone-map.yml'
+      - 'assets/cnv-zone-map.js'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add interactive zone map to website
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          tag='<script defer src="assets/cnv-zone-map.js"></script>'
+          if tag not in s:
+              if '</body>' not in s:
+                  raise RuntimeError('Closing body tag not found')
+              s=s.replace('</body>',tag+'\n</body>',1)
+              p.write_text(s,encoding='utf-8')
+          print('Zone map script present:',tag in s)
+          PY
+      - name: Commit updated index
+        run: |
+          if git diff --quiet -- index.html; then
+            echo "Map script already installed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Load interactive CNV 26-zone map on site"
+          git push
