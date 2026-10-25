@@ -1,0 +1,45 @@
+name: Verify CNV live site
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-cnv-live.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check source and live published HTML
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, urllib.request, time
+          def check(name,s):
+              patterns=[r'8\s+micro[-\s]villages',r'8\s+micro[-\s]pueblos',r'Staff\s+and\s+Senior',r'Staff\s+et\s+Senior',r'Staff\s+y\s+Senior',r'Staff\s+Village',r'Village\s+Staff']
+              print(name,'length',len(s))
+              failed=False
+              for p in patterns:
+                  matches=list(re.finditer(p,s,re.I))
+                  print(name,p,'count',len(matches))
+                  if matches:
+                      print('examples',[s[max(0,m.start()-65):m.end()+65] for m in matches[:2]])
+                      failed=True
+              return failed
+          source=Path('index.html').read_text(encoding='utf-8')
+          bad_source=check('SOURCE',source)
+          if bad_source: raise SystemExit('FAIL: old Staff or 8 micro-villages still in source')
+          url='https://www.cnvillages.com/?cnv_check='+str(int(time.time()))
+          try:
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0 CNV-verification','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=35) as response:
+                  live=response.read().decode('utf-8','replace')
+                  print('LIVE HTTP',response.status,'FINAL URL',response.url)
+          except Exception as e:
+              print('LIVE CHECK ERROR',repr(e))
+              raise
+          if check('LIVE',live): raise SystemExit('FAIL: old Staff or 8 micro-villages still on published site')
+          print('PASS: no old Staff Village enumeration or 8 micro-villages in source and public website')
+          PY
