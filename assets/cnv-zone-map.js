@@ -32,9 +32,9 @@ const coords=[[18,15],[42,19],[64,23],[53,43],[76,36],[39,49],[85,65],[18,51],[5
 const translations={fr:{title:"Carte interactive des 26 zones",subtitle:"Explorez les zones et leurs principaux équipements",zone:"ZONE SÉLECTIONNÉE",note:"Implantation conceptuelle : les emplacements ne représentent pas un plan géographique définitif.",area:"Superficie"},en:{title:"Interactive map of 26 zones",subtitle:"Explore each zone and its main facilities",zone:"SELECTED ZONE",note:"Conceptual layout: positions are not a final geographic plan.",area:"Area"},es:{title:"Mapa interactivo de 26 zonas",subtitle:"Explora las zonas y sus principales instalaciones",zone:"ZONA SELECCIONADA",note:"Distribución conceptual: las posiciones no son un plano geográfico definitivo.",area:"Superficie"}};
 function lang(){let v=(document.documentElement.lang||"fr").slice(0,2);return translations[v]?v:"fr";}
 function el(tag,cls,txt){const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
-function mount(){
+function removeStaffVillage(){const scopes=[document.getElementById("village"),document.getElementById("housing"),document.querySelector('[id*="micro-village"]')].filter(Boolean);for(const scope of scopes){for(const node of scope.querySelectorAll("h2,h3,h4,h5,.card-title,.village-title")){if(!/^staff(?:\\s+village)?$|^village\\s+(?:du\\s+)?personnel$|^staff\\s+micro.village$/i.test((node.textContent||"").trim()))continue;const card=node.closest("article,.card,.village-card,.housing-card,li");if(card&&!card.contains(document.getElementById("cnv-zone-map-v2")))card.remove();else node.remove();}}}\nfunction mount(){
 if(document.getElementById("cnv-zone-map-v2"))return;
-const target=document.getElementById("village")||document.querySelector('[id*="village"]');if(!target)return;
+const target=document.getElementById("village")||document.querySelector('[id*="village"]')||document.querySelector('a[href="#village"]')?.closest("section")||document.querySelector("main");if(!target)return;
 const style=el("style");style.textContent=`
 #cnv-zone-map-v2{background:#082e25;color:#f7f5ed;padding:clamp(18px,3vw,36px);border-radius:28px;margin:30px auto;max-width:1250px;font-family:inherit}
 #cnv-zone-map-v2 .cz-title{font:normal clamp(27px,3vw,42px) Georgia,serif;color:#eac982;margin:0 0 8px}
@@ -63,8 +63,8 @@ function select(i){current=i;const z=zones[i],l=lang(),t=translations[l];eyebrow
 for(let i=0;i<26;i++){const pin=el("button","cz-pin",String(i+1));pin.type="button";pin.title=(i+1)+". "+zones[i][0];pin.style.left=coords[i][0]+"%";pin.style.top=coords[i][1]+"%";pin.addEventListener("click",()=>select(i));map.append(pin);pins.push(pin);const b=el("button","",String(i+1));b.type="button";b.title=zones[i][0];b.setAttribute("aria-label",(i+1)+". "+zones[i][0]);b.addEventListener("click",()=>select(i));controls.append(b);buttons.push(b);}
 function localize(){const t=translations[lang()];heading.textContent=t.title;sub.textContent=t.subtitle;note.textContent=t.note;select(current);}
 detail.append(eyebrow,name,desc,controls);layout.append(map,detail);root.append(heading,sub,layout,note);
-target.prepend(root);localize();
+target.prepend(root);localize();removeStaffVillage();
 new MutationObserver(localize).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
 }
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();window.addEventListener("load",mount,{once:true});
 })();
