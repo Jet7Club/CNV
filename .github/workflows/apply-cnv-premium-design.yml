@@ -1,0 +1,34 @@
+name: Apply CNV premium design
+on:
+  push:
+    paths: ['.github/workflows/apply-cnv-premium-design.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load unified typography and visual design
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html');s=p.read_text(encoding='utf-8')
+          tag='<link rel="stylesheet" href="assets/cnv-premium-design.css?v=20261025">'
+          if tag not in s:
+              if '</head>' not in s:raise RuntimeError('HTML head not found')
+              s=s.replace('</head>',tag+'\n</head>',1)
+          assert s.count(tag)==1
+          p.write_text(s,encoding='utf-8')
+          print('PREMIUM CSS INSTALLED',s.count(tag))
+          PY
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Apply unified premium design across CNV homepage"
+          git pull --rebase origin main
+          git push
