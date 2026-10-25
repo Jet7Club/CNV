@@ -1,0 +1,61 @@
+name: Clean duplicate maps in CNV index
+on:
+  push:
+    paths: ['.github/workflows/clean-duplicate-cnv-maps.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep only the 26-zone interactive map
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          start=s.index('<section class="section" id="village">')
+          end=s.index('</section>',start)
+          section=s[start:end]
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=False)
+                  self.depth=0;self.start=None;self.end=None
+              def handle_starttag(self,tag,attrs):
+                  if tag!='div':return
+                  if self.start is None and dict(attrs).get('class')=='master':
+                      self.start=self.getpos();self.depth=1
+                  elif self.start is not None and self.end is None:self.depth+=1
+              def handle_endtag(self,tag):
+                  if tag!='div' or self.start is None or self.end is not None:return
+                  self.depth-=1
+                  if self.depth==0:self.end=self.getpos()
+          parser=Parser();parser.feed(section)
+          if parser.start is None or parser.end is None:raise RuntimeError('Old map not found or cannot locate its end')
+          def index_from_pos(pos):
+              lines=section.splitlines(keepends=True)
+              return sum(len(x) for x in lines[:pos[0]-1])+pos[1]
+          a=index_from_pos(parser.start);b=index_from_pos(parser.end)+len('</div>')
+          removed=section[a:b]
+          if 'data-key="sanctuary"' not in removed:raise RuntimeError('Old map signature absent')
+          section=section[:a]+section[b:]
+          section,n=re.subn(r'<div id="cnv-map-direct-link"[^>]*>.*?</div>','',section,flags=re.S)
+          if 'id="cnv-map-embed"' not in section:raise RuntimeError('26-zone map embed missing')
+          s=s[:start]+section+s[end:]
+          p.write_text(s,encoding='utf-8')
+          print('REMOVED OLD 6-POINT MAP',len(removed),'characters')
+          print('REMOVED EXTERNAL LINKS',n)
+          print('KEPT EMBEDDED MAP',s.count('id="cnv-map-embed"'))
+          PY
+      - name: Commit
+        run: |
+          if git diff --quiet -- index.html; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Remove duplicate old radar; keep only embedded 26-zone map"
+          git push
