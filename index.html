@@ -2245,5 +2245,6 @@ function sync(){const a=document.getElementById("cnv-charter-link");if(!a)return
 const lang=(document.documentElement.lang||localStorage.getItem("lang")||"fr").toLowerCase().slice(0,2);
 const item=map[lang]||map.fr;a.textContent=item[0]+" ↗";a.href=item[1];}
 document.addEventListener("DOMContentLoaded",sync);new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});window.addEventListener("storage",sync);
-})();</script></body>
+})();</script><script defer src="assets/cnv-zone-map.js"></script>
+</body>
 </html>
