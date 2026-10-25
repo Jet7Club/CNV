@@ -44,5 +44,11 @@ jobs:
               print('LIVE CHECK ERROR',repr(e))
               raise
           if check('LIVE',live): raise SystemExit('FAIL: old Staff or 8 micro-villages still on published site')
+          for language,term in [('EN','Senior'),('FR','Senior'),('ES','Senior')]:
+              print('SENIOR',language,'source occurrences',len(re.findall(r'\\b'+term+r'\\b',source,re.I)),'live occurrences',len(re.findall(r'\\b'+term+r'\\b',live,re.I)))
+          for match in list(re.finditer(r'7\\s+micro[-\\s](?:villages|pueblos)',live,re.I))[:8]:
+              print('LIVE SEVEN VILLAGES CONTEXT:',repr(live[match.start():match.start()+260]))
+          if not re.search(r'Free Camp.{0,90}Senior|Camp libre.{0,100}Senior|Campamento libre.{0,100}Senior',live,re.I|re.S):
+              raise SystemExit('FAIL: Senior missing from micro-village lists')
           print('PASS: no old Staff Village enumeration or 8 micro-villages in source and public website')
           PY
