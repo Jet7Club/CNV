@@ -40,6 +40,38 @@ const offset=(n+at)%5;
 return Array.from({length:5},(_,j)=>thematic[(offset+j)%5]);
 }
 function render(){const root=document.getElementById("cnv-day-experience");if(!root)return;const l=lang(),n=chosen();root.replaceChildren();root.append(buildForm(l));const h=document.createElement("h3");h.textContent=HEAD[l][0];root.append(h);const intro=document.createElement("p");intro.className="cnv-day-sub";intro.textContent=HEAD[l][1];root.append(intro);const badge=document.createElement("div");badge.className="cnv-day-bar";badge.textContent="✧ "+N[l][n];root.append(badge);const line=document.createElement("div");line.className="cnv-day-timeline";T.forEach((t,i)=>{const opts=choices(n,l,i);let k=0;const article=document.createElement("article");article.className="cnv-day-item";const time=document.createElement("span");time.className="cnv-day-time";time.textContent=t;const symbol=document.createElement("span");symbol.className="cnv-day-icon";symbol.textContent=["☀","☕","♧","♧","♨","♡","♧","◒","♨","♧","☾"][i];const content=document.createElement("div"),title=document.createElement("h4"),desc=document.createElement("p"),place=document.createElement("small");function show(){title.textContent=opts[k][0];desc.textContent=opts[k][1];place.textContent="⌖ "+opts[k][2];}show();const next=document.createElement("button");next.type="button";next.className="cnv-day-next-choice";next.textContent=HEAD[l][2];next.addEventListener("click",()=>{k=(k+1)%opts.length;show();});content.append(title,desc,place,next);article.append(time,symbol,content);line.append(article);});root.append(line);}
-function init(){if(!document.getElementById("cnv-quick-style")){const st=document.createElement("style");st.id="cnv-quick-style";st.textContent=QUICK_CSS;document.head.append(st);}let root=document.getElementById("cnv-day-experience");if(!root){const art=document.getElementById("artoflife");if(!art)return;root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.append(root);}const life=document.getElementById("life");if(life)life.style.display="none";render();document.addEventListener("change",()=>setTimeout(render,50),true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(render,180)},true);new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
+function removeLegacyProfilePicker(){
+const root=document.getElementById("cnv-day-experience");
+const select=document.getElementById("profileSelect");
+if(select){
+let node=select;
+for(let depth=0;depth<6&&node.parentElement;depth++){
+const parent=node.parentElement;
+if(parent===document.body||parent.id==="artoflife"||parent.contains(root))break;
+const text=(parent.textContent||"").toLowerCase();
+if(/choisissez votre profil en 2 étapes|choose your profile in 2 steps|elige tu perfil en 2 pasos/.test(text)){
+parent.style.setProperty("display","none","important");
+parent.setAttribute("aria-hidden","true");
+return;
+}
+node=parent;
+}
+const field=select.closest("section,.profile-selector,.profile-selection,.profile-chooser,.profile-picker");
+if(field&&field.id!=="artoflife"&&!field.contains(root)){field.style.setProperty("display","none","important");field.setAttribute("aria-hidden","true");}
+}
+const headings=document.querySelectorAll("#artoflife h1,#artoflife h2,#artoflife h3,#artoflife h4,#artoflife p");
+for(const h of headings){
+if(!/choisissez votre profil en 2 étapes|choose your profile in 2 steps|elige tu perfil en 2 pasos/i.test(h.textContent||""))continue;
+let el=h;
+for(let d=0;d<5&&el.parentElement;d++){
+const parent=el.parentElement;
+if(parent.id==="artoflife"||parent.contains(root))break;
+if(parent.querySelector("select")||parent.querySelectorAll("button").length>=3){el=parent;break;}
+el=parent;
+}
+if(el!==root&&el.id!=="artoflife"&&!el.contains(root)){el.style.setProperty("display","none","important");el.setAttribute("aria-hidden","true");}
+}
+}
+function init(){if(!document.getElementById("cnv-quick-style")){const st=document.createElement("style");st.id="cnv-quick-style";st.textContent=QUICK_CSS;document.head.append(st);}let root=document.getElementById("cnv-day-experience");if(!root){const art=document.getElementById("artoflife");if(!art)return;root=document.createElement("div");root.id="cnv-day-experience";root.className="cnv-day-experience";const charter=art.querySelector(".cnv-charter-cta");if(charter)art.insertBefore(root,charter);else art.append(root);}const life=document.getElementById("life");if(life)life.style.display="none";removeLegacyProfilePicker();render();document.addEventListener("change",()=>setTimeout(()=>{removeLegacyProfilePicker();render();},50),true);document.addEventListener("click",e=>{if(e.target.closest("#cnv-day-experience"))return;setTimeout(()=>{removeLegacyProfilePicker();render();},180)},true);new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
