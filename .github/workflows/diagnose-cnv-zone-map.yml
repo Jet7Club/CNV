@@ -25,6 +25,8 @@ jobs:
               for m in list(re.finditer(r'cnv-zone-map.js',s))[:4]:
                   print('SCRIPT CONTEXT',repr(s[m.start()-100:m.end()+100]))
           inspect('SOURCE',src)
+          start=src.find('<section class="section" id="village">')
+          print('VILLAGE FIRST 11000',src[start:start+11000])
           req=urllib.request.Request('https://www.cnvillages.com/?map_diag=20261025',headers={'Cache-Control':'no-cache','User-Agent':'Mozilla/5.0'})
           with urllib.request.urlopen(req,timeout=40) as r:
               print('LIVE STATUS',r.status)
