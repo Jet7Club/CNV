@@ -2079,6 +2079,30 @@ populate();render();window.CNV_DAY_ENGINE={keys,makeDay,render,applyScenario,sce
   var attempts=0;
   var timer=setInterval(function(){fix();if(++attempts>=20)clearInterval(timer)},250);
 })();
-</script><script id="cnv-day-i18n-fix-20261109">(function(){const translations={".cnvStudioEyebrow":["YOUR PERSONALIZED JOURNEY","VOTRE PARCOURS PERSONNALISÉ","TU EXPERIENCIA PERSONALIZADA"],".cnvDaySide h3":["Design your day","Composez votre journée","Diseña tu día"],".cnvDaySide > p":["Every choice updates your profile and refreshes your 16 experiences.","Chaque choix s'ajoute à votre profil et actualise immédiatement les 16 expériences.","Cada elección actualiza tu perfil y tus 16 experiencias."],".cnvDayRightHeading":["Your ideal day in 16 moments","Votre journée idéale en 16 moments","Tu día ideal en 16 momentos"],"#cnvResetDay":["↺ Start over","↺ Recommencer","↺ Empezar de nuevo"],"#cnvSurpriseDay":["✦ Surprise me","✦ Me surprendre","✦ Sorpréndeme"],".cnvScenarioPicker label":["Explore 100 sample programmes","Explorer 100 programmes types","Explora 100 programas de ejemplo"],"#cnvPrevScenario":["← Previous","← Précédent","← Anterior"],"#cnvNextScenario":["Next →","Suivant →","Siguiente →"]};function update(){const lang=document.documentElement.lang||'en',idx=lang==='fr'?1:lang==='es'?2:0;for(const [selector,values] of Object.entries(translations)){const el=document.querySelector(selector);if(el)el.textContent=values[idx]}const filter=document.getElementById('cnvScenarioFilter');if(filter){const values={all:['All profiles','Tous les profils','Todos los perfiles'],i76:['Solo','Solo','Solo'],i77:['Couple','Couple','Pareja'],i78:['Family','Famille','Familia'],i79:['Friends','Amis','Amigos']};for(const o of filter.options)if(values[o.value])o.textContent=values[o.value][idx]}const select=document.getElementById('cnvScenarioSelect');if(select){select.setAttribute('aria-label',['Choose a programme','Choisir un programme','Elegir un programa'][idx]);if(select.options.length&&select.options[0].value==='')select.options[0].textContent=['Choose from 100 programmes','Choisir parmi 100 programmes','Elegir entre 100 programas'][idx]}}new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',update);else update()})();</script></body></html>
+</script><script id="cnv-language-sync-v2">(function(){
+const map={
+"#tech .techIntro h2":[["Technology fades away.","The experience gets better."],["La technologie disparaît.","L’expérience s’améliore."],["La tecnología desaparece.","La experiencia mejora."]],
+"#tech .techIntro .lead strong":["Technology stays invisible. It frees up time for what matters most: living, creating and connecting.","La technologie reste invisible. Elle libère du temps pour l’essentiel : vivre, créer et se rencontrer.","La tecnología permanece invisible. Libera tiempo para lo esencial: vivir, crear y conectar."],
+".cnvStudioEyebrow":["YOUR PERSONALISED JOURNEY","VOTRE PARCOURS PERSONNALISÉ","TU EXPERIENCIA PERSONALIZADA"],
+".cnvDaySide h3":["Design your day","Composez votre journée","Diseña tu día"],
+".cnvDaySide > p":["Every choice updates your profile and refreshes your 16 experiences.","Chaque choix s'ajoute à votre profil et actualise immédiatement les 16 expériences.","Cada elección actualiza tu perfil y tus 16 experiencias."],
+".cnvDayRightHeading":["Your ideal day in 16 moments","Votre journée idéale en 16 moments","Tu día ideal en 16 momentos"],
+"#cnvResetDay":["↺ Start over","↺ Recommencer","↺ Empezar de nuevo"],
+"#cnvSurpriseDay":["✦ Surprise me","✦ Me surprendre","✦ Sorpréndeme"],
+".cnvScenarioPicker label":["Explore 100 sample programmes","Explorer 100 programmes types","Explora 100 programas de ejemplo"],
+"#cnvPrevScenario":["← Previous","← Précédent","← Anterior"],
+"#cnvNextScenario":["Next →","Suivant →","Siguiente →"]
+};
+let busy=false;
+function fix(){if(busy)return;busy=true;try{
+const lang=(document.documentElement.lang||'en').toLowerCase().slice(0,2),i=lang==='fr'?1:lang==='es'?2:0;
+for(const [sel,arr] of Object.entries(map)){const el=document.querySelector(sel);if(!el)continue;const val=arr[i];if(Array.isArray(val)){if(el.textContent.trim()!==val.join(''))el.innerHTML=val.join('<br>');}else if(el.textContent!==val)el.textContent=val;}
+const opts={all:['All profiles','Tous les profils','Todos los perfiles'],i76:['Solo','Solo','Solo'],i77:['Couple','Couple','Pareja'],i78:['Family','Famille','Familia'],i79:['Friends','Amis','Amigos']};
+const filter=document.getElementById('cnvScenarioFilter');if(filter)for(const o of filter.options){const v=opts[o.value];if(v&&o.textContent!==v[i])o.textContent=v[i];}
+const select=document.getElementById('cnvScenarioSelect');if(select){const a=['Choose a programme','Choisir un programme','Elegir un programa'][i];if(select.getAttribute('aria-label')!==a)select.setAttribute('aria-label',a);if(select.options.length&&select.options[0].value===''){const v=['Choose from 100 programmes','Choisir parmi 100 programmes','Elegir entre 100 programas'][i];if(select.options[0].textContent!==v)select.options[0].textContent=v;}}
+}finally{busy=false;}}
+function init(){fix();const observer=new MutationObserver(fix);observer.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});for(const id of ['tech','cnvDayStudio']){const el=document.getElementById(id);if(el)observer.observe(el,{subtree:true,childList:true,characterData:true});}window.addEventListener('load',fix);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();</script></body></html>
 <!-- V4.3: Join CNV moved to end; large photography added to every major module. -->
 <!-- V4.5: module illustrations removed; clean premium editorial layout retained. -->
