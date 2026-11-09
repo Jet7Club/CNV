@@ -1612,6 +1612,13 @@ document.querySelectorAll('[data-i18n]').forEach(el=>{
    const v=CNV_I18N[lang][el.dataset.i18n];
    if(v!==undefined) el.textContent=v;
  });
+ const techHeading=document.querySelector('#tech .techIntro h2');
+ if(techHeading){const titles={en:['Technology fades away.','The experience gets better.'],fr:['La technologie disparaît.','L’expérience s’améliore.'],es:['La tecnología desaparece.','La experiencia mejora.']};techHeading.replaceChildren(document.createTextNode(titles[lang][0]),document.createElement('br'),document.createTextNode(titles[lang][1]));}
+ const techClosing=document.querySelector('#tech .techIntro .lead strong');
+ if(techClosing)techClosing.textContent={en:'Technology stays invisible. It frees up time for what matters most: living, creating and connecting.',fr:'La technologie reste invisible. Elle libère du temps pour l’essentiel : vivre, créer et se rencontrer.',es:'La tecnología permanece invisible. Libera tiempo para lo esencial: vivir, crear y conectar.'}[lang];
+ const studioTitles={'.cnvStudioEyebrow':['YOUR PERSONALISED JOURNEY','VOTRE PARCOURS PERSONNALISÉ','TU EXPERIENCIA PERSONALIZADA'],'.cnvDaySide h3':['Design your day','Composez votre journée','Diseña tu día'],'.cnvDaySide > p':['Every choice updates your profile and refreshes your 16 experiences.','Chaque choix s\'ajoute à votre profil et actualise immédiatement les 16 expériences.','Cada elección actualiza tu perfil y tus 16 experiencias.']};
+ const languageIndex=lang==='fr'?1:lang==='es'?2:0;
+ for(const selector in studioTitles){const el=document.querySelector(selector);if(el)el.textContent=studioTitles[selector][languageIndex];}
  const ta=document.querySelector('.joinForm textarea');
  if(ta) ta.placeholder=lang==='fr'?'Expliquez-nous ce qui vous amène à CNV et comment vous souhaitez participer.':lang==='es'?'Cuéntanos qué te trae a CNV y cómo te gustaría participar.':'Tell us what brings you to CNV and how you would like to take part.';
 }
