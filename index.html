@@ -1633,21 +1633,21 @@ function editionCopy(){
  if(l==="fr")return {
  visionary:["ÉDITION VISIONNAIRE","10 000 cartes à vie à émettre","Sur invitation uniquement","red"],
  life:["ÉDITION VILLAGE","5 000 cartes à vie par village","Sur invitation uniquement","red"],
- week:["ÉDITION HEBDOMADAIRE","Cartes annuelles","Quota annuel limité","green"],
- month:["ÉDITION MENSUELLE","Cartes annuelles","Quota annuel limité","green"],
- year:["ÉDITION ANNUELLE","Cartes annuelles","Quota annuel limité","green"]};
+ week:["ÉDITION HEBDOMADAIRE","Adhésion hebdomadaire","Disponibilité limitée","green"],
+ month:["ÉDITION MENSUELLE","Adhésion mensuelle","Disponibilité limitée","green"],
+ year:["ÉDITION ANNUELLE","Adhésion annuelle","Disponibilité limitée","green"]};
  if(l==="es")return {
  visionary:["EDICIÓN VISIONARIA","10.000 tarjetas vitalicias a emitir","Solo con invitación","red"],
  life:["EDICIÓN VILLAGE","5.000 tarjetas vitalicias por village","Solo con invitación","red"],
- week:["EDICIÓN SEMANAL","Tarjetas anuales","Cupo anual limitado","green"],
- month:["EDICIÓN MENSUAL","Tarjetas anuales","Cupo anual limitado","green"],
- year:["EDICIÓN ANUAL","Tarjetas anuales","Cupo anual limitado","green"]};
+ week:["EDICIÓN SEMANAL","Membresía semanal","Disponibilidad limitada","green"],
+ month:["EDICIÓN MENSUAL","Membresía mensual","Disponibilidad limitada","green"],
+ year:["EDICIÓN ANUAL","Membresía anual","Disponibilidad limitada","green"]};
  return {
  visionary:["VISIONARY EDITION","10,000 lifetime cards to be issued","By invitation only","red"],
  life:["VILLAGE EDITION","5,000 lifetime cards per village","By invitation only","red"],
- week:["WEEKLY EDITION","Annual cards","Limited annual quota","green"],
- month:["MONTHLY EDITION","Annual cards","Limited annual quota","green"],
- year:["ANNUAL EDITION","Annual cards","Limited annual quota","green"]};
+ week:["WEEKLY EDITION","Weekly membership","Limited availability","green"],
+ month:["MONTHLY EDITION","Monthly membership","Limited availability","green"],
+ year:["ANNUAL EDITION","Annual membership","Limited availability","green"]};
 }
 function decorateEditions(){
  var s=document.getElementById("memberEditionStrip"); if(!s)return;
@@ -1665,15 +1665,15 @@ function translateMembershipUI(){
  decorateEditions();
 }
 function members(){
- var d=D[edition],L=d.levels,out=document.getElementById("membershipOutput");
- var cards=L.map(function(n,i){
-  var green=n==="Green";
-  return '<article class="mcard '+(green?'greenLocal ': '')+(n==="Social +"?'socialplus':'')+'"><h4>'+n+'</h4>'+(green?'<span class="localOnly">Réservé aux locaux</span>':'')+'<div class="price">'+d.price[i]+'</div><p><b>Accès</b> · '+d.access[i]+'</p><p><b>Cash back</b> · '+d.cash[i]+'</p><p><b>Personnes</b> · '+d.people[i]+'</p>'+(edition==="visionary"?'<p><b>Partage annuel des redevances CNV</b> · '+d.share[i]+'</p>':'')+'</article>';
- }).join("");
- var labels=["Accès","Wellness","Wellness +","Programme de régénération","Parc aventure","Salle de coworking","Personnes"]; var vals=[d.access,d.well,d.plus,d.regen,d.adv,d.cow,d.people]; if(edition==="visionary"){labels.push("Partage annuel des redevances CNV");vals.push(d.share);}
- var rows=labels.map(function(l,j){return "<tr><td>"+l+"</td>"+vals[j].map(function(v){return "<td>"+v+"</td>"}).join("")+"</tr>"}).join("");
- var note=edition!=="visionary"?'<p class="greenNote">Green : réservé aux membres locaux — accès uniquement à votre village.</p>':"";
- out.innerHTML='<div class="mcards" style="grid-template-columns:repeat('+L.length+',1fr)!important">'+cards+'</div>'+note+'<div class="mtablewrap"><table class="mtable"><thead><tr><th>Avantages & services</th>'+L.map(function(x){return "<th>"+x+"</th>"}).join("")+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+ var d=D[edition],L=d.levels,out=document.getElementById("membershipOutput"),l=uiLang();
+ var t=l==="fr"?{access:"Accès",people:"Personnes",share:"Partage annuel des redevances CNV",local:"Réservé aux membres locaux",village:"Votre village",all:"Tous les villages",family:"Couple + enfants",friends3:"Solo + 3 amis",friends7:"Solo + 7 amis",free:"Gratuit",well:"Wellness",plus:"Wellness +",regen:"Programme de régénération",adv:"Parc aventure",cow:"Salle de coworking",benefits:"Avantages & services",note:"Green : réservé aux membres locaux — accès uniquement à votre village.",green:"Local"}:l==="es"?{access:"Acceso",people:"Personas",share:"Participación anual en los ingresos por licencias CNV",local:"Reservado a residentes locales",village:"Tu pueblo",all:"Todos los pueblos",family:"Pareja + hijos",friends3:"Solo + 3 amigos",friends7:"Solo + 7 amigos",free:"Gratis",well:"Bienestar",plus:"Bienestar +",regen:"Programa de regeneración",adv:"Parque de aventuras",cow:"Espacio de coworking",benefits:"Ventajas y servicios",note:"Local: reservado a residentes locales; acceso solo a su pueblo.",green:"Local"}:{access:"Access",people:"People",share:"Annual share of CNV royalties",local:"For local residents only",village:"Your village",all:"All villages",family:"Couple + children",friends3:"Solo + 3 friends",friends7:"Solo + 7 friends",free:"Free",well:"Wellness",plus:"Wellness +",regen:"Regeneration programme",adv:"Adventure park",cow:"Coworking space",benefits:"Benefits & services",note:"Local: reserved for local residents; access to your village only.",green:"Local"};
+ function value(v){return v==="Tous les villages"?t.all:v==="Votre village"?t.village:v==="Couple + enfants"?t.family:v==="Solo + 3 amis"?t.friends3:v==="Solo + 7 amis"?t.friends7:v==="Gratuit"?t.free:v}
+ function level(n){return n==="Green"?t.green:n}
+ var cards=L.map(function(n,i){var green=n==="Green";return '<article class="mcard '+(green?'greenLocal ':'')+(n==="Social +"?'socialplus':'')+'"><h4>'+level(n)+'</h4>'+(green?'<span class="localOnly">'+t.local+'</span>':'')+'<div class="price">'+d.price[i]+'</div><p><b>'+t.access+'</b> · '+value(d.access[i])+'</p><p><b>Cash back</b> · '+d.cash[i]+'</p><p><b>'+t.people+'</b> · '+value(d.people[i])+'</p>'+(edition==="visionary"?'<p><b>'+t.share+'</b> · '+d.share[i]+'</p>':'')+'</article>'}).join("");
+ var labels=[t.access,t.well,t.plus,t.regen,t.adv,t.cow,t.people],vals=[d.access,d.well,d.plus,d.regen,d.adv,d.cow,d.people];if(edition==="visionary"){labels.push(t.share);vals.push(d.share)}
+ var rows=labels.map(function(label,j){return '<tr><td>'+label+'</td>'+vals[j].map(function(v){return '<td>'+value(v)+'</td>'}).join('')+'</tr>'}).join('');
+ var note=edition!=="visionary"?'<p class="greenNote">'+t.note+'</p>':'';
+ out.innerHTML='<div class="mcards" style="grid-template-columns:repeat('+L.length+',1fr)!important">'+cards+'</div>'+note+'<div class="mtablewrap"><table class="mtable"><thead><tr><th>'+t.benefits+'</th>'+L.map(function(x){return '<th>'+level(x)+'</th>'}).join('')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function owners(){
  var l=uiLang(),d=D.life,i=3;
