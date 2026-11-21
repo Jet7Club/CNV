@@ -1547,7 +1547,7 @@ header .nav>#cnvMainMenu.cnvMenuOpen{display:flex!important}
 <section class="dark" id="tech"><div class="wrap two"><div class="techIntro"><div><div class="eyebrow" data-i18n="i124">Nature × Tech</div><h2 class="title">La technologie disparaît.<br/>L’expérience s’améliore.</h2><p class="lead" data-i18n="i125">CNV utilise la technologie comme une infrastructure silencieuse : orientation intelligente, mobilité douce, gestion de l’eau et de l’énergie, personnalisation des expériences, gestion des activités sportives et culturelles et mise en relation continue de la communauté.</p><p class="lead"><strong style="color:#fff">La technologie reste invisible. Elle libère du temps pour l’essentiel : vivre, créer et se rencontrer.</strong></p></div><div class="techCards"><div class="techCard"><i>◉</i><h3 data-i18n="i126">Carte vivante</h3><p data-i18n="i127">8 zones reliées dans une interface simple, interactive et contextuelle.</p></div><div class="techCard"><i>✦</i><h3 data-i18n="i128">Expérience personnalisée</h3><p data-i18n="i129">Votre journée évolue selon vos envies, votre profil et le moment.</p></div><div class="techCard"><i>≋</i><h3 data-i18n="i130">Village intelligent</h3><p data-i18n="i131">Eau, énergie, mobilité et ressources pilotées avec sobriété.</p></div><div class="techCard"><i>◎</i><h3 data-i18n="i132">Connexion humaine</h3><p data-i18n="i133">La technologie facilite les rencontres sans jamais remplacer la spontanéité.</p></div></div></div>
 <div class="editorialVisual"><img alt="Nature and discreet technology" decoding="async" loading="lazy" src="NaturexTech.jpg"/></div></div></section>
 <section class="white" id="membership"><div class="wrap two"><div class="editorialVisual"><img alt="CNV premium community lifestyle" decoding="async" loading="lazy" src="Membership.jpg"/></div><div><div class="eyebrow" data-i18n="i134">CNV Membership</div><h2 class="title" data-i18n="i135">Appartenir à un écosystème</h2><p class="lead" data-i18n="i136">Le membership CNV ouvre l’accès à un réseau de lieux, d’expériences, de services et de rencontres.</p><p class="lead" data-i18n="i137">Il permet de profiter du village selon son rythme : séjourner, se régénérer, travailler, pratiquer, apprendre, célébrer et contribuer à la vie collective.</p><div class="actions"></div></div><div class="membershipRestore" id="membershipDetails">
-<h3 id="membershipMainTitle">Members, owners and investor &amp; privileges</h3>
+<h3 id="membershipMainTitle">Members, owners and investors &amp; privileges</h3>
 <div class="membershipAudience" id="membershipAudience">
 <button class="audBtn active" data-audience="members" type="button">Members</button>
 <button class="audBtn" data-audience="owners" type="button">Owners</button>
@@ -1649,7 +1649,7 @@ function editionCopy(){
  year:["ÉDITION ANNUELLE","Adhésion annuelle","Disponibilité limitée","green"]};
  if(l==="es")return {
  visionary:["EDICIÓN VISIONARIA","10.000 tarjetas vitalicias a emitir","Solo con invitación","red"],
- life:["EDICIÓN VILLAGE","5.000 tarjetas vitalicias por village","Solo con invitación","red"],
+ life:["EDICIÓN VILLAGE","5.000 tarjetas vitalicias por pueblo","Solo con invitación","red"],
  week:["EDICIÓN SEMANAL","Membresía semanal","Disponibilidad limitada","green"],
  month:["EDICIÓN MENSUAL","Membresía mensual","Disponibilidad limitada","green"],
  year:["EDICIÓN ANUAL","Membresía anual","Disponibilidad limitada","green"]};
@@ -1670,7 +1670,7 @@ function decorateEditions(){
 }
 function translateMembershipUI(){
  var l=uiLang(), title=document.getElementById("membershipMainTitle");
- if(title)title.textContent=l==="fr"?"Membres, propriétaires et investisseurs & privilèges":l==="es"?"Miembros, propietarios e inversores & privilegios":"Members, owners and investors & privileges";
+ if(title)title.textContent=l==="fr"?"Membres, propriétaires et investisseurs et privilèges":l==="es"?"Miembros, propietarios e inversores y privilegios":"Members, owners and investors & privileges";
  var labs=l==="fr"?["Membres","Propriétaires","Investisseurs"]:l==="es"?["Miembros","Propietarios","Inversores"]:["Members","Owners","Investors"];
  document.querySelectorAll("#membershipAudience button").forEach(function(b,i){b.textContent=labs[i]});
  decorateEditions();
