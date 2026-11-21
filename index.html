@@ -2114,6 +2114,7 @@ const select=document.getElementById('cnvScenarioSelect');if(select){const a=['C
 }finally{busy=false;}}
 function init(){fix();const observer=new MutationObserver(fix);observer.observe(document.documentElement,{attributes:true,attributeFilter:['lang']});for(const id of ['tech','cnvDayStudio']){const el=document.getElementById(id);if(el)observer.observe(el,{subtree:true,childList:true,characterData:true});}window.addEventListener('load',fix);}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();</script></body></html>
+})();</script><script defer src="assets/cnv-zone-map.js"></script>
+</body></html>
 <!-- V4.3: Join CNV moved to end; large photography added to every major module. -->
 <!-- V4.5: module illustrations removed; clean premium editorial layout retained. -->
