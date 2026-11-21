@@ -1,4 +1,4 @@
-name: Audit CNV FR EN ES navigateur
+name: Audit CNV FR EN ES navigateur — vérification relancée
 on:
   workflow_dispatch:
   push:
