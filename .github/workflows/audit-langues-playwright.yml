@@ -1,0 +1,66 @@
+name: Audit CNV FR EN ES navigateur
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/audit-langues-playwright.yml'
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Audit site officiel mobile et desktop
+        run: |
+          mkdir -p audit-results
+          cat > /tmp/audit.cjs <<'JS'
+          const { chromium } = require(process.cwd()+'/node_modules/playwright');
+          const fs=require('fs');
+          (async()=>{
+            const browser=await chromium.launch({headless:true});
+            const results=[];
+            for(const [device,width,height] of [['mobile',390,844],['desktop',1366,768]]){
+              const page=await browser.newPage({viewport:{width,height}});
+              const errors=[];
+              page.on('pageerror',e=>errors.push(e.message));
+              try{
+                const response=await page.goto('https://www.cnvillages.com/',{waitUntil:'domcontentloaded',timeout:45000});
+                await page.waitForTimeout(1500);
+                results.push({device,test:'load',status:response?.status(),ok:response?.ok()});
+                for(const lang of ['en','fr','es']){
+                  let clicked=false;
+                  for(const selector of [`[data-lang="${lang}"]`,`[data-language="${lang}"]`,`button[lang="${lang}"]`,`a[hreflang="${lang}"]`,`button:text-is("${lang.toUpperCase()}")`]){
+                    const el=page.locator(selector).first();
+                    try{if(await el.count() && await el.isVisible()){await el.click({timeout:2500});clicked=true;break;}}catch(e){}
+                  }
+                  await page.waitForTimeout(650);
+                  const actual=await page.locator('html').getAttribute('lang');
+                  const body=await page.locator('body').innerText();
+                  await page.screenshot({path:`audit-results/${device}-${lang}.png`,fullPage:true});
+                  results.push({device,test:'language',requested:lang,clicked,actual,confirmed:!!actual&&actual.toLowerCase().startsWith(lang),textLength:body.length,buttons:await page.locator('button').count(),links:await page.locator('a[href]').count(),sample:body.slice(0,400)});
+                }
+                results.push({device,test:'javascript',errors,ok:errors.length===0});
+              }catch(e){results.push({device,test:'access',ok:false,error:String(e)});}
+              await page.close();
+            }
+            await browser.close();
+            fs.writeFileSync('audit-results/report.json',JSON.stringify(results,null,2));
+            console.log(JSON.stringify(results,null,2));
+            if(results.some(x=>x.ok===false)||results.some(x=>x.test==='language'&&!x.confirmed))process.exitCode=1;
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          JS
+          node /tmp/audit.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-cnv-langues
+          path: audit-results/
