@@ -40,6 +40,9 @@ jobs:
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
           # Upload entire repository
           path: '.'
+      # The uploaded artifact can take a few seconds to appear in the Pages API.
+      - name: Wait for the uploaded artifact to become available
+        run: sleep 20
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
