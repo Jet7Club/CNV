@@ -46,7 +46,7 @@ jobs:
                   const actual=await page.locator('html').getAttribute('lang');
                   const body=await page.locator('body').innerText();
                   await page.screenshot({path:`audit-results/${device}-${lang}.png`,fullPage:true});
-                  results.push({device,test:'language',requested:lang,clicked,actual,confirmed:!!actual&&actual.toLowerCase().startsWith(lang),textLength:body.length,buttons:await page.locator('button').count(),links:await page.locator('a[href]').count(),sample:body.slice(0,400)});
+                  results.push({device,test:'language',requested:lang,clicked,actual,confirmed:clicked&&!!actual&&actual.toLowerCase().startsWith(lang),textLength:body.length,buttons:await page.locator('button').count(),links:await page.locator('a[href]').count(),sample:body.slice(0,400),visibleText:body.slice(0,12000)});
                 }
                 results.push({device,test:'javascript',errors,ok:errors.length===0});
               }catch(e){results.push({device,test:'access',ok:false,error:String(e)});}
